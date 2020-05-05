@@ -99,3 +99,26 @@ float get_normal_random(){
     return cos(2*PI*y2)*sqrt(-2.*log(y1));
 
 }
+
+/**** PARTE 1: TIPO DI DATI ip_mat E MEMORIA ****/
+ip_mat * ip_mat_create(unsigned int h, unsigned int w,unsigned  int k, float v){
+    int i = 0, j = 0, z = 0;
+    ip_mat* mat = calloc(1, sizeof(*mat));
+    float*** data = calloc(h, sizeof(*data));
+    stats* st = calloc(k, sizeof(*st));
+    mat->h = h;
+    mat->w = w;
+    mat->k = k;
+    for(i = 0; i < h; i++){
+        data[i] = calloc(w, sizeof(**data));
+        for(j = 0; j < w; j++){
+            data[i][j] = calloc(k, sizeof(***data));
+            for(z = 0; z < k; z++){
+                data[i][j][z] = v;
+            }
+        }
+    }
+    mat->data = data;
+    mat->stats = st;
+    return mat;
+}
