@@ -147,3 +147,68 @@ void ip_mat_free(ip_mat *a){
 void compute_stats(ip_mat * t){
     printf("Compute stats is garbage\n");
 }
+
+/* AUTHOR: Dussin */
+ip_mat * ip_mat_copy(ip_mat * in){
+	ip_mat* m = NULL;
+	int i, j, z;
+	m = ip_mat_create(in->h, in->w, in->k, 0);
+	for(i = 0; i < m->h; i++){
+		for(j = 0; j < m->w; j++){
+			for(z = 0; z < m->k; z++){
+				m->data[i][j][z] = in->data[i][j][z];
+			}
+		}
+	}
+	m->stat->min = in->stat->min;
+	m->stat->max = in->stat->max;
+	m->stat->mean = in->stat->mean;
+	return m;
+}
+
+
+/**** PARTE 1: OPERAZIONI MATEMATICHE FRA IP_MAT ****/
+/* Esegue la somma di due ip_mat (tutte le dimensioni devono essere identiche)
+ * e la restituisce in output. */
+ip_mat * ip_mat_sum(ip_mat * a, ip_mat * b);
+
+/* Esegue la sottrazione di due ip_mat (tutte le dimensioni devono essere identiche)
+ * e la restituisce in output.
+ * */
+ip_mat * ip_mat_sub(ip_mat * a, ip_mat * b);
+
+/* Moltiplica un ip_mat per uno scalare c. Si moltiplica c per tutti gli elementi di "a"
+ * e si salva il risultato in un nuovo tensore in output. */
+/* AUTHOR: Dussin */
+ip_mat * ip_mat_mul_scalar(ip_mat *a, float c){
+	ip_mat* tmp = NULL;
+	int i = 0, j = 0, z = 0;
+	tmp = ip_mat_copy(a);
+	for(i = 0; i < tmp->h; i++){
+		for(j = 0; j < tmp->w; j++){
+			for(z = 0; z < tmp->k; z++){
+				tmp->data[i][j][z] *= c;
+			}
+		}
+	}
+	return tmp;
+}
+
+/* Aggiunge ad un ip_mat uno scalare c e lo restituisce in un nuovo tensore in output. */
+/* AUTHOR: Dussin */
+ip_mat *  ip_mat_add_scalar(ip_mat *a, float c){
+	ip_mat* tmp = NULL;
+	int i = 0, j = 0, z = 0;
+	tmp = ip_mat_copy(a);
+	for(i = 0; i < tmp->h; i++){
+		for(j = 0; j < tmp->w; j++){
+			for(z = 0; z < tmp->k; z++){
+				tmp->data[i][j][z] += c;
+			}
+		}
+	}
+	return tmp;
+}
+
+/* Calcola la media di due ip_mat a e b e la restituisce in output.*/
+ip_mat * ip_mat_mean(ip_mat * a, ip_mat * b);
