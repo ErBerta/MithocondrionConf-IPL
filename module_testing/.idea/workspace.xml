@@ -9,7 +9,11 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="709c4f99-e1c6-4d0a-adba-97021ad71a12" name="Default Changelist" comment="" />
+    <list default="true" id="709c4f99-e1c6-4d0a-adba-97021ad71a12" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bitmap/ip_lib.c" beforeDir="false" afterPath="$PROJECT_DIR$/bitmap/ip_lib.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module_tester.c" beforeDir="false" afterPath="$PROJECT_DIR$/module_tester.c" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -32,7 +36,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="cf.first.check.clang-format" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/exec.out" />
     <property name="settings.editor.selected.configurable" value="preferences.sourceCode.C/C++" />
   </component>
   <component name="SvnConfiguration">
@@ -46,7 +50,8 @@
       <option name="presentableId" value="Default" />
       <updated>1588704955814</updated>
       <workItem from="1588704957563" duration="1562000" />
-      <workItem from="1588707379947" duration="231000" />
+      <workItem from="1588707379947" duration="830000" />
+      <workItem from="1588748965483" duration="3206000" />
     </task>
     <servers />
   </component>
@@ -58,6 +63,18 @@
       <screen x="0" y="0" width="1366" height="732" />
     </state>
     <state x="516" y="218" key="#Other_File_Types/0.0.1366.732@0.0.1366.732" timestamp="1588707459224" />
+    <state x="141" y="26" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1588751026437">
+      <screen x="0" y="0" width="1366" height="732" />
+    </state>
+    <state x="141" y="26" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.732@0.0.1366.732" timestamp="1588751026437" />
+    <state x="465" y="76" key="#com.intellij.ide.macro.MacrosDialog" timestamp="1588751013967">
+      <screen x="0" y="0" width="1366" height="732" />
+    </state>
+    <state x="465" y="76" key="#com.intellij.ide.macro.MacrosDialog/0.0.1366.732@0.0.1366.732" timestamp="1588751013967" />
+    <state x="465" y="126" key="FileChooserDialogImpl" timestamp="1588750999305">
+      <screen x="0" y="0" width="1366" height="732" />
+    </state>
+    <state x="465" y="126" key="FileChooserDialogImpl/0.0.1366.732@0.0.1366.732" timestamp="1588750999305" />
     <state x="361" y="0" key="SettingsEditor" timestamp="1588707279783">
       <screen x="0" y="0" width="1366" height="732" />
     </state>

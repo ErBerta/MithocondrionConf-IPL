@@ -104,7 +104,7 @@ float get_normal_random(){
 /* AUTHOR: Dussin */
 ip_mat * ip_mat_create(unsigned int h, unsigned int w,unsigned  int k, float v){
     int i = 0, j = 0, z = 0;
-    ip_mat* mat = calloc(1, sizeof(*mat));
+    ip_mat* mat = calloc(1, sizeof(ip_mat));
     float*** data = calloc(h, sizeof(*data));
     stats* st = calloc(k, sizeof(*st));
     mat->h = h;
@@ -121,10 +121,29 @@ ip_mat * ip_mat_create(unsigned int h, unsigned int w,unsigned  int k, float v){
     }
     mat->data = data;
     mat->stat = st;
+
     return mat;
 }
 
 /* AUTHOR: Dussin */
+void ip_mat_free(ip_mat *a){
+	int i = 0, j = 0;
+	for(i = 0; i < a->h; i++){
+		for(j = 0; j < a->w; j++){
+			free(a->data[i][j]);
+			a->data[i][j] = NULL;
+		}
+		free(a->data[i]);
+		a->data[i] = NULL;
+	}
+	free(a->data);
+	a->data = NULL;
+	free(a->stat);
+	a->stat = NULL;
+	free(a);
+	a = NULL;
+}
+
 void compute_stats(ip_mat * t){
     printf("Compute stats is garbage\n");
 }
