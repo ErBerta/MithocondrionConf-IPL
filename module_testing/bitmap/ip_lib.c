@@ -103,17 +103,17 @@ float get_normal_random(){
 /**** PARTE 1: TIPO DI DATI ip_mat E MEMORIA ****/
 /* AUTHOR: Dussin */
 ip_mat * ip_mat_create(unsigned int h, unsigned int w,unsigned  int k, float v){
-    int i = 0, j = 0, z = 0;
-    ip_mat* mat = calloc(1, sizeof(ip_mat));
-    float*** data = calloc(h, sizeof(*data));
-    stats* st = calloc(k, sizeof(*st));
+    unsigned int i = 0, j = 0, z = 0;
+    ip_mat* mat = (ip_mat*)calloc(1, sizeof(ip_mat));
+    float*** data = (float***)calloc(h, sizeof(*data));
+    stats* st = (stats*)calloc(k, sizeof(*st));
     mat->h = h;
     mat->w = w;
     mat->k = k;
     for(i = 0; i < h; i++){
-        data[i] = calloc(w, sizeof(**data));
+        data[i] = (float**)calloc(w, sizeof(**data));
         for(j = 0; j < w; j++){
-            data[i][j] = calloc(k, sizeof(***data));
+            data[i][j] = (float*)calloc(k, sizeof(***data));
             for(z = 0; z < k; z++){
                 data[i][j][z] = v;
             }
@@ -127,7 +127,7 @@ ip_mat * ip_mat_create(unsigned int h, unsigned int w,unsigned  int k, float v){
 
 /* AUTHOR: Dussin */
 void ip_mat_free(ip_mat *a){
-	int i = 0, j = 0;
+	unsigned int i = 0, j = 0;
 	for(i = 0; i < a->h; i++){
 		for(j = 0; j < a->w; j++){
 			free(a->data[i][j]);
@@ -151,7 +151,7 @@ void compute_stats(ip_mat * t){
 /* AUTHOR: Dussin */
 ip_mat * ip_mat_copy(ip_mat * in){
 	ip_mat* m = NULL;
-	int i, j, z;
+	unsigned int i, j, z;
 	m = ip_mat_create(in->h, in->w, in->k, 0);
 	for(i = 0; i < m->h; i++){
 		for(j = 0; j < m->w; j++){
@@ -170,19 +170,50 @@ ip_mat * ip_mat_copy(ip_mat * in){
 /**** PARTE 1: OPERAZIONI MATEMATICHE FRA IP_MAT ****/
 /* Esegue la somma di due ip_mat (tutte le dimensioni devono essere identiche)
  * e la restituisce in output. */
-ip_mat * ip_mat_sum(ip_mat * a, ip_mat * b);
-
+ /* AUTHOR: Berta */
+ip_mat * ip_mat_sum(ip_mat * a, ip_mat * b){
+  ip_mat* tmp = NULL;
+  if(a->w == b->w && a->h == b->h && a->k == b->k)
+  {
+    unsigned int i = 0, j = 0, z = 0;
+  	tmp = ip_mat_copy(a);
+  	for(i = 0; i < tmp->h; i++){
+     for(j = 0; j < tmp->w; j++){
+  		for(z = 0; z < tmp->k; z++){
+  			tmp->data[i][j][z] += b->data[i][j][z];
+  		}
+  	 }
+  	}
+  }
+	return tmp;
+}
 /* Esegue la sottrazione di due ip_mat (tutte le dimensioni devono essere identiche)
  * e la restituisce in output.
  * */
-ip_mat * ip_mat_sub(ip_mat * a, ip_mat * b);
+ /* AUTHOR: Berta */
+ip_mat * ip_mat_sub(ip_mat * a, ip_mat * b){
+  ip_mat* tmp = NULL;
+  if(a->w == b->w && a->h == b->h && a->k == b->k)
+  {
+    unsigned int i = 0, j = 0, z = 0;
+  	tmp = ip_mat_copy(a);
+  	for(i = 0; i < tmp->h; i++){
+     for(j = 0; j < tmp->w; j++){
+  		for(z = 0; z < tmp->k; z++){
+  			tmp->data[i][j][z] -= b->data[i][j][z];
+  		}
+  	 }
+  	}
+  }
+	return tmp;
+}
 
 /* Moltiplica un ip_mat per uno scalare c. Si moltiplica c per tutti gli elementi di "a"
  * e si salva il risultato in un nuovo tensore in output. */
 /* AUTHOR: Dussin */
 ip_mat * ip_mat_mul_scalar(ip_mat *a, float c){
 	ip_mat* tmp = NULL;
-	int i = 0, j = 0, z = 0;
+	unsigned int i = 0, j = 0, z = 0;
 	tmp = ip_mat_copy(a);
 	for(i = 0; i < tmp->h; i++){
 		for(j = 0; j < tmp->w; j++){
@@ -198,7 +229,7 @@ ip_mat * ip_mat_mul_scalar(ip_mat *a, float c){
 /* AUTHOR: Dussin */
 ip_mat *  ip_mat_add_scalar(ip_mat *a, float c){
 	ip_mat* tmp = NULL;
-	int i = 0, j = 0, z = 0;
+	unsigned int i = 0, j = 0, z = 0;
 	tmp = ip_mat_copy(a);
 	for(i = 0; i < tmp->h; i++){
 		for(j = 0; j < tmp->w; j++){
@@ -211,4 +242,18 @@ ip_mat *  ip_mat_add_scalar(ip_mat *a, float c){
 }
 
 /* Calcola la media di due ip_mat a e b e la restituisce in output.*/
-ip_mat * ip_mat_mean(ip_mat * a, ip_mat * b);
+/* AUTHOR: Berta */ /*TODO: controllare cast float*/
+ip_mat * ip_mat_mean(ip_mat * a, ip_mat * b){
+  ip_mat* tmp = NULL;
+  unsigned int i = 0, j = 0, z = 0;
+  tmp = ip_mat_copy(a);
+  for(i = 0; i < tmp->h; i++){
+   for(j = 0; j < tmp->w; j++){
+  	for(z = 0; z < tmp->k; z++){
+  		tmp->data[i][j][z] *= b->data[i][j][z];
+      tmp->data[i][j][z] /= 2;
+  	}
+   }
+  }
+  return tmp;
+}
