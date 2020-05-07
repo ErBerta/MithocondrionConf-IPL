@@ -14,9 +14,11 @@ int main(){
 	/* "Lab Rat" ip_mat */
 	ip_mat* mod_ip_mat = NULL;
 
-    /* Load a bmp image */
-    b = bm_load("mongolfiere.bmp");
+  /* Load a bmp image */
+  b = bm_load("mongolfiere.bmp");
+	c = bm_load("mandelbrot.bmp");
 	input_img = bitmap_to_ip_mat(b);
+	input_img2 = bitmap_to_ip_mat(c);
 	ip_mat_show(input_img);
 
     /* Test a function, show on screen the output, free up the memory and set the pointer to NULL*/
@@ -31,10 +33,6 @@ int main(){
 	ip_mat_free(mod_ip_mat);
 	mod_ip_mat = NULL;
 
-    c = bm_load("mongolfiere.bmp");
-	/* Necessario esegure cast a float? */
-	input_img2 = bitmap_to_ip_mat(c);
-
 	mod_ip_mat = ip_mat_sum(input_img,input_img2);
 	ip_mat_show(mod_ip_mat);
 	ip_mat_free(mod_ip_mat);
@@ -48,7 +46,38 @@ int main(){
 	mod_ip_mat = ip_mat_mean(input_img,input_img2);
 	ip_mat_show(mod_ip_mat);
 	ip_mat_free(mod_ip_mat);
-    mod_ip_mat = NULL;
+  mod_ip_mat = NULL;
+
+	/*mod_ip_mat = ip_mat_subset(input_img,0,92,0,93);
+	ip_mat_show(mod_ip_mat);
+	d = ip_mat_to_bitmap(mod_ip_mat);
+	ip_mat_free(mod_ip_mat);
+  mod_ip_mat = NULL;*/
+
+	/*mod_ip_mat = ip_mat_concat(input_img, input_img2,1);
+	ip_mat_show(mod_ip_mat);
+	d = ip_mat_to_bitmap(mod_ip_mat);
+	ip_mat_free(mod_ip_mat);
+  mod_ip_mat = NULL;*/
+
+	/*mod_ip_mat = ip_mat_create(5000, 5000, 3,0);
+	ip_mat_init_random(mod_ip_mat,3,2.5);
+	ip_mat_show(mod_ip_mat);
+	d = ip_mat_to_bitmap(mod_ip_mat);
+	ip_mat_free(mod_ip_mat);
+  mod_ip_mat = NULL;*/
+
+	/*mod_ip_mat = ip_mat_to_gray_scale(input_img2);
+	ip_mat_show(mod_ip_mat);
+	d = ip_mat_to_bitmap(mod_ip_mat);
+	ip_mat_free(mod_ip_mat);
+  mod_ip_mat = NULL;*/
+
+	/*mod_ip_mat = ip_mat_brighten(input_img,1);
+	ip_mat_show(mod_ip_mat);
+	d = ip_mat_to_bitmap(mod_ip_mat);
+	ip_mat_free(mod_ip_mat);
+  mod_ip_mat = NULL;*/
 
     /* Don't free mod_ip_mat in this section here, but rather do it after each call to a function*/
 	bm_free(b);
