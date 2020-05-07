@@ -33,10 +33,10 @@ typedef struct {
 /* Inizializza una ip_mat con dimensioni h w e k. Ogni elemento è inizializzato a v.
  * Inoltre crea un vettore di stats per contenere le statische sui singoli canali.
  * */
-ip_mat * ip_mat_create(unsigned int h, unsigned int w,unsigned  int k, float v);
+ip_mat * ip_mat_create(unsigned int h, unsigned int w,unsigned  int k, float v); /* OK */
 
 /* Libera la memoria (data, stat e la struttura) */
-void ip_mat_free(ip_mat *a);
+void ip_mat_free(ip_mat *a); /* OK */
 
 /* Restituisce il valore in posizione i,j,k */
 float get_val(ip_mat * a, unsigned int i,unsigned int j,unsigned int k);
@@ -54,7 +54,7 @@ void compute_stats(ip_mat * t);
 void ip_mat_init_random(ip_mat * t, float mean, float var);
 
 /* Crea una copia di una ip_mat e lo restituisce in output */
-ip_mat * ip_mat_copy(ip_mat * in);
+ip_mat * ip_mat_copy(ip_mat * in); /* OK */
 
 /* Restituisce una sotto-matrice, ovvero la porzione individuata da:
  * t->data[row_start...row_end][col_start...col_end][0...k]
@@ -88,22 +88,22 @@ ip_mat * ip_mat_concat(ip_mat * a, ip_mat * b, int dimensione);
 /**** PARTE 1: OPERAZIONI MATEMATICHE FRA IP_MAT ****/
 /* Esegue la somma di due ip_mat (tutte le dimensioni devono essere identiche)
  * e la restituisce in output. */
-ip_mat * ip_mat_sum(ip_mat * a, ip_mat * b);
+ip_mat * ip_mat_sum(ip_mat * a, ip_mat * b); /* MAYBE OK */
 
 /* Esegue la sottrazione di due ip_mat (tutte le dimensioni devono essere identiche)
  * e la restituisce in output.
  * */
-ip_mat * ip_mat_sub(ip_mat * a, ip_mat * b);
+ip_mat * ip_mat_sub(ip_mat * a, ip_mat * b); /* MAYBE OK */
 
 /* Moltiplica un ip_mat per uno scalare c. Si moltiplica c per tutti gli elementi di "a"
  * e si salva il risultato in un nuovo tensore in output. */
-ip_mat * ip_mat_mul_scalar(ip_mat *a, float c);
+ip_mat * ip_mat_mul_scalar(ip_mat *a, float c); /* OK */
 
 /* Aggiunge ad un ip_mat uno scalare c e lo restituisce in un nuovo tensore in output. */
-ip_mat *  ip_mat_add_scalar(ip_mat *a, float c);
+ip_mat *  ip_mat_add_scalar(ip_mat *a, float c); /* OK */
 
 /* Calcola la media di due ip_mat a e b e la restituisce in output.*/
-ip_mat * ip_mat_mean(ip_mat * a, ip_mat * b);
+ip_mat * ip_mat_mean(ip_mat * a, ip_mat * b); /* MAYBE OK */
 
 /**** PARTE 2: SEMPLICI OPERAZIONI SU IMMAGINI ****/
 /* Converte un'immagine RGB ad una immagine a scala di grigio.

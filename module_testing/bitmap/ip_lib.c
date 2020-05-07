@@ -129,13 +129,16 @@ ip_mat * ip_mat_create(unsigned int h, unsigned int w,unsigned  int k, float v){
 void ip_mat_free(ip_mat *a){
 	unsigned int i = 0, j = 0;
 	for(i = 0; i < a->h; i++){
+	    /* Free up each channel on the j-th row */
 		for(j = 0; j < a->w; j++){
 			free(a->data[i][j]);
 			a->data[i][j] = NULL;
 		}
+		/* Free up the i-th row*/
 		free(a->data[i]);
 		a->data[i] = NULL;
 	}
+	/* Free up the whole data matrix, the stats and ultimately the whole struct*/
 	free(a->data);
 	a->data = NULL;
 	free(a->stat);
@@ -152,6 +155,10 @@ void compute_stats(ip_mat * t){
 ip_mat * ip_mat_copy(ip_mat * in){
 	ip_mat* m = NULL;
 	unsigned int i, j, z;
+	/* We have to literally copy the input matrix. We do NOT want to
+	    affect the data in the input matrix, which would happen if we
+	    merely copied the pointer to the input matrix.
+	*/
 	m = ip_mat_create(in->h, in->w, in->k, 0);
 	for(i = 0; i < m->h; i++){
 		for(j = 0; j < m->w; j++){
@@ -250,8 +257,7 @@ ip_mat * ip_mat_mean(ip_mat * a, ip_mat * b){
   for(i = 0; i < tmp->h; i++){
    for(j = 0; j < tmp->w; j++){
   	for(z = 0; z < tmp->k; z++){
-  		tmp->data[i][j][z] *= b->data[i][j][z];
-      tmp->data[i][j][z] /= 2;
+  		tmp->data[i][j][z] = (a->data[i][j][z] * b->data[i][j][z])/2.0;
   	}
    }
   }
