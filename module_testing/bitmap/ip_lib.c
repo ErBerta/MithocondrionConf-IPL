@@ -416,6 +416,7 @@ ip_mat * ip_mat_mean(ip_mat * a, ip_mat * b){
  * e creando una nuova immagine avente per valore di un pixel su ogni canale la media appena calcolata.
  * Avremo quindi che tutti i canali saranno uguali.
  * */
+/* AUTHOR: Berta */
 ip_mat * ip_mat_to_gray_scale(ip_mat * in){
   ip_mat* out = NULL;
   unsigned int i, j, z;
@@ -437,6 +438,7 @@ ip_mat * ip_mat_to_gray_scale(ip_mat * in){
 }
 /* Operazione di brightening: aumenta la luminosità dell'immagine
  * aggiunge ad ogni pixel un certo valore*/
+/* AUTHOR: Berta */
 ip_mat * ip_mat_brighten(ip_mat * in, float bright)
 {
   ip_mat* out = NULL;
