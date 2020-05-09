@@ -325,20 +325,20 @@ ip_mat * ip_mat_copy(ip_mat * in){
  * e la restituisce in output. */
  /* AUTHOR: Berta */
 ip_mat * ip_mat_sum(ip_mat * a, ip_mat * b){
-  ip_mat* tmp = NULL;
+  ip_mat* out = NULL;
   if(a->w == b->w && a->h == b->h && a->k == b->k)
   {
     unsigned int i = 0, j = 0, z = 0;
-  	tmp = ip_mat_copy(a);
-  	for(i = 0; i < tmp->h; i++){
-     for(j = 0; j < tmp->w; j++){
-  		for(z = 0; z < tmp->k; z++){
-  			tmp->data[i][j][z] += b->data[i][j][z];
-  		}
-  	 }
-  	}
+    out = ip_mat_create(a->h, a->w, a->k, 0);
+	  for(i = 0; i < out->h; i++){
+		  for(j = 0; j < out->w; j++){
+			  for(z = 0; z < out->k; z++){
+				  out->data[i][j][z] = a->data[i][j][z] + b->data[i][j][z];
+			  }
+		  }
+	  }
   }
-	return tmp;
+  return out;
 }
 /* Esegue la sottrazione di due ip_mat (tutte le dimensioni devono essere identiche)
  * e la restituisce in output.
@@ -349,11 +349,11 @@ ip_mat * ip_mat_sub(ip_mat * a, ip_mat * b){
   if(a->w == b->w && a->h == b->h && a->k == b->k)
   {
     unsigned int i = 0, j = 0, z = 0;
-  	out = ip_mat_copy(a);
+    out = ip_mat_create(a->h, a->w, a->k, 0);
   	for(i = 0; i < out->h; i++){
      for(j = 0; j < out->w; j++){
   		for(z = 0; z < out->k; z++){
-  			out->data[i][j][z] -= b->data[i][j][z];
+  			out->data[i][j][z] = a->data[i][j][z] - b->data[i][j][z];
   		}
   	 }
   	}
@@ -399,7 +399,7 @@ ip_mat *  ip_mat_add_scalar(ip_mat *a, float c){
 ip_mat * ip_mat_mean(ip_mat * a, ip_mat * b){
   ip_mat* out = NULL;
   unsigned int i = 0, j = 0, z = 0;
-  out = ip_mat_copy(a);
+  out = ip_mat_create(a->h, a->w, a->k, 0);
   for(i = 0; i < out->h; i++){
    for(j = 0; j < out->w; j++){
   	for(z = 0; z < out->k; z++){
@@ -416,6 +416,7 @@ ip_mat * ip_mat_mean(ip_mat * a, ip_mat * b){
  * e creando una nuova immagine avente per valore di un pixel su ogni canale la media appena calcolata.
  * Avremo quindi che tutti i canali saranno uguali.
  * */
+/* AUTHOR: Berta */
 ip_mat * ip_mat_to_gray_scale(ip_mat * in){
   ip_mat* out = NULL;
   unsigned int i, j, z;
@@ -435,8 +436,31 @@ ip_mat * ip_mat_to_gray_scale(ip_mat * in){
   }
   return out;
 }
+
+/* Effettua la fusione (combinazione convessa) di due immagini */
+/* AUTHOR: Dussin */
+ip_mat * ip_mat_blend(ip_mat * a, ip_mat * b, float alpha){
+	ip_mat* out = NULL;
+	unsigned int i, j, z, _h, _w, _k;
+	/* Pick the smaller dimensions */
+	_h = a->h < b->h ? a->h : b->h;
+	_w = a->w < b->w ? a->w : b->w;
+	_k = a->k < b->k ? a->k : b->k;
+
+	out = ip_mat_create(_h, _w, _k, 0);
+	for(i = 0; i < _h; i++){
+		for(j = 0; j < _w; j++){
+			for(z = 0; z < _k; z++){
+				out->data[i][j][z] = alpha * a->data[i][j][z] + (1 - alpha) * b->data[i][j][z];
+			}
+		}
+	}
+	return out;
+}
+
 /* Operazione di brightening: aumenta la luminosità dell'immagine
  * aggiunge ad ogni pixel un certo valore*/
+/* AUTHOR: Berta */
 ip_mat * ip_mat_brighten(ip_mat * in, float bright)
 {
   ip_mat* out = NULL;
@@ -445,12 +469,26 @@ ip_mat * ip_mat_brighten(ip_mat * in, float bright)
   for(i = 0; i < out->h; i++){
     for(j = 0; j < out->w; j++){
       for(z = 0; z < out->k; z++){
+<<<<<<< HEAD
   		  if(in->data[i][j][z] + bright > 255)
           out->data[i][j][z] = 255;
         else
           out->data[i][j][z] = in->data[i][j][z] + bright;
+=======
+  		  out->data[i][j][z] = in->data[i][j][z] + bright;
+  		  /* TODO: Do we need to check if the pixel value is outside of [0, 255]? */
+  		  /*
+  		  if(out->data[i][j][z] > 255.0){
+  		   out->data[i][j][z] = 255.0;
+  		  }
+  		  else if(out->data[i][j][z] < 0.0){
+  		   out->data[i][j][z] = 0.0;
+  		  }
+  		  */
+>>>>>>> fa9926d2f04f7454fb39270ddfca6dec0958836f
   	  }
     }
   }
   return out;
 }
+
