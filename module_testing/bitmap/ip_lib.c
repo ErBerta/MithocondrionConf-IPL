@@ -239,6 +239,7 @@ void set_val(ip_mat * a, unsigned int i,unsigned int j,unsigned int k, float v){
     }
 }
 
+/* https://en.wikipedia.org/wiki/Normal_distribution#Generating_values_from_normal_distribution */
 float get_normal_random(){
     float y1 = ( (float)(rand()) + 1. )/( (float)(RAND_MAX) + 1. );
     float y2 = ( (float)(rand()) + 1. )/( (float)(RAND_MAX) + 1. );
@@ -470,7 +471,7 @@ ip_mat * ip_mat_brighten(ip_mat * in, float bright)
     for(j = 0; j < out->w; j++){
       for(z = 0; z < out->k; z++){
   		  out->data[i][j][z] = in->data[i][j][z] + bright;
-  		  /* TODO: Do we need to check if the pixel value is outside of [0, 255]? */
+  		  /* TODO: Do we need to check if the new pixel value is outside the range [0, 255]? */
   		  /*
   		  if(out->data[i][j][z] > 255.0){
   		   out->data[i][j][z] = 255.0;
@@ -485,3 +486,26 @@ ip_mat * ip_mat_brighten(ip_mat * in, float bright)
   return out;
 }
 
+/* Operazione di corruzione con rumore gaussiano:
+ * Aggiunge del rumore gaussiano all'immagine, il rumore viene enfatizzato
+ * per mezzo della variabile amount.
+ * out = a + gauss_noise*amount
+ * */
+ip_mat * ip_mat_corrupt(ip_mat * a, float amount){
+	ip_mat* out = NULL;
+	unsigned int i, j, z;
+	float tmp = 0.0;
+	out = ip_mat_create(a->h, a->w, a->k, 0);
+	for(i = 0; i < out->h; i++){
+		for(j = 0; j < out->w; j++){
+			for(z = 0; z < out->k; z++){
+				tmp = out->data[i][j][z];
+				do{
+					tmp = a->data[i][j][z] + get_normal_random()*amount;
+				}while(tmp > 255.0 || tmp < 0.0);
+				out->data[i][j][z] = tmp;
+			}
+		}
+	}
+	return out;
+}

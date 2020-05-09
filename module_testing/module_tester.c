@@ -17,6 +17,8 @@ int main(){
 	float alpha = 0.0;
 	char* filename = calloc(100, sizeof(*filename));
 
+	int i = 0;
+
   /* Load a bmp image */
   b = bm_load("mongolfiere.bmp");
 	c = bm_load("penismusic.bmp");
@@ -127,7 +129,22 @@ int main(){
 
 	  alpha += 0.25;
   }
-  printf("---- DONE\n");
+	printf("---- DONE\n");
+
+	alpha = (float)0.0;
+  while(alpha <= 255.0){
+	  mod_ip_mat = ip_mat_corrupt(input_img2, alpha);
+	  d = ip_mat_to_bitmap(mod_ip_mat);
+	  sprintf(filename, "corruption_%d.bmp", (int)alpha);
+	  bm_save(d, filename);
+	  bm_free(d);
+	  d = NULL;
+	  ip_mat_free(mod_ip_mat);
+	  mod_ip_mat = NULL;
+
+	  alpha += 15.0;
+  }
+
 	free(filename);
 	filename = NULL;
 	/* Don't free mod_ip_mat in this section here, but rather do it after each call to a function*/
