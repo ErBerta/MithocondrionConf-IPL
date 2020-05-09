@@ -445,7 +445,10 @@ ip_mat * ip_mat_brighten(ip_mat * in, float bright)
   for(i = 0; i < out->h; i++){
     for(j = 0; j < out->w; j++){
       for(z = 0; z < out->k; z++){
-  		  out->data[i][j][z] = in->data[i][j][z] + bright;
+  		  if(in->data[i][j][z] + bright > 255)
+          out->data[i][j][z] = 255;
+        else
+          out->data[i][j][z] = in->data[i][j][z] + bright;
   	  }
     }
   }
