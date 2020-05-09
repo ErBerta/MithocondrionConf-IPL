@@ -19,25 +19,14 @@ int main(){
 
 	int i = 0;
 
-  /* Load a bmp image */
-  b = bm_load("mongolfiere.bmp");
-<<<<<<< HEAD
-	c = bm_load("flower.bmp");
-=======
+	/* Load a bmp image */
+	b = bm_load("mongolfiere.bmp");
 	c = bm_load("penismusic.bmp");
->>>>>>> fa9926d2f04f7454fb39270ddfca6dec0958836f
 	input_img = bitmap_to_ip_mat(b);
 	input_img2 = bitmap_to_ip_mat(c);
-	//ip_mat_show(input_img);
+	ip_mat_show(input_img);
 
-    /* Test a function, show on screen the output, free up the memory and set the pointer to NULL*/
-<<<<<<< HEAD
-	/*mod_ip_mat = ip_mat_mul_scalar(input_img, 10.0);
-	ip_mat_show(mod_ip_mat);
-	d = ip_mat_to_bitmap(mod_ip_mat);
-	ip_mat_free(mod_ip_mat);
-	mod_ip_mat = NULL;
-=======
+	/* Test a function, show on screen the output, free up the memory and set the pointer to NULL*/
 	mod_ip_mat = ip_mat_mul_scalar(input_img, 10.0);
 	if(mod_ip_mat) {
 		ip_mat_free(mod_ip_mat);
@@ -47,7 +36,6 @@ int main(){
 	else{
 		printf("mod_ip_mat is NULL\n");
 	}
->>>>>>> fa9926d2f04f7454fb39270ddfca6dec0958836f
 
 	mod_ip_mat = ip_mat_add_scalar(input_img, 20.0);
 	if(mod_ip_mat) {
@@ -81,12 +69,6 @@ int main(){
 	}
 
 	mod_ip_mat = ip_mat_mean(input_img,input_img2);
-<<<<<<< HEAD
-	ip_mat_show(mod_ip_mat);
-	ip_mat_free(mod_ip_mat);
-  mod_ip_mat = NULL;
-*/
-=======
 	if(mod_ip_mat) {
 		ip_mat_free(mod_ip_mat);
 		mod_ip_mat = NULL;
@@ -96,7 +78,6 @@ int main(){
 		printf("mod_ip_mat is NULL\n");
 	}
 
->>>>>>> fa9926d2f04f7454fb39270ddfca6dec0958836f
 	/*mod_ip_mat = ip_mat_subset(input_img,0,92,0,93);
 	ip_mat_show(mod_ip_mat);
 	d = ip_mat_to_bitmap(mod_ip_mat);
@@ -121,52 +102,48 @@ int main(){
 	ip_mat_free(mod_ip_mat);
   mod_ip_mat = NULL;
 
-<<<<<<< HEAD
-	mod_ip_mat = ip_mat_brighten(input_img2,50);
-=======
 	mod_ip_mat = ip_mat_brighten(input_img, 60.0);
->>>>>>> fa9926d2f04f7454fb39270ddfca6dec0958836f
 	ip_mat_show(mod_ip_mat);
 	ip_mat_free(mod_ip_mat);
-  mod_ip_mat = NULL;
+  mod_ip_mat = NULL;*/
 
-  printf("Blending test\n");
-  while(alpha <= 1.0) {
-	  mod_ip_mat = ip_mat_blend(input_img, input_img2, alpha);
+	printf("Blending test\n");
+	while(alpha <= 1.0) {
+		mod_ip_mat = ip_mat_blend(input_img, input_img2, alpha);
 
-	  d = ip_mat_to_bitmap(mod_ip_mat);
-	  sprintf(filename, "blending_%f.bmp", alpha);
-	  bm_save(d, filename);
-	  bm_free(d);
-	  d = NULL;
-	  bzero(filename, 100);
+		d = ip_mat_to_bitmap(mod_ip_mat);
+		sprintf(filename, "blending_%f.bmp", alpha);
+		bm_save(d, filename);
+		bm_free(d);
+		d = NULL;
+		bzero(filename, 100);
 
-	  if(mod_ip_mat) {
-		  ip_mat_free(mod_ip_mat);
-		  mod_ip_mat = NULL;
-		  printf("mod_ip_mat is OK\n");
-	  }
-	  else{
-		  printf("mod_ip_mat is NULL\n");
-	  }
+		if(mod_ip_mat) {
+			ip_mat_free(mod_ip_mat);
+			mod_ip_mat = NULL;
+			printf("mod_ip_mat is OK\n");
+		}
+		else{
+			printf("mod_ip_mat is NULL\n");
+		}
 
-	  alpha += 0.25;
-  }
+		alpha += 0.25;
+	}
 	printf("---- DONE\n");
 
 	alpha = (float)0.0;
-  while(alpha <= 255.0){
-	  mod_ip_mat = ip_mat_corrupt(input_img2, alpha);
-	  d = ip_mat_to_bitmap(mod_ip_mat);
-	  sprintf(filename, "corruption_%d.bmp", (int)alpha);
-	  bm_save(d, filename);
-	  bm_free(d);
-	  d = NULL;
-	  ip_mat_free(mod_ip_mat);
-	  mod_ip_mat = NULL;
+	while(alpha <= 255.0){
+		mod_ip_mat = ip_mat_corrupt(input_img2, alpha);
+		d = ip_mat_to_bitmap(mod_ip_mat);
+		sprintf(filename, "corruption_%d.bmp", (int)alpha);
+		bm_save(d, filename);
+		bm_free(d);
+		d = NULL;
+		ip_mat_free(mod_ip_mat);
+		mod_ip_mat = NULL;
 
-	  alpha += 15.0;
-  }
+		alpha += 15.0;
+	}
 
 	free(filename);
 	filename = NULL;

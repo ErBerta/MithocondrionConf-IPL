@@ -7,81 +7,81 @@
 #include "bmp.h"
 
 void ip_mat_show(ip_mat * t){
-    unsigned int i,l,j;
-    printf("Matrix of size %d x %d x %d (hxwxk)\n",t->h,t->w,t->k);
-    for (l = 0; l < t->k; l++) {
-        printf("Slice %d\n", l);
-        for(i=0;i<t->h;i++) {
-            for (j = 0; j < t->w; j++) {
-                printf("%f ", get_val(t,i,j,l));
-            }
-            printf("\n");
-        }
-        printf("\n");
-    }
+	unsigned int i,l,j;
+	printf("Matrix of size %d x %d x %d (hxwxk)\n",t->h,t->w,t->k);
+	for (l = 0; l < t->k; l++) {
+		printf("Slice %d\n", l);
+		for(i=0;i<t->h;i++) {
+			for (j = 0; j < t->w; j++) {
+				printf("%f ", get_val(t,i,j,l));
+			}
+			printf("\n");
+		}
+		printf("\n");
+	}
 }
 
 void ip_mat_show_stats(ip_mat * t){
-    unsigned int k;
+	unsigned int k;
 
-    compute_stats(t);
+	compute_stats(t);
 
-    for(k=0;k<t->k;k++){
-        printf("Channel %d:\n", k);
-        printf("\t Min: %f\n", t->stat[k].min);
-        printf("\t Max: %f\n", t->stat[k].max);
-        printf("\t Mean: %f\n", t->stat[k].mean);
-    }
+	for(k=0;k<t->k;k++){
+		printf("Channel %d:\n", k);
+		printf("\t Min: %f\n", t->stat[k].min);
+		printf("\t Max: %f\n", t->stat[k].max);
+		printf("\t Mean: %f\n", t->stat[k].mean);
+	}
 }
 
 ip_mat * bitmap_to_ip_mat(Bitmap * img){
-    unsigned int i=0,j=0;
+	unsigned int i=0,j=0;
 
-    unsigned char R,G,B;
+	unsigned char R,G,B;
 
-    unsigned int h = img->h;
-    unsigned int w = img->w;
+	unsigned int h = img->h;
+	unsigned int w = img->w;
 
-    ip_mat * out = ip_mat_create(h, w,3,0);
+	ip_mat * out = ip_mat_create(h, w,3,0);
 
-    for (i = 0; i < h; i++)              /* rows */
-    {
-        for (j = 0; j < w; j++)          /* columns */
-        {
-            bm_get_pixel(img, j,i,&R, &G, &B);
-            set_val(out,i,j,0,(float) R);
-            set_val(out,i,j,1,(float) G);
-            set_val(out,i,j,2,(float) B);
-        }
-    }
+	for (i = 0; i < h; i++)              /* rows */
+	{
+		for (j = 0; j < w; j++)          /* columns */
+		{
+			bm_get_pixel(img, j,i,&R, &G, &B);
+			set_val(out,i,j,0,(float) R);
+			set_val(out,i,j,1,(float) G);
+			set_val(out,i,j,2,(float) B);
+		}
+	}
 
-    return out;
+	return out;
 }
 
 Bitmap * ip_mat_to_bitmap(ip_mat * t){
 
-    Bitmap *b = bm_create(t->w,t->h);
+	Bitmap *b = bm_create(t->w,t->h);
 
-    unsigned int i, j;
-    for (i = 0; i < t->h; i++)              /* rows */
-    {
-        for (j = 0; j < t->w; j++)          /* columns */
-        {
-            bm_set_pixel(b, j,i, (unsigned char) get_val(t,i,j,0),
-                    (unsigned char) get_val(t,i,j,1),
-                    (unsigned char) get_val(t,i,j,2));
-        }
-    }
-    return b;
+	unsigned int i, j;
+	for (i = 0; i < t->h; i++)              /* rows */
+	{
+		for (j = 0; j < t->w; j++)          /* columns */
+		{
+			bm_set_pixel(b, j,i, (unsigned char) get_val(t,i,j,0),
+			             (unsigned char) get_val(t,i,j,1),
+			             (unsigned char) get_val(t,i,j,2));
+		}
+	}
+	return b;
 }
 
 float get_val(ip_mat * a, unsigned int i,unsigned int j,unsigned int k){
-    if(i<a->h && j<a->w &&k<a->k){  /* j>=0 and k>=0 and i>=0 is non sense*/
-        return a->data[i][j][k];
-    }else{
-        printf("Errore get_val!!!");
-        exit(1);
-    }
+	if(i<a->h && j<a->w &&k<a->k){  /* j>=0 and k>=0 and i>=0 is non sense*/
+		return a->data[i][j][k];
+	}else{
+		printf("Errore get_val!!!");
+		exit(1);
+	}
 }
 /* Inizializza una ip_mat con dimensioni w h e k.
  * Ogni elemento è generato da una gaussiana con media mean e varianza var */
@@ -89,11 +89,11 @@ float get_val(ip_mat * a, unsigned int i,unsigned int j,unsigned int k){
 void ip_mat_init_random(ip_mat * t, float mean, float var)
 {
 	unsigned int i, j, z;
-  const double pi = 3.141592653589793;
-  for(i = 0; i < t->h; i++){
+	const double pi = 3.141592653589793;
+	for(i = 0; i < t->h; i++){
 		for(j = 0; j < t->w; j++){
 			for(z = 0; z < t->k; z++){
-			    t->data[i][j][z] = mean + var * (float) (sqrt ( - 2.0 * log ( get_normal_random() ) ) * cos ( 2.0 * pi * get_normal_random() ));
+				t->data[i][j][z] = mean + var * (float) (sqrt ( - 2.0 * log ( get_normal_random() ) ) * cos ( 2.0 * pi * get_normal_random() ));
 			}
 		}
 	}
@@ -104,10 +104,10 @@ void ip_mat_init_random(ip_mat * t, float mean, float var)
  * La terza dimensione la riportiamo per intero, stiamo in sostanza prendendo un sottoinsieme
  * delle righe e delle colonne.
  * */
- /* AUTHOR: Berta */
+/* AUTHOR: Berta */
 ip_mat * ip_mat_subset(ip_mat * t, unsigned int row_start, unsigned int row_end, unsigned int col_start, unsigned int col_end)
 {
-  ip_mat* out = NULL;
+	ip_mat* out = NULL;
 	unsigned int i, j, z;
 
 	out = ip_mat_create((row_end - row_start + 1), (col_end - col_start + 1), t->k, 0);
@@ -141,89 +141,89 @@ ip_mat * ip_mat_subset(ip_mat * t, unsigned int row_start, unsigned int row_end,
  *      out.w = a.w = b.w
  *      out.k = a.k + b.k
  * */
- /*TODO: Serve controllare che le dimensioni siano uguali?*/
- /*Meglio soluzione 1 o 2?*/
- /* AUTHOR: Berta */
+/*TODO: Serve controllare che le dimensioni siano uguali?*/
+/*Meglio soluzione 1 o 2?*/
+/* AUTHOR: Berta */
 ip_mat * ip_mat_concat(ip_mat * a, ip_mat * b, int dimensione)
 {
-  ip_mat* out = NULL;
+	ip_mat* out = NULL;
 	unsigned int i, j, z;
-  unsigned int h = a->h, w = a->w, k = a->k;
-  unsigned int remh=0, remw=0, remk=0;
+	unsigned int h = a->h, w = a->w, k = a->k;
+	unsigned int remh=0, remw=0, remk=0;
 
-  switch(dimensione)
-  {
-    case 0:
-      h = a->h + b->h;
-      remh = a->h;
-      break;
-    case 1:
-      w = a->w + b->w;
-      remw = a->w;
-      break;
-    case 2:
-      k = a->k + b->k;
-      remk = a->k;
-      break;
-    default:
-      return NULL;
-    break;
-  }
-  out = ip_mat_create(h, w, k,0);
-  for(i = 0; i < h; i++){
+	switch(dimensione)
+	{
+		case 0:
+			h = a->h + b->h;
+			remh = a->h;
+			break;
+		case 1:
+			w = a->w + b->w;
+			remw = a->w;
+			break;
+		case 2:
+			k = a->k + b->k;
+			remk = a->k;
+			break;
+		default:
+			return NULL;
+			break;
+	}
+	out = ip_mat_create(h, w, k,0);
+	for(i = 0; i < h; i++){
 		for(j = 0; j < w; j++){
 			for(z = 0; z < k; z++){
-        if(i<a->h && j<a->w && z<a->k)
-			    out->data[i][j][z] = a->data[i][j][z];
-        else
-          out->data[i][j][z] = b->data[i-remh][j-remw][z-remk];
+				if(i<a->h && j<a->w && z<a->k)
+					out->data[i][j][z] = a->data[i][j][z];
+				else
+					out->data[i][j][z] = b->data[i-remh][j-remw][z-remk];
 			}
 		}
 	}
-  /*
-  unsigned int h, w, k;
-  switch(dimensione)
-  {
-    case 0:
-      h = a->h + b->h;
-      w = a->w;
-      k = a->k;
-      break;
-    case 1:
-      h = a->h;
-      w = a->w + b->w;
-      k = a->k;
-      break;
-    case 2:
-      h = a->h;
-      w = a->w;
-      k = a->k + b->k;
-      break;
-    default:
-      return NULL;
-    break;
-  }
+	/*
+	unsigned int h, w, k;
+	switch(dimensione)
+	{
+		case 0:
+			h = a->h + b->h;
+			w = a->w;
+			k = a->k;
+			break;
+		case 1:
+			h = a->h;
+			w = a->w + b->w;
+			k = a->k;
+			break;
+		case 2:
+			h = a->h;
+			w = a->w;
+			k = a->k + b->k;
+			break;
+		default:
+			return NULL;
+		break;
+	}
 
 	out = ip_mat_create(h, w, k,0);
 
 	for(i = 0; i < h; i++){
 		for(j = 0; j < w; j++){
 			for(z = 0; z < k; z++){
-        if(i<a->h && j<a->w && z<a->k)
-			    out->data[i][j][z] = a->data[i][j][z];
-        else
-          switch(dimensione)
-          {
-            case 0:
-              out->data[i][j][z] = b->data[i - a->h][j][z];
-            break;
-            case 1:
-              out->data[i][j][z] = b->data[i][j - a->w][z];
-            break;
-            case 2:
-              out->data[i][j][z] = b->data[i][j][z - a->k];
-            break;
-          }
+				if(i<a->h && j<a->w && z<a->k)
+					out->data[i][j][z] = a->data[i][j][z];
+				else
+					switch(dimensione)
+					{
+						case 0:
+							out->data[i][j][z] = b->data[i - a->h][j][z];
+						break;
+						case 1:
+							out->data[i][j][z] = b->data[i][j - a->w][z];
+						break;
+						case 2:
+							out->data[i][j][z] = b->data[i][j][z - a->k];
+						break;
+					}
 			}
 		}
 	}*/
@@ -231,52 +231,52 @@ ip_mat * ip_mat_concat(ip_mat * a, ip_mat * b, int dimensione)
 }
 
 void set_val(ip_mat * a, unsigned int i,unsigned int j,unsigned int k, float v){
-    if(i<a->h && j<a->w &&k<a->k){
-        a->data[i][j][k]=v;
-    }else{
-        printf("Errore set_val!!!");
-        exit(1);
-    }
+	if(i<a->h && j<a->w &&k<a->k){
+		a->data[i][j][k]=v;
+	}else{
+		printf("Errore set_val!!!");
+		exit(1);
+	}
 }
 
 /* https://en.wikipedia.org/wiki/Normal_distribution#Generating_values_from_normal_distribution */
 float get_normal_random(){
-    float y1 = ( (float)(rand()) + 1. )/( (float)(RAND_MAX) + 1. );
-    float y2 = ( (float)(rand()) + 1. )/( (float)(RAND_MAX) + 1. );
-    return cos(2*PI*y2)*sqrt(-2.*log(y1));
+	float y1 = ( (float)(rand()) + 1. )/( (float)(RAND_MAX) + 1. );
+	float y2 = ( (float)(rand()) + 1. )/( (float)(RAND_MAX) + 1. );
+	return cos(2*PI*y2)*sqrt(-2.*log(y1));
 
 }
 
 /**** PARTE 1: TIPO DI DATI ip_mat E MEMORIA ****/
 /* AUTHOR: Dussin */
 ip_mat * ip_mat_create(unsigned int h, unsigned int w,unsigned  int k, float v){
-    unsigned int i = 0, j = 0, z = 0;
-    ip_mat* mat = (ip_mat*)calloc(1, sizeof(ip_mat));
-    float*** data = (float***)calloc(h, sizeof(*data));
-    stats* st = (stats*)calloc(k, sizeof(*st));
-    mat->h = h;
-    mat->w = w;
-    mat->k = k;
-    for(i = 0; i < h; i++){
-        data[i] = (float**)calloc(w, sizeof(**data));
-        for(j = 0; j < w; j++){
-            data[i][j] = (float*)calloc(k, sizeof(***data));
-            for(z = 0; z < k; z++){
-                data[i][j][z] = v;
-            }
-        }
-    }
-    mat->data = data;
-    mat->stat = st;
+	unsigned int i = 0, j = 0, z = 0;
+	ip_mat* mat = (ip_mat*)calloc(1, sizeof(ip_mat));
+	float*** data = (float***)calloc(h, sizeof(*data));
+	stats* st = (stats*)calloc(k, sizeof(*st));
+	mat->h = h;
+	mat->w = w;
+	mat->k = k;
+	for(i = 0; i < h; i++){
+		data[i] = (float**)calloc(w, sizeof(**data));
+		for(j = 0; j < w; j++){
+			data[i][j] = (float*)calloc(k, sizeof(***data));
+			for(z = 0; z < k; z++){
+				data[i][j][z] = v;
+			}
+		}
+	}
+	mat->data = data;
+	mat->stat = st;
 
-    return mat;
+	return mat;
 }
 
 /* AUTHOR: Dussin */
 void ip_mat_free(ip_mat *a){
 	unsigned int i = 0, j = 0;
 	for(i = 0; i < a->h; i++){
-	    /* Free up each channel on the j-th row */
+		/* Free up each channel on the j-th row */
 		for(j = 0; j < a->w; j++){
 			free(a->data[i][j]);
 			a->data[i][j] = NULL;
@@ -295,7 +295,7 @@ void ip_mat_free(ip_mat *a){
 }
 
 void compute_stats(ip_mat * t){
-    printf("Compute stats is garbage\n");
+	printf("Compute stats is garbage\n");
 }
 
 /* AUTHOR: Dussin */
@@ -324,41 +324,41 @@ ip_mat * ip_mat_copy(ip_mat * in){
 /**** PARTE 1: OPERAZIONI MATEMATICHE FRA IP_MAT ****/
 /* Esegue la somma di due ip_mat (tutte le dimensioni devono essere identiche)
  * e la restituisce in output. */
- /* AUTHOR: Berta */
+/* AUTHOR: Berta */
 ip_mat * ip_mat_sum(ip_mat * a, ip_mat * b){
-  ip_mat* out = NULL;
-  if(a->w == b->w && a->h == b->h && a->k == b->k)
-  {
-    unsigned int i = 0, j = 0, z = 0;
-    out = ip_mat_create(a->h, a->w, a->k, 0);
-	  for(i = 0; i < out->h; i++){
-		  for(j = 0; j < out->w; j++){
-			  for(z = 0; z < out->k; z++){
-				  out->data[i][j][z] = a->data[i][j][z] + b->data[i][j][z];
-			  }
-		  }
-	  }
-  }
-  return out;
+	ip_mat* out = NULL;
+	if(a->w == b->w && a->h == b->h && a->k == b->k)
+	{
+		unsigned int i = 0, j = 0, z = 0;
+		out = ip_mat_create(a->h, a->w, a->k, 0);
+		for(i = 0; i < out->h; i++){
+			for(j = 0; j < out->w; j++){
+				for(z = 0; z < out->k; z++){
+					out->data[i][j][z] = a->data[i][j][z] + b->data[i][j][z];
+				}
+			}
+		}
+	}
+	return out;
 }
 /* Esegue la sottrazione di due ip_mat (tutte le dimensioni devono essere identiche)
  * e la restituisce in output.
  * */
- /* AUTHOR: Berta */
+/* AUTHOR: Berta */
 ip_mat * ip_mat_sub(ip_mat * a, ip_mat * b){
-  ip_mat* out = NULL;
-  if(a->w == b->w && a->h == b->h && a->k == b->k)
-  {
-    unsigned int i = 0, j = 0, z = 0;
-    out = ip_mat_create(a->h, a->w, a->k, 0);
-  	for(i = 0; i < out->h; i++){
-     for(j = 0; j < out->w; j++){
-  		for(z = 0; z < out->k; z++){
-  			out->data[i][j][z] = a->data[i][j][z] - b->data[i][j][z];
-  		}
-  	 }
-  	}
-  }
+	ip_mat* out = NULL;
+	if(a->w == b->w && a->h == b->h && a->k == b->k)
+	{
+		unsigned int i = 0, j = 0, z = 0;
+		out = ip_mat_create(a->h, a->w, a->k, 0);
+		for(i = 0; i < out->h; i++){
+			for(j = 0; j < out->w; j++){
+				for(z = 0; z < out->k; z++){
+					out->data[i][j][z] = a->data[i][j][z] - b->data[i][j][z];
+				}
+			}
+		}
+	}
 	return out;
 }
 
@@ -398,17 +398,17 @@ ip_mat *  ip_mat_add_scalar(ip_mat *a, float c){
 /* Calcola la media di due ip_mat a e b e la restituisce in output.*/
 /* AUTHOR: Berta */ /*TODO: controllare cast float*/
 ip_mat * ip_mat_mean(ip_mat * a, ip_mat * b){
-  ip_mat* out = NULL;
-  unsigned int i = 0, j = 0, z = 0;
-  out = ip_mat_create(a->h, a->w, a->k, 0);
-  for(i = 0; i < out->h; i++){
-   for(j = 0; j < out->w; j++){
-  	for(z = 0; z < out->k; z++){
-  		out->data[i][j][z] = (a->data[i][j][z] * b->data[i][j][z])/2.0;
-  	}
-   }
-  }
-  return out;
+	ip_mat* out = NULL;
+	unsigned int i = 0, j = 0, z = 0;
+	out = ip_mat_create(a->h, a->w, a->k, 0);
+	for(i = 0; i < out->h; i++){
+		for(j = 0; j < out->w; j++){
+			for(z = 0; z < out->k; z++){
+				out->data[i][j][z] = (a->data[i][j][z] * b->data[i][j][z])/2.0;
+			}
+		}
+	}
+	return out;
 }
 
 /**** PARTE 2: SEMPLICI OPERAZIONI SU IMMAGINI ****/
@@ -419,23 +419,23 @@ ip_mat * ip_mat_mean(ip_mat * a, ip_mat * b){
  * */
 /* AUTHOR: Berta */
 ip_mat * ip_mat_to_gray_scale(ip_mat * in){
-  ip_mat* out = NULL;
-  unsigned int i, j, z;
-  float somma, media;
-  out = ip_mat_create(in->h, in->w, in->k, 0);
-  for(i = 0; i < out->h; i++){
-    for(j = 0; j < out->w; j++){
-      somma = 0;
-	    for(z = 0; z < out->k; z++){
-  		  somma += in->data[i][j][z];
-  	  }
-      media = somma/out->k;
-      for(z = 0; z < out->k; z++){
-  		  out->data[i][j][z] = media;
-  	  }
-    }
-  }
-  return out;
+	ip_mat* out = NULL;
+	unsigned int i, j, z;
+	float somma, media;
+	out = ip_mat_create(in->h, in->w, in->k, 0);
+	for(i = 0; i < out->h; i++){
+		for(j = 0; j < out->w; j++){
+			somma = 0;
+			for(z = 0; z < out->k; z++){
+				somma += in->data[i][j][z];
+			}
+			media = somma/out->k;
+			for(z = 0; z < out->k; z++){
+				out->data[i][j][z] = media;
+			}
+		}
+	}
+	return out;
 }
 
 /* Effettua la fusione (combinazione convessa) di due immagini */
@@ -464,33 +464,26 @@ ip_mat * ip_mat_blend(ip_mat * a, ip_mat * b, float alpha){
 /* AUTHOR: Berta */
 ip_mat * ip_mat_brighten(ip_mat * in, float bright)
 {
-  ip_mat* out = NULL;
-  unsigned int i, j, z;
-  out = ip_mat_create(in->h, in->w, in->k, 0);
-  for(i = 0; i < out->h; i++){
-    for(j = 0; j < out->w; j++){
-      for(z = 0; z < out->k; z++){
-<<<<<<< HEAD
-  		  if(in->data[i][j][z] + bright > 255)
-          out->data[i][j][z] = 255;
-        else
-          out->data[i][j][z] = in->data[i][j][z] + bright;
-=======
-  		  out->data[i][j][z] = in->data[i][j][z] + bright;
-  		  /* TODO: Do we need to check if the new pixel value is outside the range [0, 255]? */
-  		  /*
-  		  if(out->data[i][j][z] > 255.0){
-  		   out->data[i][j][z] = 255.0;
-  		  }
-  		  else if(out->data[i][j][z] < 0.0){
-  		   out->data[i][j][z] = 0.0;
-  		  }
-  		  */
->>>>>>> fa9926d2f04f7454fb39270ddfca6dec0958836f
-  	  }
-    }
-  }
-  return out;
+	ip_mat* out = NULL;
+	unsigned int i, j, z;
+	out = ip_mat_create(in->h, in->w, in->k, 0);
+	for(i = 0; i < out->h; i++){
+		for(j = 0; j < out->w; j++){
+			for(z = 0; z < out->k; z++){
+				out->data[i][j][z] = in->data[i][j][z] + bright;
+				/* TODO: Do we need to check if the new pixel value is outside the range [0, 255]? */
+				/*
+				if(out->data[i][j][z] > 255.0){
+				 out->data[i][j][z] = 255.0;
+				}
+				else if(out->data[i][j][z] < 0.0){
+				 out->data[i][j][z] = 0.0;
+				}
+				*/
+			}
+		}
+	}
+	return out;
 }
 
 /* Operazione di corruzione con rumore gaussiano:
