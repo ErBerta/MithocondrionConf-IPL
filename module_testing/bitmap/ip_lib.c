@@ -470,6 +470,12 @@ ip_mat * ip_mat_brighten(ip_mat * in, float bright)
   for(i = 0; i < out->h; i++){
     for(j = 0; j < out->w; j++){
       for(z = 0; z < out->k; z++){
+<<<<<<< HEAD
+  		  if(in->data[i][j][z] + bright > 255)
+          out->data[i][j][z] = 255;
+        else
+          out->data[i][j][z] = in->data[i][j][z] + bright;
+=======
   		  out->data[i][j][z] = in->data[i][j][z] + bright;
   		  /* TODO: Do we need to check if the new pixel value is outside the range [0, 255]? */
   		  /*
@@ -480,6 +486,7 @@ ip_mat * ip_mat_brighten(ip_mat * in, float bright)
   		   out->data[i][j][z] = 0.0;
   		  }
   		  */
+>>>>>>> fa9926d2f04f7454fb39270ddfca6dec0958836f
   	  }
     }
   }
