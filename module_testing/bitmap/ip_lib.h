@@ -111,14 +111,14 @@ ip_mat * ip_mat_mean(ip_mat * a, ip_mat * b); /* MAYBE OK */
  * e creando una nuova immagine avente per valore di un pixel su ogni canale la media appena calcolata.
  * Avremo quindi che tutti i canali saranno uguali.
  * */
-ip_mat * ip_mat_to_gray_scale(ip_mat * in);
+ip_mat * ip_mat_to_gray_scale(ip_mat * in); /* OK */
 
 /* Effettua la fusione (combinazione convessa) di due immagini */
-ip_mat * ip_mat_blend(ip_mat * a, ip_mat * b, float alpha);
+ip_mat * ip_mat_blend(ip_mat * a, ip_mat * b, float alpha); /* OK */
 
 /* Operazione di brightening: aumenta la luminosità dell'immagine
  * aggiunge ad ogni pixel un certo valore*/
-ip_mat * ip_mat_brighten(ip_mat * a, float bright);
+ip_mat * ip_mat_brighten(ip_mat * a, float bright); /* OK */
 
 /* Operazione di corruzione con rumore gaussiano:
  * Aggiunge del rumore gaussiano all'immagine, il rumore viene enfatizzato
