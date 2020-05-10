@@ -27,7 +27,7 @@ int main(){
 	float alpha = 0.0, foo = 0.0;
 	char* filename = calloc(FDIM, sizeof(*filename));
 	char imgdir[] = "images";
-	int i = 0;
+	int i = 0, j = 0, z = 0, f = 0;
 
 	/* Load a bmp image */
 	sprintf(filename, "%s/mongolfiere.bmp", imgdir);
@@ -41,6 +41,7 @@ int main(){
 	bzero(filename, FDIM);
 
 	/* Test a function, show on screen the output, free up the memory and set the pointer to NULL*/
+
 	printf("_mul_scalar test\n");
 	start = clock();
 	mod_ip_mat = ip_mat_mul_scalar(input_img, 10.0);
@@ -159,6 +160,7 @@ int main(){
 	  d = ip_mat_to_bitmap(mod_ip_mat);
 	  sprintf(filename, "%s/brighten_%f.bmp", imgdir, foo);
 	  bm_save(d, filename);
+	  bzero(filename, FDIM);
 	  bm_free(d);
 	  d = NULL;
 	  if(mod_ip_mat) {
@@ -212,6 +214,7 @@ int main(){
 		d = ip_mat_to_bitmap(mod_ip_mat);
 		sprintf(filename, "%s/corruption_%d.bmp", imgdir, (int)alpha);
 		bm_save(d, filename);
+		bzero(filename, FDIM);
 		bm_free(d);
 		d = NULL;
 		ip_mat_free(mod_ip_mat);
@@ -231,6 +234,7 @@ int main(){
 		d = ip_mat_to_bitmap(mod_ip_mat);
 		sprintf(filename, "%s/concat_%d.bmp", imgdir, i);
 		bm_save(d, filename);
+		bzero(filename, FDIM);
 		bm_free(d);
 		d = NULL;
 		ip_mat_free(mod_ip_mat);
@@ -238,8 +242,24 @@ int main(){
 		printf("Time to Concat on %d-th dimension: %f seconds\n", i, et(start, end));
 	}
 	printf("---- DONE\n");
+
+	printf("_padding test\n");
+	start = clock();
+	mod_ip_mat = ip_mat_padding(input_img, 25, 50);
+	end = clock();
+	d = ip_mat_to_bitmap(mod_ip_mat);
+	sprintf(filename, "%s/padding.bmp", imgdir);
+	bm_save(d, filename);
+	bzero(filename, FDIM);
+	bm_free(d);
+	d = NULL;
+	ip_mat_free(mod_ip_mat);
+	mod_ip_mat = NULL;
+	printf("_padding took: %f seconds\n", et(start, end));
+
 	free(filename);
 	filename = NULL;
+
 	/* Don't free mod_ip_mat in this section here, but rather do it after each call to a function*/
 	bm_free(b);
 	bm_free(c);

@@ -47,11 +47,11 @@ void set_val(ip_mat * a, unsigned int i,unsigned int j,unsigned int k, float v);
 /* Calcola il valore minimo, il massimo e la media per ogni canale
  * e li salva dentro la struttura ip_mat stats
  * */
-void compute_stats(ip_mat * t);
+void compute_stats(ip_mat * t); /* OK */
 
 /* Inizializza una ip_mat con dimensioni w h e k.
  * Ogni elemento è generato da una gaussiana con media mean e varianza var */
-void ip_mat_init_random(ip_mat * t, float mean, float var);
+void ip_mat_init_random(ip_mat * t, float mean, float var); /* OK */
 
 /* Crea una copia di una ip_mat e lo restituisce in output */
 ip_mat * ip_mat_copy(ip_mat * in); /* OK */
@@ -83,7 +83,7 @@ ip_mat * ip_mat_subset(ip_mat * t, unsigned int row_start, unsigned int row_end,
  *      out.w = a.w = b.w
  *      out.k = a.k + b.k
  * */
-ip_mat * ip_mat_concat(ip_mat * a, ip_mat * b, int dimensione);
+ip_mat * ip_mat_concat(ip_mat * a, ip_mat * b, int dimensione); /* OK */
 
 /**** PARTE 1: OPERAZIONI MATEMATICHE FRA IP_MAT ****/
 /* Esegue la somma di due ip_mat (tutte le dimensioni devono essere identiche)

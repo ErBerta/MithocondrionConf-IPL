@@ -180,53 +180,6 @@ ip_mat * ip_mat_concat(ip_mat * a, ip_mat * b, int dimensione)
 			}
 		}
 	}
-	/*
-	unsigned int h, w, k;
-	switch(dimensione)
-	{
-		case 0:
-			h = a->h + b->h;
-			w = a->w;
-			k = a->k;
-			break;
-		case 1:
-			h = a->h;
-			w = a->w + b->w;
-			k = a->k;
-			break;
-		case 2:
-			h = a->h;
-			w = a->w;
-			k = a->k + b->k;
-			break;
-		default:
-			return NULL;
-		break;
-	}
-
-	out = ip_mat_create(h, w, k,0);
-
-	for(i = 0; i < h; i++){
-		for(j = 0; j < w; j++){
-			for(z = 0; z < k; z++){
-				if(i<a->h && j<a->w && z<a->k)
-					out->data[i][j][z] = a->data[i][j][z];
-				else
-					switch(dimensione)
-					{
-						case 0:
-							out->data[i][j][z] = b->data[i - a->h][j][z];
-						break;
-						case 1:
-							out->data[i][j][z] = b->data[i][j - a->w][z];
-						break;
-						case 2:
-							out->data[i][j][z] = b->data[i][j][z - a->k];
-						break;
-					}
-			}
-		}
-	}*/
 	return out;
 }
 
@@ -295,7 +248,26 @@ void ip_mat_free(ip_mat *a){
 }
 
 void compute_stats(ip_mat * t){
-	printf("Compute stats is garbage\n");
+	unsigned int i, j, z;
+	float sum[t->k];
+	for(z = 0; z < t->k; z++) {
+		sum[z] = 0;
+	}
+
+	for(i = 0; i < t->h; i++){
+		for(j = 0; j < t->w; j++){
+			for(z = 0; z < t->k; z++){
+				t->stat[z].min = t->stat[z].min > t->data[i][j][z] ? t->data[i][j][z] : t->stat[z].min;
+				t->stat[z].max = t->stat[z].max < t->data[i][j][z] ? t->data[i][j][z] : t->stat[z].max;
+				sum[z] += t->data[i][j][z];
+			}
+		}
+	}
+
+	for(z = 0; z < t->k; z++) {
+		t->stat[z].mean = sum[z] / (float)(t->h * t->w);
+	}
+
 }
 
 /* AUTHOR: Dussin */
@@ -488,6 +460,7 @@ ip_mat * ip_mat_brighten(ip_mat * in, float bright)
  * per mezzo della variabile amount.
  * out = a + gauss_noise*amount
  * */
+/* AUTHOR: Dussin */
 ip_mat * ip_mat_corrupt(ip_mat * a, float amount){
 	ip_mat* out = NULL;
 	unsigned int i, j, z;
@@ -507,3 +480,29 @@ ip_mat * ip_mat_corrupt(ip_mat * a, float amount){
 	}
 	return out;
 }
+
+/**** PARTE 3: CONVOLUZIONE E FILTRI *****/
+/* Aggiunge un padding all'immagine. Il padding verticale è pad_h mentre quello
+ * orizzontale è pad_w.
+ * L'output sarà un'immagine di dimensioni:
+ *      out.h = a.h + 2*pad_h;
+ *      out.w = a.w + 2*pad_w;
+ *      out.k = a.k
+ * con valori nulli sui bordi corrispondenti al padding e l'immagine "a" riportata
+ * nel centro
+ * */
+/* AUTHOR: Dussin */
+ip_mat * ip_mat_padding(ip_mat * a, int pad_h, int pad_w){
+	ip_mat* out = NULL;
+	unsigned int i, j, z;
+	out = ip_mat_create(a->h + 2*pad_h, a->w + 2*pad_w, a->k, 0);
+	for(i = pad_h; i < pad_h + a->h; i++){
+		for(j = pad_w; j < pad_w + a->w; j++) {
+			for(z = 0; z < out->k; z++) {
+				out->data[i][j][z] = a->data[i - pad_h][j - pad_w][z];
+			}
+		}
+	}
+	return out;
+}
+
