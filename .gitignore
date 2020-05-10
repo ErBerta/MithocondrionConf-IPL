@@ -46,7 +46,9 @@
 *.mod*
 *.cmd
 .tmp_versions/
-images/*
+!flower.bmp
+!mongolfiere.bmp
+!penismusic.bmp
 modules.order
 Module.symvers
 Mkfile.old
