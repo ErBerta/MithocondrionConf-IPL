@@ -48,7 +48,7 @@
 .tmp_versions/
 /module_testing/images/*
 !flower.bmp
-!mendelbrot.bmp
+!mandelbrot.bmp
 !penismusic.bmp
 !mongolfiere.bmp
 modules.order
