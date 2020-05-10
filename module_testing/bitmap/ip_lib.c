@@ -471,15 +471,12 @@ ip_mat * ip_mat_brighten(ip_mat * in, float bright)
 		for(j = 0; j < out->w; j++){
 			for(z = 0; z < out->k; z++){
 				out->data[i][j][z] = in->data[i][j][z] + bright;
-				/* TODO: Do we need to check if the new pixel value is outside the range [0, 255]? */
-				/*
 				if(out->data[i][j][z] > 255.0){
 				 out->data[i][j][z] = 255.0;
 				}
 				else if(out->data[i][j][z] < 0.0){
 				 out->data[i][j][z] = 0.0;
 				}
-				*/
 			}
 		}
 	}
@@ -494,16 +491,17 @@ ip_mat * ip_mat_brighten(ip_mat * in, float bright)
 ip_mat * ip_mat_corrupt(ip_mat * a, float amount){
 	ip_mat* out = NULL;
 	unsigned int i, j, z;
-	float tmp = 0.0;
 	out = ip_mat_create(a->h, a->w, a->k, 0);
 	for(i = 0; i < out->h; i++){
 		for(j = 0; j < out->w; j++){
 			for(z = 0; z < out->k; z++){
-				tmp = out->data[i][j][z];
-				do{
-					tmp = a->data[i][j][z] + get_normal_random()*amount;
-				}while(tmp > 255.0 || tmp < 0.0);
-				out->data[i][j][z] = tmp;
+				out->data[i][j][z] = a->data[i][j][z] + get_normal_random()*amount;
+				if(out->data[i][j][z] > 255.0){
+					out->data[i][j][z] = 255.0;
+				}
+				else if(out->data[i][j][z] < 0.0){
+					out->data[i][j][z] = 0.0;
+				}
 			}
 		}
 	}

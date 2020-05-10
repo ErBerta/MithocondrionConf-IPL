@@ -10,7 +10,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="709c4f99-e1c6-4d0a-adba-97021ad71a12" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bitmap/ip_lib.c" beforeDir="false" afterPath="$PROJECT_DIR$/bitmap/ip_lib.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bitmap/ip_lib.h" beforeDir="false" afterPath="$PROJECT_DIR$/bitmap/ip_lib.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flower.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mandelbrot.bmp" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/module_tester.c" beforeDir="false" afterPath="$PROJECT_DIR$/module_tester.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mongolfiere.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/penismusic.bmp" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,6 +42,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -56,6 +64,7 @@
       <workItem from="1588707379947" duration="830000" />
       <workItem from="1588748965483" duration="6293000" />
       <workItem from="1588849729131" duration="398000" />
+      <workItem from="1589111924799" duration="2576000" />
     </task>
     <servers />
   </component>
