@@ -46,9 +46,11 @@
 *.mod*
 *.cmd
 .tmp_versions/
+module_testing/images/*
 !flower.bmp
-!mongolfiere.bmp
+!mendelbrot.bmp
 !penismusic.bmp
+!mongolfiere.bmp
 modules.order
 Module.symvers
 Mkfile.old
