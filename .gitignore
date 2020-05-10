@@ -46,7 +46,7 @@
 *.mod*
 *.cmd
 .tmp_versions/
-module_testing/images/*
+/module_testing/images/*
 !flower.bmp
 !mendelbrot.bmp
 !penismusic.bmp
