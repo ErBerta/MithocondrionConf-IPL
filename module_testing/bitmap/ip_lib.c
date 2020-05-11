@@ -3,6 +3,7 @@
 */
 
 #include <stdio.h>
+#include <math.h>
 #include "ip_lib.h"
 #include "bmp.h"
 
@@ -506,3 +507,145 @@ ip_mat * ip_mat_padding(ip_mat * a, int pad_h, int pad_w){
 	return out;
 }
 
+/* Effettua la convoluzione di un ip_mat "a" con un ip_mat "f".
+ * La funzione restituisce un ip_mat delle stesse dimensioni di "a".
+ * */
+ip_mat * ip_mat_convolve(ip_mat * a, ip_mat * f) {
+
+    ip_mat* out = NULL;
+    unsigned pad_h = (f->h - 1)/2;
+    unsigned pad_w = (f->w - 1)/2;
+    ip_mat* in = ip_mat_padding(a, pad_h, pad_w);
+    out = ip_mat_create(a->h, a->w, a->k, 0);
+    ip_mat_free(a);
+    a = NULL;
+
+    unsigned int i, j, z, m, n;
+
+    printf("size out: %d %d %d \nsize in: %d %d %d\nsize filter: %d %d %d\n", out->h, out->w, out->k, in->h, in->w, in->k, f->h, f->w, f->k);
+
+    for (j = 0; j < out->h ; j++) {
+        for (i = 0; i < out->w ; i++) {
+            for (z = 0; z < out->k; z++) {
+                float sum = 0;
+                for(n = 0; n < f->h && n+j < out->h; n++) {
+                    for(m = 0; m < f->w && m+i < out->w; m++) {
+                        sum += (get_val(in, j + n, i + m, z) * get_val(f, n, m,z));
+                    }
+                }
+
+                if(sum > 255.0) {
+                    out->data[j][i][z] = 255.0;
+                } else if (sum < 0.0) {
+                    out->data[j][i][z] = 0.0;
+                } else {
+                    out->data[j][i][z] = sum;
+                }
+            }
+        }
+    }
+
+    return out;
+}
+
+/* Crea un filtro di sharpening */
+ip_mat * create_sharpen_filter() {
+    ip_mat* out = ip_mat_create(3, 3, 3, 0);
+
+    unsigned int z;
+
+    for (z = 0; z < out->k; z++) {
+        out->data[0][0][z] = 0;
+        out->data[0][1][z] = -1;
+        out->data[0][2][z] = 0;
+        out->data[1][0][z] = -1;
+        out->data[1][1][z] = 5;
+        out->data[1][2][z] = -1;
+        out->data[2][0][z] = 0;
+        out->data[2][1][z] = -1;
+        out->data[2][2][z] = 0;
+    }
+
+    return out;
+}
+
+/* Crea un filtro per rilevare i bordi */
+ip_mat * create_edge_filter() {
+    ip_mat* out = ip_mat_create(3, 3, 3, 0);
+
+    unsigned int z;
+
+    for (z = 0; z < out->k; z++) {
+        out->data[0][0][z] = -1;
+        out->data[0][1][z] = -1;
+        out->data[0][2][z] = -1;
+        out->data[1][0][z] = -1;
+        out->data[1][1][z] = 8;
+        out->data[1][2][z] = -1;
+        out->data[2][0][z] = -1;
+        out->data[2][1][z] = -1;
+        out->data[2][2][z] = -1;
+    }
+
+    return out;
+}
+
+/* Crea un filtro per aggiungere profondità */
+ip_mat * create_emboss_filter() {
+    ip_mat* out = ip_mat_create(3, 3, 3, 0);
+
+    unsigned int z;
+
+    for (z = 0; z < out->k; z++) {
+        out->data[0][0][z] = -2;
+        out->data[0][1][z] = -1;
+        out->data[0][2][z] = 0;
+        out->data[1][0][z] = -1;
+        out->data[1][1][z] = 1;
+        out->data[1][2][z] = 1;
+        out->data[2][0][z] = 0;
+        out->data[2][1][z] = 1;
+        out->data[2][2][z] = 2;
+    }
+
+    return out;
+}
+
+/* Crea un filtro medio per la rimozione del rumore */
+ip_mat * create_average_filter(int w, int h, int k) {
+    ip_mat* out = ip_mat_create(h, w, k, 0);
+
+    unsigned int x, y, z;
+    float c = 1.0/(w*h);
+
+    for (x = 0; x < out->w; x++) {
+        for (y = 0; y < out->h; y++) {
+            for (z = 0; z < out->k; z++) {
+                out->data[y][x][z] = c;
+            }
+        }
+    }
+
+    return out;
+}
+
+/* Crea un filtro gaussiano per la rimozione del rumore */
+ip_mat * create_gaussian_filter(int w, int h, int k, float sigma){
+    ip_mat* out = ip_mat_create(h, w, k, 0);
+
+    unsigned int x, y, z;
+    unsigned int cx = w/2, cy = h/2;
+    float constant = 1/(2* M_PI * pow(sigma, 2));
+
+    for (x = 0; x < out->w; x++) {
+        for (y = 0; y < out->h; y++) {
+            for (z = 0; z < out->k; z++) {
+                int mx = x - cx;
+                int my = y - cy;
+                out->data[y][x][z] = constant * exp( - (pow(mx, 2) + pow(my, 2)) / (2 * pow(sigma, 2)));
+            }
+        }
+    }
+
+    return out;
+}

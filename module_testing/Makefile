@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS= -ILib/ -Wall -g --ansi --pedantic -g3 -O3 -fsanitize=address -fsanitize=undefined -std=gnu89 -Wextra
 LIB_P=lib/
-LD_FLAGS=-lz -lm
+LD_FLAGS=-lm -lz
 
 MAIN_EXEC=module_tester.c
 OUT=exec.out
@@ -26,3 +26,6 @@ link:
 
 memtest:
 	valgrind -v --leak-check=full ./$(OUT)
+
+exe:
+	./$(OUT)

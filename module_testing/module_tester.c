@@ -30,7 +30,7 @@ int main(){
 	int i = 0, j = 0, z = 0, f = 0;
 
 	/* Load a bmp image */
-	sprintf(filename, "%s/mongolfiere.bmp", imgdir);
+	sprintf(filename, "%s/flower.bmp", imgdir);
 	b = bm_load(filename);
 	input_img = bitmap_to_ip_mat(b);
 	bzero(filename, FDIM);
@@ -136,7 +136,7 @@ int main(){
 	d = ip_mat_to_bitmap(mod_ip_mat);
 	ip_mat_free(mod_ip_mat);
   mod_ip_mat = NULL;*/
-
+/*
 	printf("Gray Scale test\n");
 	start = clock();
 	mod_ip_mat = ip_mat_to_gray_scale(input_img2);
@@ -256,7 +256,102 @@ int main(){
 	ip_mat_free(mod_ip_mat);
 	mod_ip_mat = NULL;
 	printf("_padding took: %f seconds\n", et(start, end));
+*/
 
+
+    ip_mat* filter = NULL;
+/*
+	printf("_sharpen test\n");
+    start = clock();
+    filter = create_sharpen_filter();
+    ip_mat_show(filter);
+    mod_ip_mat = ip_mat_convolve(input_img, filter);
+    end = clock();
+    ip_mat_free(filter);
+    filter = NULL;
+    d = ip_mat_to_bitmap(mod_ip_mat);
+    sprintf(filename, "%s/sharpen.bmp", imgdir);
+    bm_save(d, filename);
+    bzero(filename, FDIM);
+    bm_free(d);
+    d = NULL;
+    ip_mat_free(mod_ip_mat);
+    mod_ip_mat = NULL;
+    printf("_sharpen took: %f seconds\n", et(start, end));
+
+    printf("_edge test\n");
+    start = clock();
+    filter = create_edge_filter();
+    ip_mat_show(filter);
+    mod_ip_mat = ip_mat_convolve(input_img, filter);
+    end = clock();
+    ip_mat_free(filter);
+    filter = NULL;
+    d = ip_mat_to_bitmap(mod_ip_mat);
+    sprintf(filename, "%s/edge.bmp", imgdir);
+    bm_save(d, filename);
+    bzero(filename, FDIM);
+    bm_free(d);
+    d = NULL;
+    ip_mat_free(mod_ip_mat);
+    mod_ip_mat = NULL;
+    printf("_edge took: %f seconds\n", et(start, end));
+ */
+    printf("_emboss test\n");
+    start = clock();
+    filter = create_emboss_filter();
+    ip_mat_show(filter);
+    mod_ip_mat = ip_mat_convolve(input_img, filter);
+    end = clock();
+    ip_mat_free(filter);
+    filter = NULL;
+    d = ip_mat_to_bitmap(mod_ip_mat);
+    sprintf(filename, "%s/emboss.bmp", imgdir);
+    bm_save(d, filename);
+    bzero(filename, FDIM);
+    bm_free(d);
+    d = NULL;
+    ip_mat_free(mod_ip_mat);
+    mod_ip_mat = NULL;
+    printf("_emboss took: %f seconds\n", et(start, end));
+/*
+    printf("_average test\n");
+    start = clock();
+    filter = create_average_filter(11, 11, 3);
+    ip_mat_show(filter);
+    mod_ip_mat = ip_mat_convolve(input_img, filter);
+    end = clock();
+    ip_mat_free(filter);
+    filter = NULL;
+    d = ip_mat_to_bitmap(mod_ip_mat);
+    sprintf(filename, "%s/average.bmp", imgdir);
+    bm_save(d, filename);
+    bzero(filename, FDIM);
+    bm_free(d);
+    d = NULL;
+    ip_mat_free(mod_ip_mat);
+    mod_ip_mat = NULL;
+    printf("_avarage took: %f seconds\n", et(start, end));
+
+
+    printf("_gaussian test\n");
+    start = clock();
+    filter = create_gaussian_filter(9, 9, 3, 5);
+    ip_mat_show(filter);
+    mod_ip_mat = ip_mat_convolve(input_img, filter);
+    end = clock();
+    ip_mat_free(filter);
+    filter = NULL;
+    d = ip_mat_to_bitmap(mod_ip_mat);
+    sprintf(filename, "%s/gaussianbluer.bmp", imgdir);
+    bm_save(d, filename);
+    bzero(filename, FDIM);
+    bm_free(d);
+    d = NULL;
+    ip_mat_free(mod_ip_mat);
+    mod_ip_mat = NULL;
+    printf("_gaussian took: %f seconds\n", et(start, end));
+*/
 	free(filename);
 	filename = NULL;
 

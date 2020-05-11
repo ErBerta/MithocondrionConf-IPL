@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
     <generated />
   </component>
@@ -9,7 +27,13 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="709c4f99-e1c6-4d0a-adba-97021ad71a12" name="Default Changelist" comment="" />
+    <list default="true" id="709c4f99-e1c6-4d0a-adba-97021ad71a12" name="Default Changelist" comment="- convolve and filters&#10;- module_tester.c problem on memory allocation with all filter active">
+      <change beforePath="$PROJECT_DIR$/../.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bitmap/ip_lib.c" beforeDir="false" afterPath="$PROJECT_DIR$/bitmap/ip_lib.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module_tester.c" beforeDir="false" afterPath="$PROJECT_DIR$/module_tester.c" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -26,6 +50,9 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
+  <component name="KonanWorkspace">
+    <executables />
+  </component>
   <component name="ProjectId" id="1bV6XnkM2LeibfOGAeQnKYMtEKo" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -37,9 +64,34 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
     <property name="cf.first.check.clang-format" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../tests" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/Makefile" />
     <property name="settings.editor.selected.configurable" value="preferences.sourceCode.C/C++" />
+  </component>
+  <component name="RunManager" selected="Makefile.Run">
+    <configuration name="Build" type="MAKEFILE_TARGET_RUN_CONFIGURATION" factoryName="Makefile">
+      <makefile filename="$PROJECT_DIR$/Makefile" target="all" workingDirectory="" arguments="">
+        <envs />
+      </makefile>
+      <method v="2" />
+    </configuration>
+    <configuration name="Run" type="MAKEFILE_TARGET_RUN_CONFIGURATION" factoryName="Makefile">
+      <makefile filename="$PROJECT_DIR$/Makefile" target="exe" workingDirectory="" arguments="">
+        <envs />
+      </makefile>
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="MAKEFILE_TARGET_RUN_CONFIGURATION" factoryName="Makefile">
+      <makefile filename="$PROJECT_DIR$/Makefile" target="all" workingDirectory="" arguments="">
+        <envs />
+      </makefile>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Makefile.Run" />
+      <item itemvalue="Makefile.Build" />
+    </list>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -57,11 +109,23 @@
       <workItem from="1588849729131" duration="398000" />
       <workItem from="1589111924799" duration="3370000" />
       <workItem from="1589125967960" duration="4444000" />
+      <workItem from="1589204850204" duration="3378000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="2" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="WindowStateProjectService">
     <state x="277" y="0" width="809" height="736" key="#C/C++" timestamp="1589025614961">
@@ -72,26 +136,60 @@
       <screen x="0" y="0" width="1366" height="732" />
     </state>
     <state x="516" y="218" key="#Other_File_Types/0.0.1366.732@0.0.1366.732" timestamp="1588707459224" />
-    <state x="141" y="26" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1588751026437">
-      <screen x="0" y="0" width="1366" height="732" />
+    <state x="198" y="37" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1589190196492">
+      <screen x="0" y="0" width="1920" height="1048" />
     </state>
     <state x="141" y="26" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.732@0.0.1366.732" timestamp="1588751026437" />
+    <state x="198" y="37" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1048@0.0.1920.1048" timestamp="1589190196492" />
     <state x="465" y="76" key="#com.intellij.ide.macro.MacrosDialog" timestamp="1588751013967">
       <screen x="0" y="0" width="1366" height="732" />
     </state>
     <state x="465" y="76" key="#com.intellij.ide.macro.MacrosDialog/0.0.1366.732@0.0.1366.732" timestamp="1588751013967" />
-    <state x="465" y="126" key="FileChooserDialogImpl" timestamp="1588753936010">
-      <screen x="0" y="0" width="1366" height="732" />
+    <state x="537" y="83" width="826" height="876" key="CommitChangelistDialog2" timestamp="1589207898530">
+      <screen x="0" y="0" width="1920" height="1048" />
+    </state>
+    <state x="537" y="83" width="826" height="876" key="CommitChangelistDialog2/0.0.1920.1048@0.0.1920.1048" timestamp="1589207898530" />
+    <state x="100" y="99" width="1720" height="848" key="DiffContextDialog" timestamp="1589195503843">
+      <screen x="0" y="0" width="1920" height="1048" />
+    </state>
+    <state x="100" y="99" width="1720" height="848" key="DiffContextDialog/0.0.1920.1048@0.0.1920.1048" timestamp="1589195503843" />
+    <state x="654" y="180" width="424" height="509" key="FileChooserDialogImpl" timestamp="1589190105290">
+      <screen x="0" y="0" width="1920" height="1048" />
     </state>
     <state x="465" y="126" key="FileChooserDialogImpl/0.0.1366.732@0.0.1366.732" timestamp="1588753936010" />
+    <state x="654" y="180" width="424" height="509" key="FileChooserDialogImpl/0.0.1920.1048@0.0.1920.1048" timestamp="1589190105290" />
+    <state width="1864" height="211" key="GridCell.Tab.0.bottom" timestamp="1589208152565">
+      <screen x="0" y="0" width="1920" height="1048" />
+    </state>
+    <state width="1864" height="211" key="GridCell.Tab.0.bottom/0.0.1920.1048@0.0.1920.1048" timestamp="1589208152565" />
+    <state width="1864" height="211" key="GridCell.Tab.0.center" timestamp="1589208152564">
+      <screen x="0" y="0" width="1920" height="1048" />
+    </state>
+    <state width="1864" height="211" key="GridCell.Tab.0.center/0.0.1920.1048@0.0.1920.1048" timestamp="1589208152564" />
+    <state width="1864" height="211" key="GridCell.Tab.0.left" timestamp="1589208152564">
+      <screen x="0" y="0" width="1920" height="1048" />
+    </state>
+    <state width="1864" height="211" key="GridCell.Tab.0.left/0.0.1920.1048@0.0.1920.1048" timestamp="1589208152564" />
+    <state width="1864" height="211" key="GridCell.Tab.0.right" timestamp="1589208152565">
+      <screen x="0" y="0" width="1920" height="1048" />
+    </state>
+    <state width="1864" height="211" key="GridCell.Tab.0.right/0.0.1920.1048@0.0.1920.1048" timestamp="1589208152565" />
     <state x="133" y="59" key="MergeDialog" timestamp="1589042723357">
       <screen x="0" y="0" width="1366" height="732" />
     </state>
     <state x="133" y="59" key="MergeDialog/0.0.1366.732@0.0.1366.732" timestamp="1589042723357" />
+    <state x="684" y="217" width="532" height="607" key="RollbackChangesDialog" timestamp="1589207796956">
+      <screen x="0" y="0" width="1920" height="1048" />
+    </state>
+    <state x="684" y="217" width="532" height="607" key="RollbackChangesDialog/0.0.1920.1048@0.0.1920.1048" timestamp="1589207796956" />
     <state x="361" y="0" key="SettingsEditor" timestamp="1588707279783">
       <screen x="0" y="0" width="1366" height="732" />
     </state>
     <state x="361" y="0" key="SettingsEditor/0.0.1366.732@0.0.1366.732" timestamp="1588707279783" />
+    <state x="666" y="269" width="587" height="508" key="find.popup" timestamp="1589202547360">
+      <screen x="0" y="0" width="1920" height="1048" />
+    </state>
+    <state x="666" y="269" width="587" height="508" key="find.popup/0.0.1920.1048@0.0.1920.1048" timestamp="1589202547360" />
     <state x="411" y="60" key="git4idea.branch.GitSmartOperationDialog" timestamp="1589042678029">
       <screen x="0" y="0" width="1366" height="732" />
     </state>
