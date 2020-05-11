@@ -522,15 +522,13 @@ ip_mat * ip_mat_convolve(ip_mat * a, ip_mat * f) {
 
     unsigned int i, j, z, m, n;
 
-    printf("size out: %d %d %d \nsize in: %d %d %d\nsize filter: %d %d %d\n", out->h, out->w, out->k, in->h, in->w, in->k, f->h, f->w, f->k);
-
     for (j = 0; j < out->h ; j++) {
         for (i = 0; i < out->w ; i++) {
             for (z = 0; z < out->k; z++) {
                 float sum = 0;
-                for(n = 0; n < f->h && n+j < out->h; n++) {
-                    for(m = 0; m < f->w && m+i < out->w; m++) {
-                        sum += (get_val(in, j + n, i + m, z) * get_val(f, n, m,z));
+                for(n = 0; n < f->h && n + j < out->h; n++) {
+                    for(m = 0; m < f->w && m + i < out->w; m++) {
+                        sum += (get_val(in, j + n, i + m, z) * get_val(f, n, m, z));
                     }
                 }
 
@@ -648,4 +646,24 @@ ip_mat * create_gaussian_filter(int w, int h, int k, float sigma){
     }
 
     return out;
+}
+
+/* Nell'operazione di clamping i valori <low si convertono in low e i valori >high in high.*/
+void clamp(ip_mat * t, float low, float high){
+
+    unsigned int x, y, z;
+
+    for(x = 0; x < t->w; x++) {
+        for(y = 0; y < t->h; y++) {
+            for(z = 0; z < t->k; z++) {
+                float data = t->data[y][x][z];
+                if (data > high) {
+                    t->data[y][x][z] = high;
+                }
+                if (data < low) {
+                    t->data[y][x][z] = low;
+                }
+            }
+        }
+    }
 }
