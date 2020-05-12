@@ -250,6 +250,12 @@ void ip_mat_free(ip_mat *a){
 
 void compute_stats(ip_mat * t){
 	unsigned int i, j, z;
+	/*inizializzo le variabili*/
+	for(z = 0; z < t->k; z++){
+		t->stat[z].min = FLT_MAX;
+		t->stat[z].max = 0;
+		t->stat[z].mean = 0;
+	}
 	for(i = 0; i < t->h; i++){
 		for(j = 0; j < t->w; j++){
 			for(z = 0; z < t->k; z++){
@@ -657,6 +663,30 @@ void clamp(ip_mat * t, float low, float high){
                 if (data < low) {
                     t->data[y][x][z] = low;
                 }
+            }
+        }
+    }
+}
+/* Effettua una riscalatura dei dati tale che i valori siano in [0,new_max].
+ * Utilizzate il metodo compute_stat per ricavarvi il min, max per ogni canale.
+ *
+ * I valori sono scalati tramite la formula valore-min/(max - min)
+ *
+ * Si considera ogni indice della terza dimensione indipendente, quindi l'operazione
+ * di scalatura va ripetuta per ogni "fetta" della matrice 3D.
+ * Successivamente moltiplichiamo per new_max gli elementi della matrice in modo da ottenere un range
+ * di valori in [0,new_max].
+ * */
+void rescale(ip_mat * t, float new_max){
+
+    unsigned int x, y, z;
+
+		compute_stats(t);
+
+    for(x = 0; x < t->w; x++) {
+        for(y = 0; y < t->h; y++) {
+            for(z = 0; z < t->k; z++) {
+								t->data[y][x][z] = ((t->data[y][x][z] - t->stat[z].min)/(t->stat[z].max - t->stat[z].min))*new_max;
             }
         }
     }
