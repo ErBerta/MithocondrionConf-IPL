@@ -41,7 +41,6 @@ int main(){
 	bzero(filename, FDIM);
 
 	/* Test a function, show on screen the output, free up the memory and set the pointer to NULL*/
-
 	printf("_mul_scalar test\n");
 	start = clock();
 	mod_ip_mat = ip_mat_mul_scalar(input_img, 10.0);
@@ -258,10 +257,9 @@ int main(){
 	printf("_padding took: %f seconds\n", et(start, end));
 */
 
-
     ip_mat* filter = NULL;
-/*
-	printf("_sharpen test\n");
+
+  	printf("_sharpen test\n");
     start = clock();
     filter = create_sharpen_filter();
     ip_mat_show(filter);
@@ -278,7 +276,7 @@ int main(){
     ip_mat_free(mod_ip_mat);
     mod_ip_mat = NULL;
     printf("_sharpen took: %f seconds\n", et(start, end));
-
+/*
     printf("_edge test\n");
     start = clock();
     filter = create_edge_filter();
@@ -296,7 +294,7 @@ int main(){
     ip_mat_free(mod_ip_mat);
     mod_ip_mat = NULL;
     printf("_edge took: %f seconds\n", et(start, end));
- */
+
     printf("_emboss test\n");
     start = clock();
     filter = create_emboss_filter();
@@ -314,6 +312,7 @@ int main(){
     ip_mat_free(mod_ip_mat);
     mod_ip_mat = NULL;
     printf("_emboss took: %f seconds\n", et(start, end));
+*/
 /*
     printf("_average test\n");
     start = clock();
@@ -358,8 +357,14 @@ int main(){
 	/* Don't free mod_ip_mat in this section here, but rather do it after each call to a function*/
 	bm_free(b);
 	bm_free(c);
-	ip_mat_free(input_img);
-	ip_mat_free(input_img2);
+	if(input_img){
+		printf("Free input_img\n");
+		ip_mat_free(input_img);
+	}
+	if(input_img2){
+		printf("Free input_img2\n");
+		ip_mat_free(input_img2);
+	}
 
 	return 0;
 }

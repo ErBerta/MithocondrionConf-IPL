@@ -250,23 +250,18 @@ void ip_mat_free(ip_mat *a){
 
 void compute_stats(ip_mat * t){
 	unsigned int i, j, z;
-	float sum[t->k];
-	for(z = 0; z < t->k; z++) {
-		sum[z] = 0;
-	}
-
 	for(i = 0; i < t->h; i++){
 		for(j = 0; j < t->w; j++){
 			for(z = 0; z < t->k; z++){
 				t->stat[z].min = t->stat[z].min > t->data[i][j][z] ? t->data[i][j][z] : t->stat[z].min;
 				t->stat[z].max = t->stat[z].max < t->data[i][j][z] ? t->data[i][j][z] : t->stat[z].max;
-				sum[z] += t->data[i][j][z];
+				t->stat[z].mean += t->data[i][j][z];
 			}
 		}
 	}
 
 	for(z = 0; z < t->k; z++) {
-		t->stat[z].mean = sum[z] / (float)(t->h * t->w);
+		t->stat[z].mean /= (float)(t->h * t->w);
 	}
 
 }
@@ -517,8 +512,6 @@ ip_mat * ip_mat_convolve(ip_mat * a, ip_mat * f) {
     unsigned pad_w = (f->w - 1)/2;
     ip_mat* in = ip_mat_padding(a, pad_h, pad_w);
     out = ip_mat_create(a->h, a->w, a->k, 0);
-    ip_mat_free(a);
-    a = NULL;
 
     unsigned int i, j, z, m, n;
 
@@ -542,7 +535,8 @@ ip_mat * ip_mat_convolve(ip_mat * a, ip_mat * f) {
             }
         }
     }
-
+		ip_mat_free(in);
+    in = NULL;
     return out;
 }
 
