@@ -191,6 +191,7 @@ int main(){
 		mod_ip_mat = ip_mat_blend(input_img, input_img2, alpha);
 
 		d = ip_mat_to_bitmap(mod_ip_mat);
+		clamp(mod_ip_mat, 0.0, 255.0);
 		sprintf(filename, "%s/blending_%f.bmp", imgdir, alpha);
 		bm_save(d, filename);
 		bm_free(d);
@@ -218,6 +219,7 @@ int main(){
 	start = clock();
 	while(alpha <= 255.0){
 		mod_ip_mat = ip_mat_corrupt(input_img2, alpha);
+		clamp(mod_ip_mat, 0.0, 255.0);
 		d = ip_mat_to_bitmap(mod_ip_mat);
 		sprintf(filename, "%s/corruption_%d.bmp", imgdir, (int)alpha);
 		bm_save(d, filename);
