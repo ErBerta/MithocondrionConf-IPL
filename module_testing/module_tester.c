@@ -366,7 +366,7 @@ int main(){
 	printf("@before\n");
 	ip_mat_show_stats(mod_ip_mat);
 	/*ip_mat_show(mod_ip_mat);*/
-	rescale(mod_ip_mat,500);
+	rescale(mod_ip_mat,150);
     clamp(mod_ip_mat, 0.0, 255.0);
 	printf("---\n@after\n");
 	ip_mat_show_stats(mod_ip_mat);

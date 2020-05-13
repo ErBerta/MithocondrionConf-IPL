@@ -97,12 +97,15 @@ ip_mat * ip_mat_subset(ip_mat * t, unsigned int row_start, unsigned int row_end,
 {
 	ip_mat* out = NULL;
 	unsigned int i, j, z;
-
-	out = ip_mat_create((row_end - row_start + 1), (col_end - col_start + 1), t->k, 0);
-	for(i = row_start; i <= row_end; i++){
-		for(j = col_start; j <= col_end; j++){
-			for(z = 0; z < out->k; z++){
-				out->data[i-row_start][j-col_start][z] = t->data[i][j][z];
+	/*controllo che le dimensioni inserite siano valide*/
+	if(row_start >= 0 && row_end <= t->h && col_start >= 0 && col_end <= t->w)
+	{
+		out = ip_mat_create((row_end - row_start + 1), (col_end - col_start + 1), t->k, 0);
+		for(i = row_start; i <= row_end; i++){
+			for(j = col_start; j <= col_end; j++){
+				for(z = 0; z < out->k; z++){
+					out->data[i-row_start][j-col_start][z] = t->data[i][j][z];
+				}
 			}
 		}
 	}
@@ -129,8 +132,6 @@ ip_mat * ip_mat_subset(ip_mat * t, unsigned int row_start, unsigned int row_end,
  *      out.w = a.w = b.w
  *      out.k = a.k + b.k
  * */
-/*TODO: Serve controllare che le dimensioni siano uguali?*/ /* Penso di si rischiamo segmantation fault se cambiamo immagine*/
-/*Meglio soluzione 1 o 2?*/
 /* AUTHOR: Berta */
 ip_mat * ip_mat_concat(ip_mat * a, ip_mat * b, int dimensione)
 {
@@ -138,33 +139,45 @@ ip_mat * ip_mat_concat(ip_mat * a, ip_mat * b, int dimensione)
 	unsigned int i, j, z;
 	unsigned int h = a->h, w = a->w, k = a->k;
 	unsigned int remh=0, remw=0, remk=0;
-
+	/*int usato come bool per controllare se è possibile effettuare l'operazione*/
+	int valid = 1;
+	
 	switch(dimensione)
 	{
 		case 0:
 			h = a->h + b->h;
 			remh = a->h;
+			if(a->w != b->w || a->k != b->k)
+				valid = 0;
 			break;
 		case 1:
 			w = a->w + b->w;
 			remw = a->w;
+			if(a->h != b->h || a->k != b->k)
+				valid = 0;
 			break;
 		case 2:
 			k = a->k + b->k;
 			remk = a->k;
+			if(a->w != b->w || a->h != b->h)
+				valid = 0;
 			break;
 		default:
 			return NULL;
 			break;
 	}
-	out = ip_mat_create(h, w, k,0);
-	for(i = 0; i < h; i++){
-		for(j = 0; j < w; j++){
-			for(z = 0; z < k; z++){
-				if(i<a->h && j<a->w && z<a->k)
-					out->data[i][j][z] = a->data[i][j][z];
-				else
-					out->data[i][j][z] = b->data[i-remh][j-remw][z-remk];
+	/*se ottengo delle dimensioni coerenti procedo, altrimenti restituistco un puntatore a NULL*/
+	if(valid)
+	{
+		out = ip_mat_create(h, w, k,0);
+		for(i = 0; i < h; i++){
+			for(j = 0; j < w; j++){
+				for(z = 0; z < k; z++){
+					if(i<a->h && j<a->w && z<a->k)
+						out->data[i][j][z] = a->data[i][j][z];
+					else
+						out->data[i][j][z] = b->data[i-remh][j-remw][z-remk];
+				}
 			}
 		}
 	}
@@ -366,16 +379,20 @@ ip_mat *  ip_mat_add_scalar(ip_mat *a, float c){
 }
 
 /* Calcola la media di due ip_mat a e b e la restituisce in output.*/
-/* AUTHOR: Berta */ /*TODO: controllare cast float*/
+/* AUTHOR: Berta */
 /* Controllo dimensioni???????????????????????????????????????????????? */
 ip_mat * ip_mat_mean(ip_mat * a, ip_mat * b){
 	ip_mat* out = NULL;
 	unsigned int i = 0, j = 0, z = 0;
-	out = ip_mat_create(a->h, a->w, a->k, 0);
-	for(i = 0; i < out->h; i++){
-		for(j = 0; j < out->w; j++){
-			for(z = 0; z < out->k; z++){
-				out->data[i][j][z] = (a->data[i][j][z] * b->data[i][j][z])/2.0;
+	
+	if(a->w == b->w && a->h == b->h && a->k == b->k)
+	{
+		out = ip_mat_create(a->h, a->w, a->k, 0);
+		for(i = 0; i < out->h; i++){
+			for(j = 0; j < out->w; j++){
+				for(z = 0; z < out->k; z++){
+					out->data[i][j][z] = (a->data[i][j][z] * b->data[i][j][z])/2.0;
+				}
 			}
 		}
 	}
