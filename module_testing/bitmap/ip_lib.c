@@ -1,7 +1,3 @@
-/*
- Created by Sebastiano Vascon on 23/03/20.
-*/
-
 #include <stdio.h>
 #include <math.h>
 #include "ip_lib.h"
@@ -76,25 +72,16 @@ Bitmap * ip_mat_to_bitmap(ip_mat * t){
 	return b;
 }
 
-float get_val(ip_mat * a, unsigned int i,unsigned int j,unsigned int k){
-	if(i<a->h && j<a->w &&k<a->k){  /* j>=0 and k>=0 and i>=0 is non sense*/
-		return a->data[i][j][k];
-	}else{
-		printf("Errore get_val!!!");
-		exit(1);
-	}
-}
 /* Inizializza una ip_mat con dimensioni w h e k.
  * Ogni elemento è generato da una gaussiana con media mean e varianza var */
 /* AUTHOR: Berta */
 void ip_mat_init_random(ip_mat * t, float mean, float var)
 {
 	unsigned int i, j, z;
-	const double pi = 3.141592653589793;
 	for(i = 0; i < t->h; i++){
 		for(j = 0; j < t->w; j++){
 			for(z = 0; z < t->k; z++){
-				t->data[i][j][z] = mean + var * (float) (sqrt ( - 2.0 * log ( get_normal_random() ) ) * cos ( 2.0 * pi * get_normal_random() ));
+				t->data[i][j][z] = mean + var * (float) (sqrt ( - 2.0 * log ( get_normal_random() ) ) * cos ( 2.0 * M_PI * get_normal_random() ));
 			}
 		}
 	}
@@ -142,7 +129,7 @@ ip_mat * ip_mat_subset(ip_mat * t, unsigned int row_start, unsigned int row_end,
  *      out.w = a.w = b.w
  *      out.k = a.k + b.k
  * */
-/*TODO: Serve controllare che le dimensioni siano uguali?*/
+/*TODO: Serve controllare che le dimensioni siano uguali?*/ /* Penso di si rischiamo segmantation fault se cambiamo immagine*/
 /*Meglio soluzione 1 o 2?*/
 /* AUTHOR: Berta */
 ip_mat * ip_mat_concat(ip_mat * a, ip_mat * b, int dimensione)
@@ -184,10 +171,19 @@ ip_mat * ip_mat_concat(ip_mat * a, ip_mat * b, int dimensione)
 	return out;
 }
 
+float get_val(ip_mat * a, unsigned int i,unsigned int j,unsigned int k){
+	if(i<a->h && j<a->w &&k<a->k){  /* j>=0 and k>=0 and i>=0 is non sense*/
+		return a->data[i][j][k];
+	}else{
+		printf("Errore get_val!!!");
+		exit(1);
+	}
+}
+
 void set_val(ip_mat * a, unsigned int i,unsigned int j,unsigned int k, float v){
 	if(i<a->h && j<a->w &&k<a->k){
 		a->data[i][j][k]=v;
-	}else{
+	} else {
 		printf("Errore set_val!!!");
 		exit(1);
 	}
@@ -197,7 +193,7 @@ void set_val(ip_mat * a, unsigned int i,unsigned int j,unsigned int k, float v){
 float get_normal_random(){
 	float y1 = ( (float)(rand()) + 1. )/( (float)(RAND_MAX) + 1. );
 	float y2 = ( (float)(rand()) + 1. )/( (float)(RAND_MAX) + 1. );
-	return cos(2*PI*y2)*sqrt(-2.*log(y1));
+	return cos(2 * PI * y2) * sqrt(-2. * log(y1));
 
 }
 
@@ -371,6 +367,7 @@ ip_mat *  ip_mat_add_scalar(ip_mat *a, float c){
 
 /* Calcola la media di due ip_mat a e b e la restituisce in output.*/
 /* AUTHOR: Berta */ /*TODO: controllare cast float*/
+/* Controllo dimensioni???????????????????????????????????????????????? */
 ip_mat * ip_mat_mean(ip_mat * a, ip_mat * b){
 	ip_mat* out = NULL;
 	unsigned int i = 0, j = 0, z = 0;
@@ -445,12 +442,6 @@ ip_mat * ip_mat_brighten(ip_mat * in, float bright)
 		for(j = 0; j < out->w; j++){
 			for(z = 0; z < out->k; z++){
 				out->data[i][j][z] = in->data[i][j][z] + bright;
-				if(out->data[i][j][z] > 255.0){
-				 out->data[i][j][z] = 255.0;
-				}
-				else if(out->data[i][j][z] < 0.0){
-				 out->data[i][j][z] = 0.0;
-				}
 			}
 		}
 	}
@@ -470,13 +461,7 @@ ip_mat * ip_mat_corrupt(ip_mat * a, float amount){
 	for(i = 0; i < out->h; i++){
 		for(j = 0; j < out->w; j++){
 			for(z = 0; z < out->k; z++){
-				out->data[i][j][z] = a->data[i][j][z] + get_normal_random()*amount;
-				if(out->data[i][j][z] > 255.0){
-					out->data[i][j][z] = 255.0;
-				}
-				else if(out->data[i][j][z] < 0.0){
-					out->data[i][j][z] = 0.0;
-				}
+				out->data[i][j][z] = a->data[i][j][z] + get_normal_random() * amount;
 			}
 		}
 	}
@@ -525,24 +510,20 @@ ip_mat * ip_mat_convolve(ip_mat * a, ip_mat * f) {
         for (i = 0; i < out->w ; i++) {
             for (z = 0; z < out->k; z++) {
                 float sum = 0;
-                for(n = 0; n < f->h && n + j < out->h; n++) {
-                    for(m = 0; m < f->w && m + i < out->w; m++) {
+                for(n = 0; n < f->h && n + j < in->h; n++) {
+                    for(m = 0; m < f->w && m + i < in->w; m++) {
                         sum += (get_val(in, j + n, i + m, z) * get_val(f, n, m, z));
                     }
                 }
 
-                if(sum > 255.0) {
-                    out->data[j][i][z] = 255.0;
-                } else if (sum < 0.0) {
-                    out->data[j][i][z] = 0.0;
-                } else {
-                    out->data[j][i][z] = sum;
-                }
+                out->data[j][i][z] = sum;
             }
         }
     }
-		ip_mat_free(in);
+
+    ip_mat_free(in);
     in = NULL;
+
     return out;
 }
 
@@ -553,15 +534,11 @@ ip_mat * create_sharpen_filter() {
     unsigned int z;
 
     for (z = 0; z < out->k; z++) {
-        out->data[0][0][z] = 0;
         out->data[0][1][z] = -1;
-        out->data[0][2][z] = 0;
         out->data[1][0][z] = -1;
         out->data[1][1][z] = 5;
         out->data[1][2][z] = -1;
-        out->data[2][0][z] = 0;
         out->data[2][1][z] = -1;
-        out->data[2][2][z] = 0;
     }
 
     return out;
@@ -569,21 +546,11 @@ ip_mat * create_sharpen_filter() {
 
 /* Crea un filtro per rilevare i bordi */
 ip_mat * create_edge_filter() {
-    ip_mat* out = ip_mat_create(3, 3, 3, 0);
+    ip_mat* out = ip_mat_create(3, 3, 3, -1);
 
     unsigned int z;
-
-    for (z = 0; z < out->k; z++) {
-        out->data[0][0][z] = -1;
-        out->data[0][1][z] = -1;
-        out->data[0][2][z] = -1;
-        out->data[1][0][z] = -1;
+    for (z=0; z < out->k; z++)
         out->data[1][1][z] = 8;
-        out->data[1][2][z] = -1;
-        out->data[2][0][z] = -1;
-        out->data[2][1][z] = -1;
-        out->data[2][2][z] = -1;
-    }
 
     return out;
 }
@@ -597,11 +564,9 @@ ip_mat * create_emboss_filter() {
     for (z = 0; z < out->k; z++) {
         out->data[0][0][z] = -2;
         out->data[0][1][z] = -1;
-        out->data[0][2][z] = 0;
         out->data[1][0][z] = -1;
         out->data[1][1][z] = 1;
         out->data[1][2][z] = 1;
-        out->data[2][0][z] = 0;
         out->data[2][1][z] = 1;
         out->data[2][2][z] = 2;
     }
@@ -611,20 +576,10 @@ ip_mat * create_emboss_filter() {
 
 /* Crea un filtro medio per la rimozione del rumore */
 ip_mat * create_average_filter(int w, int h, int k) {
-    ip_mat* out = ip_mat_create(h, w, k, 0);
 
-    unsigned int x, y, z;
     float c = 1.0/(w*h);
 
-    for (x = 0; x < out->w; x++) {
-        for (y = 0; y < out->h; y++) {
-            for (z = 0; z < out->k; z++) {
-                out->data[y][x][z] = c;
-            }
-        }
-    }
-
-    return out;
+    return ip_mat_create(h, w, k, c);
 }
 
 /* Crea un filtro gaussiano per la rimozione del rumore */
@@ -667,6 +622,7 @@ void clamp(ip_mat * t, float low, float high){
         }
     }
 }
+
 /* Effettua una riscalatura dei dati tale che i valori siano in [0,new_max].
  * Utilizzate il metodo compute_stat per ricavarvi il min, max per ogni canale.
  *
@@ -681,12 +637,12 @@ void rescale(ip_mat * t, float new_max){
 
     unsigned int x, y, z;
 
-		compute_stats(t);
+    compute_stats(t);
 
     for(x = 0; x < t->w; x++) {
         for(y = 0; y < t->h; y++) {
             for(z = 0; z < t->k; z++) {
-								t->data[y][x][z] = ((t->data[y][x][z] - t->stat[z].min)/(t->stat[z].max - t->stat[z].min))*new_max;
+				t->data[y][x][z] = ((t->data[y][x][z] - t->stat[z].min)/(t->stat[z].max - t->stat[z].min)) * new_max;
             }
         }
     }

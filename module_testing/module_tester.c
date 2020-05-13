@@ -31,7 +31,7 @@ int main(){
 	int i = 0;
 
 	/* Load a bmp image */
-	sprintf(filename, "%s/flower.bmp", imgdir);
+	sprintf(filename, "%s/caf.bmp", imgdir);
 	b = bm_load(filename);
 	input_img = bitmap_to_ip_mat(b);
 	bzero(filename, FDIM);
@@ -47,6 +47,7 @@ int main(){
 	mod_ip_mat = ip_mat_mul_scalar(input_img, 10.0);
 	end = clock();
 	if(mod_ip_mat) {
+	    clamp(mod_ip_mat, 0.0, 255.0);
 		ip_mat_free(mod_ip_mat);
 		mod_ip_mat = NULL;
 		printf("mod_ip_mat is OK\n");
@@ -61,7 +62,9 @@ int main(){
 	printf("_add_scalar test\n");
 	start = clock();
 	mod_ip_mat = ip_mat_add_scalar(input_img, 20.0);
+
 	if(mod_ip_mat) {
+	    clamp(mod_ip_mat, 0.0, 255.0);
 		ip_mat_free(mod_ip_mat);
 		mod_ip_mat = NULL;
 		printf("mod_ip_mat is OK\n");
@@ -77,6 +80,7 @@ int main(){
 	start = clock();
 	mod_ip_mat = ip_mat_sum(input_img,input_img2);
 	if(mod_ip_mat) {
+	    clamp(mod_ip_mat, 0.0, 255.0);
 		ip_mat_free(mod_ip_mat);
 		mod_ip_mat = NULL;
 		printf("mod_ip_mat is OK\n");
@@ -92,6 +96,7 @@ int main(){
 	start = clock();
 	mod_ip_mat = ip_mat_sub(input_img,input_img2);
 	if(mod_ip_mat) {
+	    clamp(mod_ip_mat, 0, 255);
 		ip_mat_free(mod_ip_mat);
 		mod_ip_mat = NULL;
 		printf("mod_ip_mat is OK\n");
@@ -105,7 +110,7 @@ int main(){
 
 	printf("_mean test\n");
 	start = clock();
-	mod_ip_mat = ip_mat_mean(input_img,input_img2);
+	/* mod_ip_mat = ip_mat_mean(input_img,input_img2); */
 	if(mod_ip_mat) {
 		ip_mat_free(mod_ip_mat);
 		mod_ip_mat = NULL;
@@ -140,6 +145,7 @@ int main(){
 	printf("Gray Scale test\n");
 	start = clock();
 	mod_ip_mat = ip_mat_to_gray_scale(input_img2);
+	clamp(mod_ip_mat, 0.0, 255.0);
 	if(mod_ip_mat) {
 		ip_mat_free(mod_ip_mat);
 		mod_ip_mat = NULL;
@@ -157,6 +163,7 @@ int main(){
 	start = clock();
   while(foo <= 255.0){
 	  mod_ip_mat = ip_mat_brighten(input_img, foo);
+	  clamp(mod_ip_mat, 0.0, 255.0);
 	  d = ip_mat_to_bitmap(mod_ip_mat);
 	  sprintf(filename, "%s/brighten_%f.bmp", imgdir, foo);
 	  bm_save(d, filename);
@@ -229,7 +236,7 @@ int main(){
 	printf("Concat test\n");
 	for(i = 0; i < 3; i++){
 		start = clock();
-		mod_ip_mat = ip_mat_concat(input_img, input_img2, i);
+		mod_ip_mat = ip_mat_concat(input_img2, input_img2, i);
 		end = clock();
 		d = ip_mat_to_bitmap(mod_ip_mat);
 		sprintf(filename, "%s/concat_%d.bmp", imgdir, i);
@@ -262,6 +269,7 @@ int main(){
   filter = create_sharpen_filter();
   ip_mat_show(filter);
   mod_ip_mat = ip_mat_convolve(input_img, filter);
+  clamp(mod_ip_mat, 0.0, 255.0);
   end = clock();
   ip_mat_free(filter);
   filter = NULL;
@@ -280,6 +288,7 @@ int main(){
   filter = create_edge_filter();
   ip_mat_show(filter);
   mod_ip_mat = ip_mat_convolve(input_img, filter);
+  clamp(mod_ip_mat, 0.0, 255.0);
   end = clock();
   ip_mat_free(filter);
   filter = NULL;
@@ -298,6 +307,7 @@ int main(){
   filter = create_emboss_filter();
   ip_mat_show(filter);
   mod_ip_mat = ip_mat_convolve(input_img, filter);
+  clamp(mod_ip_mat, 0.0, 255.0);
   end = clock();
   ip_mat_free(filter);
   filter = NULL;
@@ -316,6 +326,7 @@ int main(){
   filter = create_average_filter(11, 11, 3);
   ip_mat_show(filter);
   mod_ip_mat = ip_mat_convolve(input_img, filter);
+  clamp(mod_ip_mat, 0.0, 255.0);
   end = clock();
   ip_mat_free(filter);
   filter = NULL;
@@ -330,23 +341,24 @@ int main(){
   printf("_avarage took: %f seconds\n", et(start, end));
 
 
-  printf("_gaussian test\n");
-  start = clock();
-  filter = create_gaussian_filter(9, 9, 3, 5);
-  ip_mat_show(filter);
-  mod_ip_mat = ip_mat_convolve(input_img, filter);
-  end = clock();
-  ip_mat_free(filter);
-  filter = NULL;
-  d = ip_mat_to_bitmap(mod_ip_mat);
-  sprintf(filename, "%s/gaussianbluer.bmp", imgdir);
-  bm_save(d, filename);
-  bzero(filename, FDIM);
-  bm_free(d);
-  d = NULL;
-  ip_mat_free(mod_ip_mat);
-  mod_ip_mat = NULL;
-  printf("_gaussian took: %f seconds\n", et(start, end));
+    printf("_gaussian test\n");
+    start = clock();
+    filter = create_gaussian_filter(9, 9, 3, 5);
+    ip_mat_show(filter);
+    mod_ip_mat = ip_mat_convolve(input_img, filter);
+    clamp(mod_ip_mat, 0.0, 255.0);
+    end = clock();
+    ip_mat_free(filter);
+    filter = NULL;
+    d = ip_mat_to_bitmap(mod_ip_mat);
+    sprintf(filename, "%s/gaussianbluer.bmp", imgdir);
+    bm_save(d, filename);
+    bzero(filename, FDIM);
+    bm_free(d);
+    d = NULL;
+    ip_mat_free(mod_ip_mat);
+    mod_ip_mat = NULL;
+    printf("_gaussian took: %f seconds\n", et(start, end));
 
 	printf("#rescale test\n");
 	start = clock();
@@ -355,6 +367,7 @@ int main(){
 	ip_mat_show_stats(mod_ip_mat);
 	/*ip_mat_show(mod_ip_mat);*/
 	rescale(mod_ip_mat,500);
+    clamp(mod_ip_mat, 0.0, 255.0);
 	printf("---\n@after\n");
 	ip_mat_show_stats(mod_ip_mat);
 	/*ip_mat_show(mod_ip_mat);*/
