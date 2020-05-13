@@ -1,7 +1,7 @@
 #!/bin/bash
 var1="_"
 var2=".bmp"
-fn="mongolfiere"
+fn="images/mongolfiere"
 method="gauss"
 
 for kernel_size in 3 5 7 9 11

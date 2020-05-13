@@ -33,10 +33,10 @@ typedef struct {
 /* Inizializza una ip_mat con dimensioni h w e k. Ogni elemento è inizializzato a v.
  * Inoltre crea un vettore di stats per contenere le statische sui singoli canali.
  * */
-ip_mat * ip_mat_create(unsigned int h, unsigned int w,unsigned  int k, float v);
+ip_mat * ip_mat_create(unsigned int h, unsigned int w,unsigned  int k, float v); /* OK */
 
 /* Libera la memoria (data, stat e la struttura) */
-void ip_mat_free(ip_mat *a);
+void ip_mat_free(ip_mat *a); /* OK */
 
 /* Restituisce il valore in posizione i,j,k */
 float get_val(ip_mat * a, unsigned int i,unsigned int j,unsigned int k);
@@ -47,14 +47,14 @@ void set_val(ip_mat * a, unsigned int i,unsigned int j,unsigned int k, float v);
 /* Calcola il valore minimo, il massimo e la media per ogni canale
  * e li salva dentro la struttura ip_mat stats
  * */
-void compute_stats(ip_mat * t);
+void compute_stats(ip_mat * t); /* OK */
 
 /* Inizializza una ip_mat con dimensioni w h e k.
  * Ogni elemento è generato da una gaussiana con media mean e varianza var */
-void ip_mat_init_random(ip_mat * t, float mean, float var);
+void ip_mat_init_random(ip_mat * t, float mean, float var); /* OK */
 
 /* Crea una copia di una ip_mat e lo restituisce in output */
-ip_mat * ip_mat_copy(ip_mat * in);
+ip_mat * ip_mat_copy(ip_mat * in); /* OK */
 
 /* Restituisce una sotto-matrice, ovvero la porzione individuata da:
  * t->data[row_start...row_end][col_start...col_end][0...k]
@@ -83,27 +83,27 @@ ip_mat * ip_mat_subset(ip_mat * t, unsigned int row_start, unsigned int row_end,
  *      out.w = a.w = b.w
  *      out.k = a.k + b.k
  * */
-ip_mat * ip_mat_concat(ip_mat * a, ip_mat * b, int dimensione);
+ip_mat * ip_mat_concat(ip_mat * a, ip_mat * b, int dimensione); /* OK */
 
 /**** PARTE 1: OPERAZIONI MATEMATICHE FRA IP_MAT ****/
 /* Esegue la somma di due ip_mat (tutte le dimensioni devono essere identiche)
  * e la restituisce in output. */
-ip_mat * ip_mat_sum(ip_mat * a, ip_mat * b);
+ip_mat * ip_mat_sum(ip_mat * a, ip_mat * b); /* MAYBE OK */
 
 /* Esegue la sottrazione di due ip_mat (tutte le dimensioni devono essere identiche)
  * e la restituisce in output.
  * */
-ip_mat * ip_mat_sub(ip_mat * a, ip_mat * b);
+ip_mat * ip_mat_sub(ip_mat * a, ip_mat * b); /* MAYBE OK */
 
 /* Moltiplica un ip_mat per uno scalare c. Si moltiplica c per tutti gli elementi di "a"
  * e si salva il risultato in un nuovo tensore in output. */
-ip_mat * ip_mat_mul_scalar(ip_mat *a, float c);
+ip_mat * ip_mat_mul_scalar(ip_mat *a, float c); /* OK */
 
 /* Aggiunge ad un ip_mat uno scalare c e lo restituisce in un nuovo tensore in output. */
-ip_mat *  ip_mat_add_scalar(ip_mat *a, float c);
+ip_mat *  ip_mat_add_scalar(ip_mat *a, float c); /* OK */
 
 /* Calcola la media di due ip_mat a e b e la restituisce in output.*/
-ip_mat * ip_mat_mean(ip_mat * a, ip_mat * b);
+ip_mat * ip_mat_mean(ip_mat * a, ip_mat * b); /* MAYBE OK */
 
 /**** PARTE 2: SEMPLICI OPERAZIONI SU IMMAGINI ****/
 /* Converte un'immagine RGB ad una immagine a scala di grigio.
@@ -111,21 +111,21 @@ ip_mat * ip_mat_mean(ip_mat * a, ip_mat * b);
  * e creando una nuova immagine avente per valore di un pixel su ogni canale la media appena calcolata.
  * Avremo quindi che tutti i canali saranno uguali.
  * */
-ip_mat * ip_mat_to_gray_scale(ip_mat * in);
+ip_mat * ip_mat_to_gray_scale(ip_mat * in); /* OK */
 
 /* Effettua la fusione (combinazione convessa) di due immagini */
-ip_mat * ip_mat_blend(ip_mat * a, ip_mat * b, float alpha);
+ip_mat * ip_mat_blend(ip_mat * a, ip_mat * b, float alpha); /* OK */
 
 /* Operazione di brightening: aumenta la luminosità dell'immagine
  * aggiunge ad ogni pixel un certo valore*/
-ip_mat * ip_mat_brighten(ip_mat * a, float bright);
+ip_mat * ip_mat_brighten(ip_mat * a, float bright); /* OK */
 
 /* Operazione di corruzione con rumore gaussiano:
  * Aggiunge del rumore gaussiano all'immagine, il rumore viene enfatizzato
  * per mezzo della variabile amount.
  * out = a + gauss_noise*amount
  * */
-ip_mat * ip_mat_corrupt(ip_mat * a, float amount);
+ip_mat * ip_mat_corrupt(ip_mat * a, float amount); /* OK */
 
 /**** PARTE 3: CONVOLUZIONE E FILTRI *****/
 
