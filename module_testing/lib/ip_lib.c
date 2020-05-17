@@ -55,6 +55,8 @@ ip_mat * bitmap_to_ip_mat(Bitmap * img){
         }
     }
 
+    compute_stats(out);
+
     return out;
 }
 
@@ -76,7 +78,7 @@ Bitmap * ip_mat_to_bitmap(ip_mat * t){
 }
 
 float get_val(ip_mat * a, unsigned int i,unsigned int j,unsigned int k){
-    if(i<a->h && j<a->w &&k<a->k){  /* j>=0 and k>=0 and i>=0 is non sense*/
+    if(i<a->h && j<a->w &&k<a->k){
         return a->data[i][j][k];
     }else{
         printf("Errore get_val!!!");
@@ -93,32 +95,11 @@ void set_val(ip_mat * a, unsigned int i,unsigned int j,unsigned int k, float v){
     }
 }
 
-float get_normal_random(){
+float get_normal_random(float media, float std){
+
     float y1 = ( (float)(rand()) + 1. )/( (float)(RAND_MAX) + 1. );
     float y2 = ( (float)(rand()) + 1. )/( (float)(RAND_MAX) + 1. );
-    return cos(2*PI*y2)*sqrt(-2.*log(y1));
+    float num = cos(2*PI*y2)*sqrt(-2.*log(y1));
 
-}
-
-/**** PARTE 1: TIPO DI DATI ip_mat E MEMORIA ****/
-ip_mat * ip_mat_create(unsigned int h, unsigned int w,unsigned  int k, float v){
-    int i = 0, j = 0, z = 0;
-    ip_mat* mat = calloc(1, sizeof(*mat));
-    float*** data = calloc(h, sizeof(*data));
-    stats* st = calloc(k, sizeof(*st));
-    mat->h = h;
-    mat->w = w;
-    mat->k = k;
-    for(i = 0; i < h; i++){
-        data[i] = calloc(w, sizeof(**data));
-        for(j = 0; j < w; j++){
-            data[i][j] = calloc(k, sizeof(***data));
-            for(z = 0; z < k; z++){
-                data[i][j][z] = v;
-            }
-        }
-    }
-    mat->data = data;
-    mat->stat = st;
-    return mat;
+    return media + num*std;
 }
