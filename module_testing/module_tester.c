@@ -26,7 +26,7 @@ int main(){
 	ip_mat* filter = NULL;
 
 	float alpha = 0.0, foo = 0.0;
-	char* filename = calloc(FDIM, sizeof(*filename));
+	char* filename = calloc(FDIM, sizeof(char *));
 	char imgdir[] = "images";
 	int i = 0;
 
