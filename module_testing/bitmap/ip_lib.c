@@ -675,3 +675,27 @@ void rescale(ip_mat * t, float new_max){
         }
     }
 }
+
+/**** PARTE 4: NOSTRE IDEE: METODI E FUNZIONI IN PIU' *****/
+/* Crea un immagine ridimensionata alle dimensioni volute
+ * */
+ip_mat * ip_mat_resize(ip_mat* a, unsigned int new_height, unsigned int new_width) {
+    ip_mat* out = NULL;
+    unsigned int i, j, z;
+
+    out = ip_mat_create(new_height, new_width, a->k, 0);
+
+    float nh = (float)a->h / (float)new_height ;
+    float nw = (float)a->w / (float)new_width;
+
+    for(i = 0; i < out->h; i++){
+        for(j = 0; j < out->w; j++){
+            for(z = 0; z < out->k; z++){
+                unsigned int o_i = i * nh;
+                unsigned int o_j = j * nw;
+                out->data[i][j][z] = a->data[o_i][o_j][z];
+            }
+        }
+    }
+    return out;
+}

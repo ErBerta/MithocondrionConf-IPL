@@ -41,6 +41,25 @@ int main(){
 	input_img2 = bitmap_to_ip_mat(c);
 	bzero(filename, FDIM);
 
+    printf("#resize test\n");
+    start = clock();
+    printf("@before\n");
+    int scale_factor = 5;
+    mod_ip_mat = ip_mat_resize(input_img, input_img->h * scale_factor, input_img->w * scale_factor);
+    printf("---\n@after\n");
+    ip_mat_show_stats(mod_ip_mat);
+    end = clock();
+    d = ip_mat_to_bitmap(mod_ip_mat);
+    sprintf(filename, "%s/resized.bmp", imgdir);
+    bm_save(d, filename);
+    bzero(filename, FDIM);
+    bm_free(d);
+    d = NULL;
+    ip_mat_free(input_img);
+    input_img = mod_ip_mat;
+    mod_ip_mat = NULL;
+    printf("---- DONE\n");
+
 	/* Test a function, show on screen the output, free up the memory and set the pointer to NULL*/
 	printf("_mul_scalar test\n");
 	start = clock();
@@ -364,7 +383,7 @@ int main(){
 
 	printf("#rescale test\n");
 	start = clock();
-	mod_ip_mat = ip_mat_copy(input_img);
+    mod_ip_mat = ip_mat_copy(input_img);
 	printf("@before\n");
 	ip_mat_show_stats(mod_ip_mat);
 	/*ip_mat_show(mod_ip_mat);*/
@@ -383,7 +402,6 @@ int main(){
 	ip_mat_free(mod_ip_mat);
   mod_ip_mat = NULL;
 	printf("---- DONE\n");
-
 
 	free(filename);
 	filename = NULL;

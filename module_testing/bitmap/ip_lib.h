@@ -227,6 +227,24 @@ void rescale(ip_mat * t, float new_max);
  * */
 void clamp(ip_mat * t, float low, float high);
 
+
+/**** PARTE 4: NOSTRE IDEE: METODI E FUNZIONI IN PIU' *****/
+/* Crea un immagine ridimensionata alle dimensioni volute
+ * */
+ip_mat * ip_mat_resize(ip_mat* a, unsigned int new_height, unsigned int new_width);
+
+/*
+ *  Crea un immagine sostituendo dall'immagine a il colore color (nell'intorno di precision) con i valori dell'immagine bg
+ *  a e bg devono avere la stessa dimensione
+ */
+ip_mat * background_chroma_key(ip_mat* a, ip_mat* bg, float* color, float precision);
+
+/*
+ *  Crea un immagine in scala di grigi, applicata a tutti i colori eccetto quello specificato da color (nell'intorno di precision)
+ */
+ip_mat * grey_scale_chroma_key(ip_mat* a, float* color, float precision);
+
+
 /**** METODI GIA' IMPLEMENTATI ****/
 /* Genera dei numeri casuali con distribuzione Normale
  * https://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform
