@@ -41,6 +41,24 @@ int main(){
 	input_img2 = bitmap_to_ip_mat(c);
 	bzero(filename, FDIM);
 
+	printf("#contrast test\n");
+	start = clock();
+    mod_ip_mat = ip_mat_copy(input_img);
+	printf("@before\n");
+	mod_ip_mat = ip_mat_contrast(mod_ip_mat,0.3);
+    clamp(mod_ip_mat, 0.0, 255.0);
+	printf("---\n@after\n");
+	end = clock();
+	d = ip_mat_to_bitmap(mod_ip_mat);
+    sprintf(filename, "%s/contrast.bmp", imgdir);
+    bm_save(d, filename);
+    bzero(filename, FDIM);
+    bm_free(d);
+    d = NULL;
+	ip_mat_free(mod_ip_mat);
+    mod_ip_mat = NULL;
+	printf("---- DONE\n");
+
     printf("#chroma key test\n");
     start = clock();
     printf("@before\n");

@@ -733,7 +733,7 @@ ip_mat * background_chroma_key(ip_mat* a, ip_mat* bg, float* color, float* preci
  */
 ip_mat * grey_scale_chroma_key(ip_mat* in, float* color, float* precision) {
     ip_mat* out = NULL;
-    unsigned int i, j, z, n;
+    unsigned int i, j, z, n=0;
 
     float somma, media;
     out = ip_mat_copy(in);
@@ -741,7 +741,7 @@ ip_mat * grey_scale_chroma_key(ip_mat* in, float* color, float* precision) {
     for(i = 0; i < out->h; i++){
         for(j = 0; j < out->w; j++){
             somma = 0;
-            for(z = 0, n = 0; z < out->k; z++) {
+            for(z = 0; z < out->k; z++) {
                 somma += out->data[i][j][z];
                 if (out->data[i][j][z] > color[z] - precision[z] && out->data[i][j][z] < color[z] + precision[z]) {
                     n++;
@@ -758,4 +758,31 @@ ip_mat * grey_scale_chroma_key(ip_mat* in, float* color, float* precision) {
 
 
     return out;
+}
+
+/*
+ * Aumenta o riduce il contrasto di un ip_mat
+ */
+ip_mat * ip_mat_contrast(ip_mat* in, float contrast)
+{
+    ip_mat* out = NULL;
+    unsigned int i, j, z;
+
+    out = ip_mat_copy(in);
+
+    for(i = 0; i < out->h; i++){
+        for(j = 0; j < out->w; j++){
+            for(z = 0; z < out->k; z++) {
+                out->data[i][j][z] = (((((out->data[i][j][z] / 255.0) - 0.5) * contrast) + 0.5) * 255.0);
+            }
+        }
+    }
+    return out;
+}
+/*
+ * Modifica saturazione
+ */
+ip_mat * ip_mat_saturation(ip_mat* in, float saturation)
+{
+
 }

@@ -243,6 +243,12 @@ ip_mat * background_chroma_key(ip_mat* a, ip_mat* bg, float* color, float* preci
  */
 ip_mat * grey_scale_chroma_key(ip_mat* a, float* color, float* precision);
 
+/*
+ * Aumenta o riduce il contrasto di un ip_mat
+ */
+ip_mat * ip_mat_contrast(ip_mat* in, float contrast);
+
+ip_mat * ip_mat_saturation(ip_mat* in, float saturation);
 
 /**** METODI GIA' IMPLEMENTATI ****/
 /* Genera dei numeri casuali con distribuzione Normale
