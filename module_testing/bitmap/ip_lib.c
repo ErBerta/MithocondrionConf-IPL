@@ -104,7 +104,7 @@ float get_normal_random(float media, float std){
 
     float y1 = ( (float)(rand()) + 1. )/( (float)(RAND_MAX) + 1. );
     float y2 = ( (float)(rand()) + 1. )/( (float)(RAND_MAX) + 1. );
-    float num = cos(2*PI*y2)*sqrt(-2.*log(y1));
+    float num = cos(2* M_PI *y2) * sqrt(-2. * log(y1));
 
     return media + num*std;
 }
@@ -697,5 +697,65 @@ ip_mat * ip_mat_resize(ip_mat* a, unsigned int new_height, unsigned int new_widt
             }
         }
     }
+    return out;
+}
+
+/*
+ *  Crea un immagine sostituendo dall'immagine a il colore color (nell'intorno di precision) con i valori dell'immagine bg
+ *  a e bg devono avere la stessa dimensione
+ */
+ip_mat * background_chroma_key(ip_mat* a, ip_mat* bg, float* color, float* precision) {
+    ip_mat* out = NULL;
+    unsigned int i, j, z, n;
+
+    out = ip_mat_copy(a);
+
+    for(i = 0; i < out->h; i++){
+        for(j = 0; j < out->w; j++){
+            for(z = 0, n = 0; z < out->k; z++){
+                if (out->data[i][j][z] > color[z] - precision[z] && out->data[i][j][z] < color[z] + precision[z]) {
+                    n++;
+                }
+            }
+            if (n != 0) {
+                for(z = 0; z < out->k; z++){
+                    out->data[i][j][z] = bg->data[i][j][z];
+                }
+            }
+
+        }
+    }
+    return out;
+}
+
+/*
+ *  Crea un immagine in scala di grigi, applicata a tutti i colori eccetto quello specificato da color (nell'intorno di precision)
+ */
+ip_mat * grey_scale_chroma_key(ip_mat* in, float* color, float* precision) {
+    ip_mat* out = NULL;
+    unsigned int i, j, z, n;
+
+    float somma, media;
+    out = ip_mat_copy(in);
+
+    for(i = 0; i < out->h; i++){
+        for(j = 0; j < out->w; j++){
+            somma = 0;
+            for(z = 0, n = 0; z < out->k; z++) {
+                somma += out->data[i][j][z];
+                if (out->data[i][j][z] > color[z] - precision[z] && out->data[i][j][z] < color[z] + precision[z]) {
+                    n++;
+                }
+            }
+            media = somma/out->k;
+            for(z = 0; z < out->k; z++) {
+                if (n != out->k) {
+                    out->data[i][j][z] = media;
+                }
+            }
+        }
+    }
+
+
     return out;
 }

@@ -15,7 +15,6 @@
 
 #define FLT_MAX 3.402823466e+38F /* max value */
 #define FLT_MIN 1.175494351e-38F /* min positive value */
-#define PI 3.141592654
 
 typedef struct{
     float min;
@@ -237,12 +236,12 @@ ip_mat * ip_mat_resize(ip_mat* a, unsigned int new_height, unsigned int new_widt
  *  Crea un immagine sostituendo dall'immagine a il colore color (nell'intorno di precision) con i valori dell'immagine bg
  *  a e bg devono avere la stessa dimensione
  */
-ip_mat * background_chroma_key(ip_mat* a, ip_mat* bg, float* color, float precision);
+ip_mat * background_chroma_key(ip_mat* a, ip_mat* bg, float* color, float* precision);
 
 /*
  *  Crea un immagine in scala di grigi, applicata a tutti i colori eccetto quello specificato da color (nell'intorno di precision)
  */
-ip_mat * grey_scale_chroma_key(ip_mat* a, float* color, float precision);
+ip_mat * grey_scale_chroma_key(ip_mat* a, float* color, float* precision);
 
 
 /**** METODI GIA' IMPLEMENTATI ****/
