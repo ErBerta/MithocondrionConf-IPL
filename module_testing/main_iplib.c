@@ -75,6 +75,7 @@ int main (int argc, char * argv[]) {
 
     if (strcmp(operation, "corrupt") == 0) {
         img = ip_mat_corrupt(input_img, k_size);  /* corrompi l'immagine con del rumore */
+        clamp(img,0,255); /* effettua il clamping dei valori in 0-255 */
     }
     else if (strcmp(operation, "brighten") == 0) {
         img = ip_mat_brighten(input_img, k_size); /* aumenta la luminosità */
@@ -138,12 +139,10 @@ int main (int argc, char * argv[]) {
     b2 = ip_mat_to_bitmap(img); /* converti l'immagine di output in una bitmap */
 
     ip_mat_free(img); /* libera la memoria da img */
-    if(filter != NULL)
-        ip_mat_free(filter); /* libera la memoria dal filtro */
+    ip_mat_free(filter); /* libera la memoria dal filtro */
 
     bm_save(b2, fn_out); /* salva la bitmap di output su file */
     bm_free(b2); /* libera la memoria dalla bitmap */
 
     return 0; /* ciao a tutti!*/
 }
-

@@ -38,7 +38,11 @@ typedef struct {
  * */
 ip_mat * ip_mat_create(unsigned int h, unsigned int w,unsigned  int k, float v);
 
-/* Libera la memoria (data, stat e la struttura) */
+/* Libera la memoria (data, stat e la struttura)
+ *
+ * se la variabile "a" è NULL non fa nulla.
+ *
+ * */
 void ip_mat_free(ip_mat *a);
 
 /* Restituisce il valore in posizione i,j,k */
@@ -146,6 +150,8 @@ ip_mat * ip_mat_to_gray_scale(ip_mat * in);
  *
  * I parametri della funzione non subiscono modiche, il risultato viene salvato e restituito in output
  * all'interno di una nuova ip_mat.
+ *
+ * Le variabili "a" e "b" devono avere le stesse dimensioni
  */
 ip_mat * ip_mat_blend(ip_mat * a, ip_mat * b, float alpha);
 
@@ -251,4 +257,3 @@ void ip_mat_show(ip_mat * t);
 void ip_mat_show_stats(ip_mat * t);
 
 #endif /*IP_LIB_H*/
-
