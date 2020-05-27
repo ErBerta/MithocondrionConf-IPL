@@ -304,6 +304,9 @@ ip_mat * ip_mat_create(unsigned int h, unsigned int w,unsigned  int k, float v){
 	}
 	mat->data = data;
 	mat->stat = st;
+	mat->stat->min = v;
+	mat->stat->max = v;
+	mat->stat->mean = v;
 
 	return mat;
 }
