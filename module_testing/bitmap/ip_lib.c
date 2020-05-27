@@ -305,7 +305,7 @@ void compute_stats(ip_mat * t){
 	}
 	else
 	{
-		printf("Errore compute_stats!!!");
+		perror("ERROR: pointer to ip_mat is NULL in compute_stats!!!\n");
 		exit(1);
 	}
 }
@@ -340,7 +340,7 @@ ip_mat * ip_mat_copy(ip_mat * in){
 	}
 	else
 	{
-		printf("Errore ip_mat_copy!!!");
+		perror("ERROR: pointer to ip_mat is NULL in ip_mat_copy!!!\n");
 		exit(1);
 	}
 }
@@ -368,7 +368,7 @@ ip_mat * ip_mat_sum(ip_mat * a, ip_mat * b){
 	}
 	else
 	{
-		printf("Errore ip_mat_sum!!!");
+		perror("ERROR: pointer to ip_mat is NULL in ip_mat_sum!!!\n");
 		exit(1);
 	}
 	return out;
@@ -399,7 +399,7 @@ ip_mat * ip_mat_sub(ip_mat * a, ip_mat * b){
 	}
 	else
 	{
-		printf("Errore ip_mat_sub!!!");
+		perror("ERROR: pointer to ip_mat is NULL in ip_mat_sub!!!\n");
 		exit(1);
 	}
 
@@ -428,7 +428,7 @@ ip_mat * ip_mat_mul_scalar(ip_mat *a, float c){
 	}
 	else
 	{
-		printf("Errore ip_mat_mul_scalar!!!");
+		perror("ERROR: pointer to ip_mat is NULL in ip_mat_mul_scalar!!!\n");
 		exit(1);
 	}
 	return tmp;
@@ -456,7 +456,7 @@ ip_mat *  ip_mat_add_scalar(ip_mat *a, float c){
 	}
 	else
 	{
-		printf("Errore ip_mat_add_scalar!!!");
+		perror("ERROR: pointer to ip_mat is NULL in ip_mat_add_scalar!!!\n");
 		exit(1);
 	}
 	return tmp;
@@ -486,10 +486,10 @@ ip_mat * ip_mat_mean(ip_mat * a, ip_mat * b){
 	}
 	else
 	{
-		printf("Errore ip_mat_mean!!!");
+		perror("ERROR: pointer to ip_mat is NULL in ip_mat_mean!!!\n");
 		exit(1);
 	}
-	
+
 	return out;
 }
 
