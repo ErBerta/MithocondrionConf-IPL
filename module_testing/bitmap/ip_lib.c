@@ -266,15 +266,37 @@ ip_mat * ip_mat_concat(ip_mat * a, ip_mat * b, int dimensione)
 ip_mat * ip_mat_create(unsigned int h, unsigned int w,unsigned  int k, float v){
 	unsigned int i = 0, j = 0, z = 0;
 	ip_mat* mat = (ip_mat*)calloc(1, sizeof(ip_mat));
+	if(!mat){
+		perror("Error: Couldn't allocate enough memory to mat in ip_mat_create\n");
+		exit(1);
+	}
 	float*** data = (float***)calloc(h, sizeof(*data));
+	if(!data){
+		perror("Error: Couldn't allocate enough memory to data in ip_mat_create\n");
+		exit(1);
+	}
 	stats* st = (stats*)calloc(k, sizeof(*st));
+	if(!st){
+		perror("Error: Couldn't allocate enough memory to st in ip_mat_create\n");
+		exit(1);
+	}
+
 	mat->h = h;
 	mat->w = w;
 	mat->k = k;
 	for(i = 0; i < h; i++){
 		data[i] = (float**)calloc(w, sizeof(**data));
+		if(!data[i]){
+			perror("Error: Couldn't allocate enough memory to data[i] in ip_mat_create\n");
+			exit(1);
+		}
+
 		for(j = 0; j < w; j++){
 			data[i][j] = (float*)calloc(k, sizeof(***data));
+			if(!data[i][j]){
+				perror("Error: Couldn't allocate enough memory to data[i][j] in ip_mat_create\n");
+				exit(1);
+			}
 			for(z = 0; z < k; z++){
 				data[i][j][z] = v;
 			}
