@@ -267,8 +267,8 @@ void ip_mat_free(ip_mat *a){
         a->stat = NULL;
         free(a);
         a = NULL;
-    }
-    else
+	}
+	else
     {
         printf("Errore free!!!");
         exit(1);
@@ -277,50 +277,73 @@ void ip_mat_free(ip_mat *a){
 
 void compute_stats(ip_mat * t){
 	unsigned int i, j, z;
-	/*inizializzo le variabili*/
-	for(z = 0; z < t->k; z++){
-		t->stat[z].min = FLT_MAX;
-		t->stat[z].max = 0;
-		t->stat[z].mean = 0;
-	}
-	for(i = 0; i < t->h; i++){
-		for(j = 0; j < t->w; j++){
-			for(z = 0; z < t->k; z++){
-				t->stat[z].min = t->stat[z].min > t->data[i][j][z] ? t->data[i][j][z] : t->stat[z].min;
-				t->stat[z].max = t->stat[z].max < t->data[i][j][z] ? t->data[i][j][z] : t->stat[z].max;
-				t->stat[z].mean += t->data[i][j][z];
+	if (t != NULL)
+	{
+		for (z = 0; z < t->k; z++)
+		{
+			t->stat[z].min = FLT_MAX;
+			t->stat[z].max = 0;
+			t->stat[z].mean = 0;
+		}
+		for (i = 0; i < t->h; i++)
+		{
+			for (j = 0; j < t->w; j++)
+			{
+				for (z = 0; z < t->k; z++)
+				{
+					t->stat[z].min = t->stat[z].min > t->data[i][j][z] ? t->data[i][j][z] : t->stat[z].min;
+					t->stat[z].max = t->stat[z].max < t->data[i][j][z] ? t->data[i][j][z] : t->stat[z].max;
+					t->stat[z].mean += t->data[i][j][z];
+				}
 			}
 		}
-	}
 
-	for(z = 0; z < t->k; z++) {
-		t->stat[z].mean /= (float)(t->h * t->w);
+		for (z = 0; z < t->k; z++)
+		{
+			t->stat[z].mean /= (float)(t->h * t->w);
+		}
 	}
-
+	else
+	{
+		printf("Errore compute_stats!!!");
+		exit(1);
+	}
 }
 
 /* AUTHOR: Dussin */
 ip_mat * ip_mat_copy(ip_mat * in){
 	ip_mat* m = NULL;
 	unsigned int i, j, z;
-	/* We have to literally copy the input matrix. We do NOT want to
+
+	if (in != NULL)
+	{
+		/* We have to literally copy the input matrix. We do NOT want to
 	    affect the data in the input matrix, which would happen if we
 	    merely copied the pointer to the input matrix.
-	*/
-	m = ip_mat_create(in->h, in->w, in->k, 0);
-	for(i = 0; i < m->h; i++){
-		for(j = 0; j < m->w; j++){
-			for(z = 0; z < m->k; z++){
-				m->data[i][j][z] = in->data[i][j][z];
+		*/
+
+		m = ip_mat_create(in->h, in->w, in->k, 0);
+		for (i = 0; i < m->h; i++)
+		{
+			for (j = 0; j < m->w; j++)
+			{
+				for (z = 0; z < m->k; z++)
+				{
+					m->data[i][j][z] = in->data[i][j][z];
+				}
 			}
 		}
+		m->stat->min = in->stat->min;
+		m->stat->max = in->stat->max;
+		m->stat->mean = in->stat->mean;
+		return m;
 	}
-	m->stat->min = in->stat->min;
-	m->stat->max = in->stat->max;
-	m->stat->mean = in->stat->mean;
-	return m;
+	else
+	{
+		printf("Errore ip_mat_copy!!!");
+		exit(1);
+	}
 }
-
 
 /**** PARTE 1: OPERAZIONI MATEMATICHE FRA IP_MAT ****/
 /* Esegue la somma di due ip_mat (tutte le dimensioni devono essere identiche)
@@ -328,17 +351,25 @@ ip_mat * ip_mat_copy(ip_mat * in){
 /* AUTHOR: Berta */
 ip_mat * ip_mat_sum(ip_mat * a, ip_mat * b){
 	ip_mat* out = NULL;
-	if(a->w == b->w && a->h == b->h && a->k == b->k)
+	if(a != NULL && b != NULL)
 	{
-		unsigned int i = 0, j = 0, z = 0;
-		out = ip_mat_create(a->h, a->w, a->k, 0);
-		for(i = 0; i < out->h; i++){
-			for(j = 0; j < out->w; j++){
-				for(z = 0; z < out->k; z++){
-					out->data[i][j][z] = a->data[i][j][z] + b->data[i][j][z];
+		if(a->w == b->w && a->h == b->h && a->k == b->k)
+		{
+			unsigned int i = 0, j = 0, z = 0;
+			out = ip_mat_create(a->h, a->w, a->k, 0);
+			for(i = 0; i < out->h; i++){
+				for(j = 0; j < out->w; j++){
+					for(z = 0; z < out->k; z++){
+						out->data[i][j][z] = a->data[i][j][z] + b->data[i][j][z];
+					}
 				}
 			}
 		}
+	}
+	else
+	{
+		printf("Errore ip_mat_sum!!!");
+		exit(1);
 	}
 	return out;
 }
@@ -348,18 +379,30 @@ ip_mat * ip_mat_sum(ip_mat * a, ip_mat * b){
 /* AUTHOR: Berta */
 ip_mat * ip_mat_sub(ip_mat * a, ip_mat * b){
 	ip_mat* out = NULL;
-	if(a->w == b->w && a->h == b->h && a->k == b->k)
+	if (a != NULL && b != NULL)
 	{
-		unsigned int i = 0, j = 0, z = 0;
-		out = ip_mat_create(a->h, a->w, a->k, 0);
-		for(i = 0; i < out->h; i++){
-			for(j = 0; j < out->w; j++){
-				for(z = 0; z < out->k; z++){
-					out->data[i][j][z] = a->data[i][j][z] - b->data[i][j][z];
+		if (a->w == b->w && a->h == b->h && a->k == b->k)
+		{
+			unsigned int i = 0, j = 0, z = 0;
+			out = ip_mat_create(a->h, a->w, a->k, 0);
+			for (i = 0; i < out->h; i++)
+			{
+				for (j = 0; j < out->w; j++)
+				{
+					for (z = 0; z < out->k; z++)
+					{
+						out->data[i][j][z] = a->data[i][j][z] - b->data[i][j][z];
+					}
 				}
 			}
 		}
 	}
+	else
+	{
+		printf("Errore ip_mat_sub!!!");
+		exit(1);
+	}
+
 	return out;
 }
 
@@ -369,13 +412,24 @@ ip_mat * ip_mat_sub(ip_mat * a, ip_mat * b){
 ip_mat * ip_mat_mul_scalar(ip_mat *a, float c){
 	ip_mat* tmp = NULL;
 	unsigned int i = 0, j = 0, z = 0;
-	tmp = ip_mat_copy(a);
-	for(i = 0; i < tmp->h; i++){
-		for(j = 0; j < tmp->w; j++){
-			for(z = 0; z < tmp->k; z++){
-				tmp->data[i][j][z] *= c;
+	if (a != NULL)
+	{
+		tmp = ip_mat_copy(a);
+		for (i = 0; i < tmp->h; i++)
+		{
+			for (j = 0; j < tmp->w; j++)
+			{
+				for (z = 0; z < tmp->k; z++)
+				{
+					tmp->data[i][j][z] *= c;
+				}
 			}
 		}
+	}
+	else
+	{
+		printf("Errore ip_mat_mul_scalar!!!");
+		exit(1);
 	}
 	return tmp;
 }
@@ -385,13 +439,25 @@ ip_mat * ip_mat_mul_scalar(ip_mat *a, float c){
 ip_mat *  ip_mat_add_scalar(ip_mat *a, float c){
 	ip_mat* tmp = NULL;
 	unsigned int i = 0, j = 0, z = 0;
-	tmp = ip_mat_copy(a);
-	for(i = 0; i < tmp->h; i++){
-		for(j = 0; j < tmp->w; j++){
-			for(z = 0; z < tmp->k; z++){
-				tmp->data[i][j][z] += c;
+	
+	if (a != NULL)
+	{
+		tmp = ip_mat_copy(a);
+		for (i = 0; i < tmp->h; i++)
+		{
+			for (j = 0; j < tmp->w; j++)
+			{
+				for (z = 0; z < tmp->k; z++)
+				{
+					tmp->data[i][j][z] += c;
+				}
 			}
 		}
+	}
+	else
+	{
+		printf("Errore ip_mat_add_scalar!!!");
+		exit(1);
 	}
 	return tmp;
 }
@@ -401,18 +467,29 @@ ip_mat *  ip_mat_add_scalar(ip_mat *a, float c){
 ip_mat * ip_mat_mean(ip_mat * a, ip_mat * b){
 	ip_mat* out = NULL;
 	unsigned int i = 0, j = 0, z = 0;
-	
-	if(a->w == b->w && a->h == b->h && a->k == b->k)
+	if (a != NULL && b != NULL)
 	{
-		out = ip_mat_create(a->h, a->w, a->k, 0);
-		for(i = 0; i < out->h; i++){
-			for(j = 0; j < out->w; j++){
-				for(z = 0; z < out->k; z++){
-					out->data[i][j][z] = (a->data[i][j][z] * b->data[i][j][z])/2.0;
+		if (a->w == b->w && a->h == b->h && a->k == b->k)
+		{
+			out = ip_mat_create(a->h, a->w, a->k, 0);
+			for (i = 0; i < out->h; i++)
+			{
+				for (j = 0; j < out->w; j++)
+				{
+					for (z = 0; z < out->k; z++)
+					{
+						out->data[i][j][z] = (a->data[i][j][z] * b->data[i][j][z]) / 2.0;
+					}
 				}
 			}
 		}
 	}
+	else
+	{
+		printf("Errore ip_mat_mean!!!");
+		exit(1);
+	}
+	
 	return out;
 }
 
