@@ -501,9 +501,16 @@ ip_mat * ip_mat_mean(ip_mat * a, ip_mat * b){
  * */
 /* AUTHOR: Berta */
 ip_mat * ip_mat_to_gray_scale(ip_mat * in){
+
 	ip_mat* out = NULL;
 	unsigned int i, j, z;
 	float somma, media;
+
+    if (in == NULL) {
+        perror("ERROR: pointer to ip_mat is NULL in ip_mat_to_gray_scale");
+        exit(1);
+    }
+
 	out = ip_mat_create(in->h, in->w, in->k, 0);
 	for(i = 0; i < out->h; i++){
 		for(j = 0; j < out->w; j++){
@@ -531,23 +538,32 @@ ip_mat * ip_mat_to_gray_scale(ip_mat * in){
 ip_mat * ip_mat_blend(ip_mat * a, ip_mat * b, float alpha){
 	ip_mat* out = NULL;
 	unsigned int i, j, z;
-    if(a->h == b->h && a->w == b->w && a->k == b->k)
-    {
-        out = ip_mat_create(a->h, a->w, a->k, 0);
-        for(i = 0; i < a->h; i++){
-            for(j = 0; j < a->w; j++){
-                for(z = 0; z < a->k; z++){
-                    out->data[i][j][z] = alpha * a->data[i][j][z] + (1 - alpha) * b->data[i][j][z];
-                }
-            }
-        }
-    }
-    else
-    {
-        printf("Errore ip_mat_blend!!!");
+
+    if (a == NULL || b == NULL) {
+        perror("ERROR: pointer to ip_mat is NULL in ip_mat_blend");
         exit(1);
     }
 
+    /* TODO: Check Corretto */
+    if (alpha < 0 || alpha > 1) {
+        perror("ERROR: invalid value for alpha in ip_mat_blend");
+        exit(1);
+    }
+
+    if(a->h != b->h || a->w != b->w || a->k != b->k)
+    {
+        perror("ERROR: size mismatch in ip_mat_blend");
+        exit(1);
+    }
+
+    out = ip_mat_create(a->h, a->w, a->k, 0);
+    for(i = 0; i < a->h; i++){
+        for(j = 0; j < a->w; j++){
+            for(z = 0; z < a->k; z++){
+                out->data[i][j][z] = alpha * a->data[i][j][z] + (1 - alpha) * b->data[i][j][z];
+            }
+        }
+    }
 	return out;
 }
 
@@ -558,6 +574,12 @@ ip_mat * ip_mat_brighten(ip_mat * in, float bright)
 {
 	ip_mat* out = NULL;
 	unsigned int i, j, z;
+
+    if (in == NULL) {
+        perror("ERROR: pointer to ip_mat is NULL in ip_mat_brighten");
+        exit(1);
+    }
+
 	out = ip_mat_create(in->h, in->w, in->k, 0);
 	for(i = 0; i < out->h; i++){
 		for(j = 0; j < out->w; j++){
@@ -578,11 +600,17 @@ ip_mat * ip_mat_brighten(ip_mat * in, float bright)
 ip_mat * ip_mat_corrupt(ip_mat * a, float amount){
 	ip_mat* out = NULL;
 	unsigned int i, j, z;
+
+    if (a == NULL) {
+        perror("ERROR: pointer to ip_mat is NULL in ip_mat_corrupt");
+        exit(1);
+    }
+
 	out = ip_mat_create(a->h, a->w, a->k, 0);
 	for(i = 0; i < out->h; i++){
 		for(j = 0; j < out->w; j++){
 			for(z = 0; z < out->k; z++){
-				out->data[i][j][z] = a->data[i][j][z] + get_normal_random(0,amount);
+				out->data[i][j][z] = a->data[i][j][z] + get_normal_random(0, amount);
 			}
 		}
 	}
@@ -603,6 +631,12 @@ ip_mat * ip_mat_corrupt(ip_mat * a, float amount){
 ip_mat * ip_mat_padding(ip_mat * a, unsigned int pad_h, unsigned int pad_w){
 	ip_mat* out = NULL;
 	unsigned int i, j, z;
+
+    if (a == NULL) {
+        perror("ERROR: pointer to ip_mat is NULL in ip_mat_padding");
+        exit(1);
+    }
+
 	out = ip_mat_create(a->h + 2*pad_h, a->w + 2*pad_w, a->k, 0);
 	for(i = pad_h; i < pad_h + a->h; i++){
 		for(j = pad_w; j < pad_w + a->w; j++) {
@@ -619,9 +653,20 @@ ip_mat * ip_mat_padding(ip_mat * a, unsigned int pad_h, unsigned int pad_w){
  * */
 ip_mat * ip_mat_convolve(ip_mat * a, ip_mat * f) {
 
+    if (a == NULL) {
+        perror("ERROR: pointer to ip_mat is NULL in ip_mat_convolve");
+        exit(1);
+    }
+
+    if (f == NULL) {
+        perror("ERROR: pointer to ip_mat filter is NULL in ip_mat_convolve");
+        exit(1);
+    }
+
     ip_mat* out = NULL;
     unsigned pad_h = (f->h - 1)/2;
     unsigned pad_w = (f->w - 1)/2;
+
     ip_mat* in = ip_mat_padding(a, pad_h, pad_w);
     out = ip_mat_create(a->h, a->w, a->k, 0);
 
@@ -729,6 +774,11 @@ void clamp(ip_mat * t, float low, float high){
 
     unsigned int x, y, z;
 
+    if (t == NULL) {
+        perror("ERROR: pointer to ip_mat is NULL in clamp");
+        exit(1);
+    }
+
     for(x = 0; x < t->w; x++) {
         for(y = 0; y < t->h; y++) {
             for(z = 0; z < t->k; z++) {
@@ -757,6 +807,11 @@ void clamp(ip_mat * t, float low, float high){
 void rescale(ip_mat * t, float new_max){
 
     unsigned int x, y, z;
+
+    if (t == NULL) {
+        perror("ERROR: pointer to ip_mat is NULL in rescale");
+        exit(1);
+    }
 
     compute_stats(t);
 

@@ -94,7 +94,7 @@ int main(){
 
 	printf("_sub test\n");
 	start = clock();
-	mod_ip_mat = ip_mat_sub(input_img,input_img2);
+	mod_ip_mat = ip_mat_sub(input_img, input_img2);
 	if(mod_ip_mat) {
 	    clamp(mod_ip_mat, 0, 255);
 		ip_mat_free(mod_ip_mat);
@@ -188,7 +188,7 @@ int main(){
 	printf("Blending test\n");
 	start = clock();
 	while(alpha <= 1.0) {
-		mod_ip_mat = ip_mat_blend(input_img, input_img2, alpha);
+		mod_ip_mat = ip_mat_blend(input_img, input_img, alpha);
 
 		d = ip_mat_to_bitmap(mod_ip_mat);
 		clamp(mod_ip_mat, 0.0, 255.0);
