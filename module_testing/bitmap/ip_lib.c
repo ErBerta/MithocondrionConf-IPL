@@ -889,6 +889,7 @@ ip_mat * grey_scale_chroma_key(ip_mat* in, float* color, float* precision) {
     for(i = 0; i < out->h; i++){
         for(j = 0; j < out->w; j++){
             somma = 0;
+            n = 0;
             for(z = 0; z < out->k; z++) {
                 somma += out->data[i][j][z];
                 if (out->data[i][j][z] > color[z] - precision[z] && out->data[i][j][z] < color[z] + precision[z]) {
@@ -926,11 +927,4 @@ ip_mat * ip_mat_contrast(ip_mat* in, float contrast)
         }
     }
     return out;
-}
-/*
- * Modifica saturazione
- */
-ip_mat * ip_mat_saturation(ip_mat* in, float saturation)
-{
-
 }
