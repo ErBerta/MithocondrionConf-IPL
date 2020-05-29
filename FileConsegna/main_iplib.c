@@ -75,6 +75,7 @@ int main (int argc, char * argv[]) {
 
     if (strcmp(operation, "corrupt") == 0) {
         img = ip_mat_corrupt(input_img, k_size);  /* corrompi l'immagine con del rumore */
+        clamp(img,0,255); /* effettua il clamping dei valori in 0-255 */
     }
     else if (strcmp(operation, "brighten") == 0) {
         img = ip_mat_brighten(input_img, k_size); /* aumenta la luminosità */
@@ -145,4 +146,3 @@ int main (int argc, char * argv[]) {
 
     return 0; /* ciao a tutti!*/
 }
-
