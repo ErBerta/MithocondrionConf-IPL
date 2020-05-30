@@ -1,8 +1,3 @@
-#include <stdio.h>
-#include <math.h>
-#include "ip_lib.h"
-#include "bmp.h"
-
 /*
  Created by Sebastiano Vascon on 23/03/20.
 */
@@ -307,6 +302,11 @@ ip_mat * ip_mat_create(unsigned int h, unsigned int w,unsigned  int k, float v){
 	return mat;
 }
 
+/* Libera la memoria (data, stat e la struttura)
+ *
+ * se la variabile "a" è NULL non fa nulla.
+ *
+ * */
 /* AUTHOR: Dussin */
 void ip_mat_free(ip_mat *a){
 	unsigned int i = 0, j = 0;
@@ -524,11 +524,10 @@ ip_mat *  ip_mat_add_scalar(ip_mat *a, float c){
 
 /* Calcola la media di due ip_mat a e b e la restituisce in output.*/
 /* AUTHOR: Berta */
-/* Controllo dimensioni???????????????????????????????????????????????? */
 ip_mat * ip_mat_mean(ip_mat * a, ip_mat * b){
 	ip_mat* out = NULL;
 	unsigned int i = 0, j = 0, z = 0;
-	
+
 	if(a->w == b->w && a->h == b->h && a->k == b->k)
 	{
 		out = ip_mat_create(a->h, a->w, a->k, 0);
@@ -688,10 +687,10 @@ ip_mat * ip_mat_padding(ip_mat * a, unsigned int pad_h, unsigned int pad_w){
 	ip_mat* out = NULL;
 	unsigned int i, j, z;
 
-    if (a == NULL) {
-        perror("ERROR: pointer to ip_mat is NULL in ip_mat_padding");
-        exit(1);
-    }
+	if(a == NULL) {
+		perror("ERROR: pointer to ip_mat is NULL in ip_mat_padding\n");
+		exit(1);
+	}
 
 	out = ip_mat_create(a->h + 2*pad_h, a->w + 2*pad_w, a->k, 0);
 	for(i = pad_h; i < pad_h + a->h; i++){
@@ -830,10 +829,10 @@ void clamp(ip_mat * t, float low, float high){
 
     unsigned int x, y, z;
 
-    if (t == NULL) {
-        perror("ERROR: pointer to ip_mat is NULL in clamp");
-        exit(1);
-    }
+	if(t == NULL) {
+		perror("ERROR: pointer to ip_mat is NULL in clamp\n");
+		exit(1);
+	}
 
     for(x = 0; x < t->w; x++) {
         for(y = 0; y < t->h; y++) {
@@ -864,10 +863,10 @@ void rescale(ip_mat * t, float new_max){
 
     unsigned int x, y, z;
 
-    if (t == NULL) {
-        perror("ERROR: pointer to ip_mat is NULL in rescale");
-        exit(1);
-    }
+	if(t == NULL) {
+		perror("ERROR: pointer to ip_mat is NULL in rescale\n");
+		exit(1);
+	}
 
     compute_stats(t);
 
@@ -878,4 +877,109 @@ void rescale(ip_mat * t, float new_max){
             }
         }
     }
+}
+
+/**** PARTE 4: NOSTRE IDEE: METODI E FUNZIONI IN PIU' *****/
+/* Crea un immagine ridimensionata alle dimensioni volute
+ * */
+ip_mat * ip_mat_resize(ip_mat* a, unsigned int new_height, unsigned int new_width) {
+    ip_mat* out = NULL;
+    unsigned int i, j, z;
+
+    out = ip_mat_create(new_height, new_width, a->k, 0);
+
+    float nh = (float)a->h / (float)new_height ;
+    float nw = (float)a->w / (float)new_width;
+
+    for(i = 0; i < out->h; i++){
+        for(j = 0; j < out->w; j++){
+            for(z = 0; z < out->k; z++){
+                unsigned int o_i = i * nh;
+                unsigned int o_j = j * nw;
+                out->data[i][j][z] = a->data[o_i][o_j][z];
+            }
+        }
+    }
+    return out;
+}
+
+/*
+ *  Crea un immagine sostituendo dall'immagine a il colore color (nell'intorno di precision) con i valori dell'immagine bg
+ *  a e bg devono avere la stessa dimensione
+ */
+ip_mat * background_chroma_key(ip_mat* a, ip_mat* bg, float* color, float* precision) {
+    ip_mat* out = NULL;
+    unsigned int i, j, z, n;
+
+    out = ip_mat_copy(a);
+
+    for(i = 0; i < out->h; i++){
+        for(j = 0; j < out->w; j++){
+            for(z = 0, n = 0; z < out->k; z++){
+                if (out->data[i][j][z] > color[z] - precision[z] && out->data[i][j][z] < color[z] + precision[z]) {
+                    n++;
+                }
+            }
+            if (n != 0) {
+                for(z = 0; z < out->k; z++){
+                    out->data[i][j][z] = bg->data[i][j][z];
+                }
+            }
+
+        }
+    }
+    return out;
+}
+
+/*
+ *  Crea un immagine in scala di grigi, applicata a tutti i colori eccetto quello specificato da color (nell'intorno di precision)
+ */
+ip_mat * grey_scale_chroma_key(ip_mat* in, float* color, float* precision) {
+    ip_mat* out = NULL;
+    unsigned int i, j, z, n=0;
+
+    float somma, media;
+    out = ip_mat_copy(in);
+
+    for(i = 0; i < out->h; i++){
+        for(j = 0; j < out->w; j++){
+            somma = 0;
+            n = 0;
+            for(z = 0; z < out->k; z++) {
+                somma += out->data[i][j][z];
+                if (out->data[i][j][z] > color[z] - precision[z] && out->data[i][j][z] < color[z] + precision[z]) {
+                    n++;
+                }
+            }
+            media = somma/out->k;
+            for(z = 0; z < out->k; z++) {
+                if (n != out->k) {
+                    out->data[i][j][z] = media;
+                }
+            }
+        }
+    }
+
+
+    return out;
+}
+
+/*
+ * Aumenta o riduce il contrasto di un ip_mat
+ */
+ip_mat * ip_mat_contrast(ip_mat* in, float contrast)
+{
+    ip_mat* out = NULL;
+    unsigned int i, j, z;
+
+    out = ip_mat_copy(in);
+
+    for(i = 0; i < out->h; i++){
+        for(j = 0; j < out->w; j++){
+            for(z = 0; z < out->k; z++) {
+                out->data[i][j][z] = (((((out->data[i][j][z] / 255.0) - 0.5) * contrast) + 0.5) * 255.0);
+            }
+        }
+    }
+    return out;
 }

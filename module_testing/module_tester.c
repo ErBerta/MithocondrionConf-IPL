@@ -24,6 +24,7 @@ int main(){
 	/* "Lab Rat" ip_mat */
 	ip_mat* mod_ip_mat = NULL;
 	ip_mat* filter = NULL;
+    ip_mat* tmp = NULL;
 
 	float alpha = 0.0, foo = 0.0;
 	char* filename = calloc(FDIM, sizeof(char *));
@@ -43,9 +44,9 @@ int main(){
 
 	printf("#contrast test\n");
 	start = clock();
-    mod_ip_mat = ip_mat_copy(input_img);
+    tmp = ip_mat_copy(input_img);
 	printf("@before\n");
-	mod_ip_mat = ip_mat_contrast(mod_ip_mat,0.3);
+	mod_ip_mat = ip_mat_contrast(tmp, 0.3);
     clamp(mod_ip_mat, 0.0, 255.0);
 	printf("---\n@after\n");
 	end = clock();
@@ -55,6 +56,8 @@ int main(){
     bzero(filename, FDIM);
     bm_free(d);
     d = NULL;
+    ip_mat_free(tmp);
+    tmp = NULL;
 	ip_mat_free(mod_ip_mat);
     mod_ip_mat = NULL;
 	printf("---- DONE\n");
@@ -68,7 +71,8 @@ int main(){
     float sensibility[3] = {
             10, 10, 10
     };
-    mod_ip_mat = background_chroma_key(input_img, ip_mat_resize(input_img2, input_img->h, input_img->w), color, sensibility);
+    tmp = ip_mat_resize(input_img2, input_img->h, input_img->w);
+    mod_ip_mat = background_chroma_key(input_img, tmp, color, sensibility);
     printf("---\n@after\n");
     ip_mat_show_stats(mod_ip_mat);
     end = clock();
@@ -78,11 +82,11 @@ int main(){
     bzero(filename, FDIM);
     bm_free(d);
     d = NULL;
+    ip_mat_free(tmp);
+    tmp = NULL;
     ip_mat_free(mod_ip_mat);
     mod_ip_mat = NULL;
     printf("---- DONE\n");
-
-    return 0;
 
     printf("#chroma grey test\n");
     start = clock();
