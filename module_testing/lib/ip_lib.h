@@ -254,8 +254,6 @@ ip_mat * grey_scale_chroma_key(ip_mat* a, float* color, float* precision);
  */
 ip_mat * ip_mat_contrast(ip_mat* in, float contrast);
 
-ip_mat * ip_mat_saturation(ip_mat* in, float saturation);
-
 /**** METODI GIA' IMPLEMENTATI ****/
 /* Genera dei numeri casuali con distribuzione Normale
  * https://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform
