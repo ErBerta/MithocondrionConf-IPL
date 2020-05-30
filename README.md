@@ -11,12 +11,20 @@ della memoria.
 
 ## Compilazione
  
- <code> make all </code>
+ <code> 
+ cd lib
+ make all 
+</code>
  
- ## Esecuzione 
+ ## Test 
   
-  <code> make exe </code>
+ <code>
+ cd lib
+ make exe
+</code>
   
- ## Esecuzione con Test Memoria 
-
-<code> make memtest </code>
+ ## Test con memtest
+ 
+<code>
+ cd lib
+ make memtest </code>
