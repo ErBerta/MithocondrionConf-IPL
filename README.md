@@ -13,7 +13,7 @@ della memoria.
  
  <code> 
  cd lib
- </code>
+ </code> <br>
   <code> 
  make all 
 </code>
@@ -22,7 +22,7 @@ della memoria.
   
  <code>
  cd lib
- </code>
+ </code><br>
   <code> 
  make exe
 </code>
@@ -31,6 +31,6 @@ della memoria.
  
 <code>
  cd lib
- </code>
+ </code><br>
   <code> 
  make memtest </code>
