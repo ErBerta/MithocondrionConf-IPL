@@ -41,6 +41,91 @@ int main(){
 	input_img2 = bitmap_to_ip_mat(c);
 	bzero(filename, FDIM);
 
+	printf("#contrast test\n");
+	start = clock();
+    mod_ip_mat = ip_mat_copy(input_img);
+	printf("@before\n");
+	mod_ip_mat = ip_mat_contrast(mod_ip_mat,0.3);
+    clamp(mod_ip_mat, 0.0, 255.0);
+	printf("---\n@after\n");
+	end = clock();
+	d = ip_mat_to_bitmap(mod_ip_mat);
+    sprintf(filename, "%s/contrast.bmp", imgdir);
+    bm_save(d, filename);
+    bzero(filename, FDIM);
+    bm_free(d);
+    d = NULL;
+	ip_mat_free(mod_ip_mat);
+    mod_ip_mat = NULL;
+	printf("---- DONE\n");
+
+    printf("#chroma key test\n");
+    start = clock();
+    printf("@before\n");
+    float color[3] = {
+            102, 125, 177
+    };
+    float sensibility[3] = {
+            10, 10, 10
+    };
+    mod_ip_mat = background_chroma_key(input_img, ip_mat_resize(input_img2, input_img->h, input_img->w), color, sensibility);
+    printf("---\n@after\n");
+    ip_mat_show_stats(mod_ip_mat);
+    end = clock();
+    d = ip_mat_to_bitmap(mod_ip_mat);
+    sprintf(filename, "%s/chroma.bmp", imgdir);
+    bm_save(d, filename);
+    bzero(filename, FDIM);
+    bm_free(d);
+    d = NULL;
+    ip_mat_free(mod_ip_mat);
+    mod_ip_mat = NULL;
+    printf("---- DONE\n");
+
+    return 0;
+
+    printf("#chroma grey test\n");
+    start = clock();
+    printf("@before\n");
+    float colore[3] = {
+            92, 136, 23
+    };
+    float sensibilit[3] = {
+            20, 100, 100
+    };
+    mod_ip_mat = grey_scale_chroma_key(input_img, colore, sensibilit);
+    printf("---\n@after\n");
+    ip_mat_show_stats(mod_ip_mat);
+    end = clock();
+    d = ip_mat_to_bitmap(mod_ip_mat);
+    sprintf(filename, "%s/chromagrey.bmp", imgdir);
+    bm_save(d, filename);
+    bzero(filename, FDIM);
+    bm_free(d);
+    d = NULL;
+    ip_mat_free(mod_ip_mat);
+    mod_ip_mat = NULL;
+    printf("---- DONE\n");
+
+    printf("#resize test\n");
+    start = clock();
+    printf("@before\n");
+    int scale_factor = 5;
+    mod_ip_mat = ip_mat_resize(input_img, input_img->h * scale_factor, input_img->w * scale_factor);
+    printf("---\n@after\n");
+    ip_mat_show_stats(mod_ip_mat);
+    end = clock();
+    d = ip_mat_to_bitmap(mod_ip_mat);
+    sprintf(filename, "%s/resized.bmp", imgdir);
+    bm_save(d, filename);
+    bzero(filename, FDIM);
+    bm_free(d);
+    d = NULL;
+    ip_mat_free(input_img);
+    input_img = mod_ip_mat;
+    mod_ip_mat = NULL;
+    printf("---- DONE\n");
+
 	/* Test a function, show on screen the output, free up the memory and set the pointer to NULL*/
 	printf("_mul_scalar test\n");
 	start = clock();
@@ -364,7 +449,7 @@ int main(){
 
 	printf("#rescale test\n");
 	start = clock();
-	mod_ip_mat = ip_mat_copy(input_img);
+    mod_ip_mat = ip_mat_copy(input_img);
 	printf("@before\n");
 	ip_mat_show_stats(mod_ip_mat);
 	/*ip_mat_show(mod_ip_mat);*/
@@ -383,7 +468,6 @@ int main(){
 	ip_mat_free(mod_ip_mat);
   mod_ip_mat = NULL;
 	printf("---- DONE\n");
-
 
 	free(filename);
 	filename = NULL;

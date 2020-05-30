@@ -1,3 +1,8 @@
+#include <stdio.h>
+#include <math.h>
+#include "ip_lib.h"
+#include "bmp.h"
+
 /*
  Created by Sebastiano Vascon on 23/03/20.
 */
@@ -24,6 +29,10 @@ void ip_mat_show(ip_mat * t){
 void ip_mat_show_stats(ip_mat * t){
     unsigned int k;
 
+	if(!t){
+		perror("Error: ip_mat pointer is NULL in ip_mat_show_stats\n");
+		exit(1);
+	}
     compute_stats(t);
 
     for(k=0;k<t->k;k++){
@@ -42,6 +51,10 @@ ip_mat * bitmap_to_ip_mat(Bitmap * img){
     unsigned int h = img->h;
     unsigned int w = img->w;
 
+	if(!img){
+		perror("Error: Bitmap pointer is NULL in bitmap_to_ip_mat\n");
+		exit(1);
+	}
     ip_mat * out = ip_mat_create(h, w,3,0);
 
     for (i = 0; i < h; i++)              /* rows */
@@ -62,6 +75,10 @@ ip_mat * bitmap_to_ip_mat(Bitmap * img){
 
 Bitmap * ip_mat_to_bitmap(ip_mat * t){
 
+	if(!t){
+		perror("Error: ip_mat pointer is NULL in ip_mat_to_bitmap\n");
+		exit(1);
+	}
     Bitmap *b = bm_create(t->w,t->h);
 
     unsigned int i, j;
@@ -78,6 +95,10 @@ Bitmap * ip_mat_to_bitmap(ip_mat * t){
 }
 
 float get_val(ip_mat * a, unsigned int i,unsigned int j,unsigned int k){
+	if(!a){
+		perror("Error: ip_mat pointer is NULL in get_val\n");
+		exit(1);
+	}
     if(i<a->h && j<a->w &&k<a->k){
         return a->data[i][j][k];
     }else{
@@ -87,6 +108,10 @@ float get_val(ip_mat * a, unsigned int i,unsigned int j,unsigned int k){
 }
 
 void set_val(ip_mat * a, unsigned int i,unsigned int j,unsigned int k, float v){
+	if(!a){
+		perror("Error: ip_mat pointer is NULL in set_val\n");
+		exit(1);
+	}
     if(i<a->h && j<a->w &&k<a->k){
         a->data[i][j][k]=v;
     }else{
@@ -99,7 +124,7 @@ float get_normal_random(float media, float std){
 
     float y1 = ( (float)(rand()) + 1. )/( (float)(RAND_MAX) + 1. );
     float y2 = ( (float)(rand()) + 1. )/( (float)(RAND_MAX) + 1. );
-    float num = cos(2*PI*y2)*sqrt(-2.*log(y1));
+    float num = cos(2* M_PI *y2) * sqrt(-2. * log(y1));
 
     return media + num*std;
 }
@@ -110,6 +135,10 @@ float get_normal_random(float media, float std){
 void ip_mat_init_random(ip_mat * t, float mean, float var)
 {
 	unsigned int i, j, z;
+	if(!t){
+		perror("Error: ip_mat pointer is NULL in ip_mat_init_random\n");
+		exit(1);
+	}
 	for(i = 0; i < t->h; i++){
 		for(j = 0; j < t->w; j++){
 			for(z = 0; z < t->k; z++){
@@ -129,6 +158,10 @@ ip_mat * ip_mat_subset(ip_mat * t, unsigned int row_start, unsigned int row_end,
 {
 	ip_mat* out = NULL;
 	unsigned int i, j, z;
+	if(!t){
+		perror("Error: ip_mat pointer is NULL in ip_mat_subset\n");
+		exit(1);
+	}
 	/*controllo che le dimensioni inserite siano valide*/
 	if(row_start >= 0 && row_end <= t->h && col_start >= 0 && col_end <= t->w)
 	{
@@ -173,7 +206,11 @@ ip_mat * ip_mat_concat(ip_mat * a, ip_mat * b, int dimensione)
 	unsigned int remh=0, remw=0, remk=0;
 	/*int usato come bool per controllare se è possibile effettuare l'operazione*/
 	int valid = 1;
-	
+
+	if(!a || !b){
+		perror("Error: ip_mat pointer is NULL in \n");
+		exit(1);
+	}
 	switch(dimensione)
 	{
 		case 0:
@@ -213,6 +250,10 @@ ip_mat * ip_mat_concat(ip_mat * a, ip_mat * b, int dimensione)
 			}
 		}
 	}
+	else{
+			perror("Error: Invalid dimension in concat\n");
+			exit(1);
+	}
 	return out;
 }
 
@@ -221,15 +262,37 @@ ip_mat * ip_mat_concat(ip_mat * a, ip_mat * b, int dimensione)
 ip_mat * ip_mat_create(unsigned int h, unsigned int w,unsigned  int k, float v){
 	unsigned int i = 0, j = 0, z = 0;
 	ip_mat* mat = (ip_mat*)calloc(1, sizeof(ip_mat));
+	if(!mat){
+		perror("Error: Couldn't allocate enough memory to mat in ip_mat_create\n");
+		exit(1);
+	}
 	float*** data = (float***)calloc(h, sizeof(*data));
+	if(!data){
+		perror("Error: Couldn't allocate enough memory to data in ip_mat_create\n");
+		exit(1);
+	}
 	stats* st = (stats*)calloc(k, sizeof(*st));
+	if(!st){
+		perror("Error: Couldn't allocate enough memory to st in ip_mat_create\n");
+		exit(1);
+	}
+
 	mat->h = h;
 	mat->w = w;
 	mat->k = k;
 	for(i = 0; i < h; i++){
 		data[i] = (float**)calloc(w, sizeof(**data));
+		if(!data[i]){
+			perror("Error: Couldn't allocate enough memory to data[i] in ip_mat_create\n");
+			exit(1);
+		}
+
 		for(j = 0; j < w; j++){
 			data[i][j] = (float*)calloc(k, sizeof(***data));
+			if(!data[i][j]){
+				perror("Error: Couldn't allocate enough memory to data[i][j] in ip_mat_create\n");
+				exit(1);
+			}
 			for(z = 0; z < k; z++){
 				data[i][j][z] = v;
 			}
@@ -237,42 +300,38 @@ ip_mat * ip_mat_create(unsigned int h, unsigned int w,unsigned  int k, float v){
 	}
 	mat->data = data;
 	mat->stat = st;
+	mat->stat->min = v;
+	mat->stat->max = v;
+	mat->stat->mean = v;
 
 	return mat;
 }
 
-/* Libera la memoria (data, stat e la struttura)
- *
- * se la variabile "a" è NULL non fa nulla.
- *
- * */
 /* AUTHOR: Dussin */
 void ip_mat_free(ip_mat *a){
 	unsigned int i = 0, j = 0;
-	if(a != NULL) {
-        for (i = 0; i < a->h; i++) {
-            /* Free up each channel on the j-th row */
-            for (j = 0; j < a->w; j++) {
-                free(a->data[i][j]);
-                a->data[i][j] = NULL;
-            }
-            /* Free up the i-th row*/
-            free(a->data[i]);
-            a->data[i] = NULL;
-        }
-        /* Free up the whole data matrix, the stats and ultimately the whole struct*/
-        free(a->data);
-        a->data = NULL;
-        free(a->stat);
-        a->stat = NULL;
-        free(a);
-        a = NULL;
+	if(!a){
+		perror("Error: ip_mat pointer is NULL in ip_mat_free\n");
+		exit(1);
 	}
-	else
-    {
-        printf("Errore free!!!");
-        exit(1);
-    }
+
+	for(i = 0; i < a->h; i++){
+		/* Free up each channel on the j-th row */
+		for(j = 0; j < a->w; j++){
+			free(a->data[i][j]);
+			a->data[i][j] = NULL;
+		}
+		/* Free up the i-th row*/
+		free(a->data[i]);
+		a->data[i] = NULL;
+	}
+	/* Free up the whole data matrix, the stats and ultimately the whole struct*/
+	free(a->data);
+	a->data = NULL;
+	free(a->stat);
+	a->stat = NULL;
+	free(a);
+	a = NULL;
 }
 
 void compute_stats(ip_mat * t){
@@ -344,6 +403,7 @@ ip_mat * ip_mat_copy(ip_mat * in){
 		exit(1);
 	}
 }
+
 
 /**** PARTE 1: OPERAZIONI MATEMATICHE FRA IP_MAT ****/
 /* Esegue la somma di due ip_mat (tutte le dimensioni devono essere identiche)
@@ -439,7 +499,7 @@ ip_mat * ip_mat_mul_scalar(ip_mat *a, float c){
 ip_mat *  ip_mat_add_scalar(ip_mat *a, float c){
 	ip_mat* tmp = NULL;
 	unsigned int i = 0, j = 0, z = 0;
-	
+
 	if (a != NULL)
 	{
 		tmp = ip_mat_copy(a);
@@ -464,22 +524,18 @@ ip_mat *  ip_mat_add_scalar(ip_mat *a, float c){
 
 /* Calcola la media di due ip_mat a e b e la restituisce in output.*/
 /* AUTHOR: Berta */
+/* Controllo dimensioni???????????????????????????????????????????????? */
 ip_mat * ip_mat_mean(ip_mat * a, ip_mat * b){
 	ip_mat* out = NULL;
 	unsigned int i = 0, j = 0, z = 0;
-	if (a != NULL && b != NULL)
+	
+	if(a->w == b->w && a->h == b->h && a->k == b->k)
 	{
-		if (a->w == b->w && a->h == b->h && a->k == b->k)
-		{
-			out = ip_mat_create(a->h, a->w, a->k, 0);
-			for (i = 0; i < out->h; i++)
-			{
-				for (j = 0; j < out->w; j++)
-				{
-					for (z = 0; z < out->k; z++)
-					{
-						out->data[i][j][z] = (a->data[i][j][z] * b->data[i][j][z]) / 2.0;
-					}
+		out = ip_mat_create(a->h, a->w, a->k, 0);
+		for(i = 0; i < out->h; i++){
+			for(j = 0; j < out->w; j++){
+				for(z = 0; z < out->k; z++){
+					out->data[i][j][z] = (a->data[i][j][z] * b->data[i][j][z])/2.0;
 				}
 			}
 		}
