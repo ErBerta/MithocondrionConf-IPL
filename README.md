@@ -11,6 +11,17 @@ della memoria.
 
 ## Compilazione
  
+<<<<<<< HEAD
+ <code> make all </code>
+ 
+ ## Esecuzione 
+  
+  <code> make exe </code>
+  
+   ## Esecuzione con Test Memoria 
+  
+  <code> make memtest </code>
+=======
  <code> 
  cd lib
  </code> <br>
@@ -34,3 +45,4 @@ della memoria.
  </code><br>
   <code> 
  make memtest </code>
+>>>>>>> master
