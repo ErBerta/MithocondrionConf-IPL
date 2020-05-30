@@ -614,6 +614,7 @@ ip_mat * ip_mat_corrupt(ip_mat * a, float amount){
 			}
 		}
 	}
+
 	return out;
 }
 
@@ -630,14 +631,16 @@ ip_mat * ip_mat_corrupt(ip_mat * a, float amount){
 /* AUTHOR: Dussin */
 ip_mat * ip_mat_padding(ip_mat * a, unsigned int pad_h, unsigned int pad_w){
 	ip_mat* out = NULL;
-	unsigned int i, j, z;
 
-    if (a == NULL) {
-        perror("ERROR: pointer to ip_mat is NULL in ip_mat_padding");
-        exit(1);
-    }
+	if(a == NULL) {
+		perror("ERROR: pointer to ip_mat is NULL in ip_mat_padding\n");
+		exit(1);
+	}
 
 	out = ip_mat_create(a->h + 2*pad_h, a->w + 2*pad_w, a->k, 0);
+
+	unsigned int i, j, z;
+
 	for(i = pad_h; i < pad_h + a->h; i++){
 		for(j = pad_w; j < pad_w + a->w; j++) {
 			for(z = 0; z < out->k; z++) {
@@ -652,21 +655,14 @@ ip_mat * ip_mat_padding(ip_mat * a, unsigned int pad_h, unsigned int pad_w){
  * La funzione restituisce un ip_mat delle stesse dimensioni di "a".
  * */
 ip_mat * ip_mat_convolve(ip_mat * a, ip_mat * f) {
-
-    if (a == NULL) {
-        perror("ERROR: pointer to ip_mat is NULL in ip_mat_convolve");
-        exit(1);
-    }
-
-    if (f == NULL) {
-        perror("ERROR: pointer to ip_mat filter is NULL in ip_mat_convolve");
-        exit(1);
-    }
-
     ip_mat* out = NULL;
     unsigned pad_h = (f->h - 1)/2;
     unsigned pad_w = (f->w - 1)/2;
 
+	if(a == NULL) {
+		perror("ERROR: pointer to ip_mat is NULL in ip_mat_convolve\n");
+		exit(1);
+	}
     ip_mat* in = ip_mat_padding(a, pad_h, pad_w);
     out = ip_mat_create(a->h, a->w, a->k, 0);
 
@@ -715,6 +711,7 @@ ip_mat * create_edge_filter() {
     ip_mat* out = ip_mat_create(3, 3, 3, -1);
 
     unsigned int z;
+
     for (z=0; z < out->k; z++)
         out->data[1][1][z] = 8;
 
@@ -774,10 +771,10 @@ void clamp(ip_mat * t, float low, float high){
 
     unsigned int x, y, z;
 
-    if (t == NULL) {
-        perror("ERROR: pointer to ip_mat is NULL in clamp");
-        exit(1);
-    }
+	if(t == NULL) {
+		perror("ERROR: pointer to ip_mat is NULL in clamp\n");
+		exit(1);
+	}
 
     for(x = 0; x < t->w; x++) {
         for(y = 0; y < t->h; y++) {
@@ -808,10 +805,10 @@ void rescale(ip_mat * t, float new_max){
 
     unsigned int x, y, z;
 
-    if (t == NULL) {
-        perror("ERROR: pointer to ip_mat is NULL in rescale");
-        exit(1);
-    }
+	if(t == NULL) {
+		perror("ERROR: pointer to ip_mat is NULL in rescale\n");
+		exit(1);
+	}
 
     compute_stats(t);
 
