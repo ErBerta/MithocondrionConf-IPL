@@ -26,7 +26,7 @@ int main(){
 	ip_mat* filter = NULL;
 
 	float alpha = 0.0, foo = 0.0;
-	char* filename = calloc(FDIM, sizeof(*filename));
+	char* filename = calloc(FDIM, sizeof(char *));
 	char imgdir[] = "images";
 	int i = 0;
 
@@ -94,7 +94,7 @@ int main(){
 
 	printf("_sub test\n");
 	start = clock();
-	mod_ip_mat = ip_mat_sub(input_img,input_img2);
+	mod_ip_mat = ip_mat_sub(input_img, input_img2);
 	if(mod_ip_mat) {
 	    clamp(mod_ip_mat, 0, 255);
 		ip_mat_free(mod_ip_mat);
@@ -188,9 +188,10 @@ int main(){
 	printf("Blending test\n");
 	start = clock();
 	while(alpha <= 1.0) {
-		mod_ip_mat = ip_mat_blend(input_img, input_img2, alpha);
+		mod_ip_mat = ip_mat_blend(input_img, input_img, alpha);
 
 		d = ip_mat_to_bitmap(mod_ip_mat);
+		clamp(mod_ip_mat, 0.0, 255.0);
 		sprintf(filename, "%s/blending_%f.bmp", imgdir, alpha);
 		bm_save(d, filename);
 		bm_free(d);
@@ -218,6 +219,7 @@ int main(){
 	start = clock();
 	while(alpha <= 255.0){
 		mod_ip_mat = ip_mat_corrupt(input_img2, alpha);
+		clamp(mod_ip_mat, 0.0, 255.0);
 		d = ip_mat_to_bitmap(mod_ip_mat);
 		sprintf(filename, "%s/corruption_%d.bmp", imgdir, (int)alpha);
 		bm_save(d, filename);
@@ -366,7 +368,7 @@ int main(){
 	printf("@before\n");
 	ip_mat_show_stats(mod_ip_mat);
 	/*ip_mat_show(mod_ip_mat);*/
-	rescale(mod_ip_mat,500);
+	rescale(mod_ip_mat,150);
     clamp(mod_ip_mat, 0.0, 255.0);
 	printf("---\n@after\n");
 	ip_mat_show_stats(mod_ip_mat);
