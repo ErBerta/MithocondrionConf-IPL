@@ -3,7 +3,7 @@ LIB_P=lib/
 CFLAGS= -I$(LIB_P) -Wall -g --ansi --pedantic -g3 -O3 -fsanitize=address -fsanitize=undefined -std=gnu89 -Wextra
 LD_FLAGS=-lm -lz
 
-MAIN_EXEC=module_tester.c
+MAIN_EXEC=main_iplib.c
 OUT=exec.out
 
 #%.o: %.c $(DEPS)
