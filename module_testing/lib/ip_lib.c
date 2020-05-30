@@ -126,7 +126,7 @@ float get_normal_random(float media, float std){
 
 /* Inizializza una ip_mat con dimensioni w h e k.
  * Ogni elemento è generato da una gaussiana con media mean e varianza var */
-/* AUTHOR: Berta */
+
 void ip_mat_init_random(ip_mat * t, float mean, float var)
 {
 	unsigned int i, j, z;
@@ -148,7 +148,7 @@ void ip_mat_init_random(ip_mat * t, float mean, float var)
  * La terza dimensione la riportiamo per intero, stiamo in sostanza prendendo un sottoinsieme
  * delle righe e delle colonne.
  * */
-/* AUTHOR: Berta */
+
 ip_mat * ip_mat_subset(ip_mat * t, unsigned int row_start, unsigned int row_end, unsigned int col_start, unsigned int col_end)
 {
 	ip_mat* out = NULL;
@@ -192,7 +192,7 @@ ip_mat * ip_mat_subset(ip_mat * t, unsigned int row_start, unsigned int row_end,
  *      out.w = a.w = b.w
  *      out.k = a.k + b.k
  * */
-/* AUTHOR: Berta */
+
 ip_mat * ip_mat_concat(ip_mat * a, ip_mat * b, int dimensione)
 {
 	ip_mat* out = NULL;
@@ -253,7 +253,7 @@ ip_mat * ip_mat_concat(ip_mat * a, ip_mat * b, int dimensione)
 }
 
 /**** PARTE 1: TIPO DI DATI ip_mat E MEMORIA ****/
-/* AUTHOR: Dussin */
+
 ip_mat * ip_mat_create(unsigned int h, unsigned int w,unsigned  int k, float v){
 	unsigned int i = 0, j = 0, z = 0;
 	ip_mat* mat = (ip_mat*)calloc(1, sizeof(ip_mat));
@@ -307,7 +307,7 @@ ip_mat * ip_mat_create(unsigned int h, unsigned int w,unsigned  int k, float v){
  * se la variabile "a" è NULL non fa nulla.
  *
  * */
-/* AUTHOR: Dussin */
+
 void ip_mat_free(ip_mat *a){
 	unsigned int i = 0, j = 0;
 	if(!a){
@@ -369,7 +369,7 @@ void compute_stats(ip_mat * t){
 	}
 }
 
-/* AUTHOR: Dussin */
+
 ip_mat * ip_mat_copy(ip_mat * in){
 	ip_mat* m = NULL;
 	unsigned int i, j, z;
@@ -408,7 +408,7 @@ ip_mat * ip_mat_copy(ip_mat * in){
 /**** PARTE 1: OPERAZIONI MATEMATICHE FRA IP_MAT ****/
 /* Esegue la somma di due ip_mat (tutte le dimensioni devono essere identiche)
  * e la restituisce in output. */
-/* AUTHOR: Berta */
+
 ip_mat * ip_mat_sum(ip_mat * a, ip_mat * b){
 	ip_mat* out = NULL;
 	if(a != NULL && b != NULL)
@@ -436,7 +436,7 @@ ip_mat * ip_mat_sum(ip_mat * a, ip_mat * b){
 /* Esegue la sottrazione di due ip_mat (tutte le dimensioni devono essere identiche)
  * e la restituisce in output.
  * */
-/* AUTHOR: Berta */
+
 ip_mat * ip_mat_sub(ip_mat * a, ip_mat * b){
 	ip_mat* out = NULL;
 	if (a != NULL && b != NULL)
@@ -468,7 +468,7 @@ ip_mat * ip_mat_sub(ip_mat * a, ip_mat * b){
 
 /* Moltiplica un ip_mat per uno scalare c. Si moltiplica c per tutti gli elementi di "a"
  * e si salva il risultato in un nuovo tensore in output. */
-/* AUTHOR: Dussin */
+
 ip_mat * ip_mat_mul_scalar(ip_mat *a, float c){
 	ip_mat* tmp = NULL;
 	unsigned int i = 0, j = 0, z = 0;
@@ -495,7 +495,7 @@ ip_mat * ip_mat_mul_scalar(ip_mat *a, float c){
 }
 
 /* Aggiunge ad un ip_mat uno scalare c e lo restituisce in un nuovo tensore in output. */
-/* AUTHOR: Dussin */
+
 ip_mat *  ip_mat_add_scalar(ip_mat *a, float c){
 	ip_mat* tmp = NULL;
 	unsigned int i = 0, j = 0, z = 0;
@@ -523,7 +523,7 @@ ip_mat *  ip_mat_add_scalar(ip_mat *a, float c){
 }
 
 /* Calcola la media di due ip_mat a e b e la restituisce in output.*/
-/* AUTHOR: Berta */
+
 ip_mat * ip_mat_mean(ip_mat * a, ip_mat * b){
 	ip_mat* out = NULL;
 	unsigned int i = 0, j = 0, z = 0;
@@ -554,7 +554,7 @@ ip_mat * ip_mat_mean(ip_mat * a, ip_mat * b){
  * e creando una nuova immagine avente per valore di un pixel su ogni canale la media appena calcolata.
  * Avremo quindi che tutti i canali saranno uguali.
  * */
-/* AUTHOR: Berta */
+
 ip_mat * ip_mat_to_gray_scale(ip_mat * in){
 
 	ip_mat* out = NULL;
@@ -589,7 +589,7 @@ ip_mat * ip_mat_to_gray_scale(ip_mat * in){
  *
  * Le variabili "a" e "b" devono avere le stesse dimensioni
  */
-/* AUTHOR: Dussin */
+
 ip_mat * ip_mat_blend(ip_mat * a, ip_mat * b, float alpha){
 	ip_mat* out = NULL;
 	unsigned int i, j, z;
@@ -623,7 +623,7 @@ ip_mat * ip_mat_blend(ip_mat * a, ip_mat * b, float alpha){
 
 /* Operazione di brightening: aumenta la luminosità dell'immagine
  * aggiunge ad ogni pixel un certo valore*/
-/* AUTHOR: Berta */
+
 ip_mat * ip_mat_brighten(ip_mat * in, float bright)
 {
 	ip_mat* out = NULL;
@@ -650,7 +650,7 @@ ip_mat * ip_mat_brighten(ip_mat * in, float bright)
  * per mezzo della variabile amount.
  * out = a + gauss_noise*amount
  * */
-/* AUTHOR: Dussin */
+
 ip_mat * ip_mat_corrupt(ip_mat * a, float amount){
 	ip_mat* out = NULL;
 	unsigned int i, j, z;
@@ -681,7 +681,7 @@ ip_mat * ip_mat_corrupt(ip_mat * a, float amount){
  * con valori nulli sui bordi corrispondenti al padding e l'immagine "a" riportata
  * nel centro
  * */
-/* AUTHOR: Dussin */
+
 ip_mat * ip_mat_padding(ip_mat * a, unsigned int pad_h, unsigned int pad_w){
 	ip_mat* out = NULL;
 	unsigned int i, j, z;
