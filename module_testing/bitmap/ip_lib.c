@@ -599,8 +599,7 @@ ip_mat * ip_mat_blend(ip_mat * a, ip_mat * b, float alpha){
         exit(1);
     }
 
-    /* TODO: Check Corretto */
-    if (alpha < 0 || alpha > 1) {
+    if (alpha < 0) {
         perror("ERROR: invalid value for alpha in ip_mat_blend");
         exit(1);
     }
@@ -886,6 +885,11 @@ ip_mat * ip_mat_resize(ip_mat* a, unsigned int new_height, unsigned int new_widt
     ip_mat* out = NULL;
     unsigned int i, j, z;
 
+    if(a == NULL) {
+        perror("ERROR: pointer to ip_mat is NULL in ip_mat_resize\n");
+        exit(1);
+    }
+
     out = ip_mat_create(new_height, new_width, a->k, 0);
 
     float nh = (float)a->h / (float)new_height ;
@@ -906,10 +910,21 @@ ip_mat * ip_mat_resize(ip_mat* a, unsigned int new_height, unsigned int new_widt
 /*
  *  Crea un immagine sostituendo dall'immagine a il colore color (nell'intorno di precision) con i valori dell'immagine bg
  *  a e bg devono avere la stessa dimensione
+ *  color e precision devono avere la stessa dimensione di a e bg
  */
 ip_mat * background_chroma_key(ip_mat* a, ip_mat* bg, float* color, float* precision) {
     ip_mat* out = NULL;
     unsigned int i, j, z, n;
+
+    if(a == NULL || bg == NULL) {
+        perror("ERROR: pointer to ip_mat is NULL in ip_mat_resize\n");
+        exit(1);
+    }
+
+    if(color == NULL || precision == NULL) {
+        perror("ERROR: pointer is NULL in ip_mat_resize\n");
+        exit(1);
+    }
 
     out = ip_mat_copy(a);
 
@@ -937,6 +952,16 @@ ip_mat * background_chroma_key(ip_mat* a, ip_mat* bg, float* color, float* preci
 ip_mat * grey_scale_chroma_key(ip_mat* in, float* color, float* precision) {
     ip_mat* out = NULL;
     unsigned int i, j, z, n=0;
+
+    if(in == NULL) {
+        perror("ERROR: pointer to ip_mat is NULL in ip_mat_resize\n");
+        exit(1);
+    }
+
+    if(color == NULL || precision == NULL) {
+        perror("ERROR: pointer is NULL in ip_mat_resize\n");
+        exit(1);
+    }
 
     float somma, media;
     out = ip_mat_copy(in);
@@ -971,6 +996,16 @@ ip_mat * ip_mat_contrast(ip_mat* in, float contrast)
 {
     ip_mat* out = NULL;
     unsigned int i, j, z;
+
+    if(in == NULL) {
+        perror("ERROR: pointer to ip_mat is NULL in ip_mat_resize\n");
+        exit(1);
+    }
+
+    if(contrast < 0) {
+        perror("ERROR: invalid value for contrast in ip_mat_resize\n");
+        exit(1);
+    }
 
     out = ip_mat_copy(in);
 
