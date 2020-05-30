@@ -25,7 +25,7 @@ void ip_mat_show_stats(ip_mat * t){
     unsigned int k;
 
 	if(!t){
-		perror("Error: ip_mat pointer is NULL in ip_mat_show_stats\n");
+		fprintf(stderr, "Error: ip_mat pointer is NULL in ip_mat_show_stats\n");
 		exit(1);
 	}
     compute_stats(t);
@@ -47,7 +47,7 @@ ip_mat * bitmap_to_ip_mat(Bitmap * img){
     unsigned int w = img->w;
 
 	if(!img){
-		perror("Error: Bitmap pointer is NULL in bitmap_to_ip_mat\n");
+		fprintf(stderr, "Error: Bitmap pointer is NULL in bitmap_to_ip_mat\n");
 		exit(1);
 	}
     ip_mat * out = ip_mat_create(h, w,3,0);
@@ -71,7 +71,7 @@ ip_mat * bitmap_to_ip_mat(Bitmap * img){
 Bitmap * ip_mat_to_bitmap(ip_mat * t){
 
 	if(!t){
-		perror("Error: ip_mat pointer is NULL in ip_mat_to_bitmap\n");
+		fprintf(stderr, "Error: ip_mat pointer is NULL in ip_mat_to_bitmap\n");
 		exit(1);
 	}
     Bitmap *b = bm_create(t->w,t->h);
@@ -91,7 +91,7 @@ Bitmap * ip_mat_to_bitmap(ip_mat * t){
 
 float get_val(ip_mat * a, unsigned int i,unsigned int j,unsigned int k){
 	if(!a){
-		perror("Error: ip_mat pointer is NULL in get_val\n");
+		fprintf(stderr, "Error: ip_mat pointer is NULL in get_val\n");
 		exit(1);
 	}
     if(i<a->h && j<a->w &&k<a->k){
@@ -104,7 +104,7 @@ float get_val(ip_mat * a, unsigned int i,unsigned int j,unsigned int k){
 
 void set_val(ip_mat * a, unsigned int i,unsigned int j,unsigned int k, float v){
 	if(!a){
-		perror("Error: ip_mat pointer is NULL in set_val\n");
+		fprintf(stderr, "Error: ip_mat pointer is NULL in set_val\n");
 		exit(1);
 	}
     if(i<a->h && j<a->w &&k<a->k){
@@ -126,11 +126,12 @@ float get_normal_random(float media, float std){
 
 /* Inizializza una ip_mat con dimensioni w h e k.
  * Ogni elemento è generato da una gaussiana con media mean e varianza var */
+
 void ip_mat_init_random(ip_mat * t, float mean, float var)
 {
 	unsigned int i, j, z;
 	if(!t){
-		perror("Error: ip_mat pointer is NULL in ip_mat_init_random\n");
+		fprintf(stderr, "Error: ip_mat pointer is NULL in ip_mat_init_random\n");
 		exit(1);
 	}
 	for(i = 0; i < t->h; i++){
@@ -147,12 +148,13 @@ void ip_mat_init_random(ip_mat * t, float mean, float var)
  * La terza dimensione la riportiamo per intero, stiamo in sostanza prendendo un sottoinsieme
  * delle righe e delle colonne.
  * */
+
 ip_mat * ip_mat_subset(ip_mat * t, unsigned int row_start, unsigned int row_end, unsigned int col_start, unsigned int col_end)
 {
 	ip_mat* out = NULL;
 	unsigned int i, j, z;
 	if(!t){
-		perror("Error: ip_mat pointer is NULL in ip_mat_subset\n");
+		fprintf(stderr, "Error: ip_mat pointer is NULL in ip_mat_subset\n");
 		exit(1);
 	}
 	/*controllo che le dimensioni inserite siano valide*/
@@ -190,6 +192,7 @@ ip_mat * ip_mat_subset(ip_mat * t, unsigned int row_start, unsigned int row_end,
  *      out.w = a.w = b.w
  *      out.k = a.k + b.k
  * */
+
 ip_mat * ip_mat_concat(ip_mat * a, ip_mat * b, int dimensione)
 {
 	ip_mat* out = NULL;
@@ -200,7 +203,7 @@ ip_mat * ip_mat_concat(ip_mat * a, ip_mat * b, int dimensione)
 	int valid = 1;
 
 	if(!a || !b){
-		perror("Error: ip_mat pointer is NULL in \n");
+		fprintf(stderr, "Error: ip_mat pointer is NULL in \n");
 		exit(1);
 	}
 	switch(dimensione)
@@ -243,28 +246,29 @@ ip_mat * ip_mat_concat(ip_mat * a, ip_mat * b, int dimensione)
 		}
 	}
 	else{
-			perror("Error: Invalid dimension in concat\n");
+			fprintf(stderr, "Error: Invalid dimension in concat\n");
 			exit(1);
 	}
 	return out;
 }
 
 /**** PARTE 1: TIPO DI DATI ip_mat E MEMORIA ****/
+
 ip_mat * ip_mat_create(unsigned int h, unsigned int w,unsigned  int k, float v){
 	unsigned int i = 0, j = 0, z = 0;
 	ip_mat* mat = (ip_mat*)calloc(1, sizeof(ip_mat));
 	if(!mat){
-		perror("Error: Couldn't allocate enough memory to mat in ip_mat_create\n");
+		fprintf(stderr, "Error: Couldn't allocate enough memory to mat in ip_mat_create\n");
 		exit(1);
 	}
 	float*** data = (float***)calloc(h, sizeof(*data));
 	if(!data){
-		perror("Error: Couldn't allocate enough memory to data in ip_mat_create\n");
+		fprintf(stderr, "Error: Couldn't allocate enough memory to data in ip_mat_create\n");
 		exit(1);
 	}
 	stats* st = (stats*)calloc(k, sizeof(*st));
 	if(!st){
-		perror("Error: Couldn't allocate enough memory to st in ip_mat_create\n");
+		fprintf(stderr, "Error: Couldn't allocate enough memory to st in ip_mat_create\n");
 		exit(1);
 	}
 
@@ -274,14 +278,14 @@ ip_mat * ip_mat_create(unsigned int h, unsigned int w,unsigned  int k, float v){
 	for(i = 0; i < h; i++){
 		data[i] = (float**)calloc(w, sizeof(**data));
 		if(!data[i]){
-			perror("Error: Couldn't allocate enough memory to data[i] in ip_mat_create\n");
+			fprintf(stderr, "Error: Couldn't allocate enough memory to data[i] in ip_mat_create\n");
 			exit(1);
 		}
 
 		for(j = 0; j < w; j++){
 			data[i][j] = (float*)calloc(k, sizeof(***data));
 			if(!data[i][j]){
-				perror("Error: Couldn't allocate enough memory to data[i][j] in ip_mat_create\n");
+				fprintf(stderr, "Error: Couldn't allocate enough memory to data[i][j] in ip_mat_create\n");
 				exit(1);
 			}
 			for(z = 0; z < k; z++){
@@ -303,10 +307,11 @@ ip_mat * ip_mat_create(unsigned int h, unsigned int w,unsigned  int k, float v){
  * se la variabile "a" è NULL non fa nulla.
  *
  * */
+
 void ip_mat_free(ip_mat *a){
 	unsigned int i = 0, j = 0;
 	if(!a){
-		perror("Error: ip_mat pointer is NULL in ip_mat_free\n");
+		fprintf(stderr, "Error: ip_mat pointer is NULL in ip_mat_free\n");
 		exit(1);
 	}
 
@@ -359,10 +364,11 @@ void compute_stats(ip_mat * t){
 	}
 	else
 	{
-		perror("ERROR: pointer to ip_mat is NULL in compute_stats!!!\n");
+		fprintf(stderr, "ERROR: pointer to ip_mat is NULL in compute_stats!!!\n");
 		exit(1);
 	}
 }
+
 
 ip_mat * ip_mat_copy(ip_mat * in){
 	ip_mat* m = NULL;
@@ -393,7 +399,7 @@ ip_mat * ip_mat_copy(ip_mat * in){
 	}
 	else
 	{
-		perror("ERROR: pointer to ip_mat is NULL in ip_mat_copy!!!\n");
+		fprintf(stderr, "ERROR: pointer to ip_mat is NULL in ip_mat_copy!!!\n");
 		exit(1);
 	}
 }
@@ -402,6 +408,7 @@ ip_mat * ip_mat_copy(ip_mat * in){
 /**** PARTE 1: OPERAZIONI MATEMATICHE FRA IP_MAT ****/
 /* Esegue la somma di due ip_mat (tutte le dimensioni devono essere identiche)
  * e la restituisce in output. */
+
 ip_mat * ip_mat_sum(ip_mat * a, ip_mat * b){
 	ip_mat* out = NULL;
 	if(a != NULL && b != NULL)
@@ -421,7 +428,7 @@ ip_mat * ip_mat_sum(ip_mat * a, ip_mat * b){
 	}
 	else
 	{
-		perror("ERROR: pointer to ip_mat is NULL in ip_mat_sum!!!\n");
+		fprintf(stderr, "ERROR: pointer to ip_mat is NULL in ip_mat_sum!!!\n");
 		exit(1);
 	}
 	return out;
@@ -429,6 +436,7 @@ ip_mat * ip_mat_sum(ip_mat * a, ip_mat * b){
 /* Esegue la sottrazione di due ip_mat (tutte le dimensioni devono essere identiche)
  * e la restituisce in output.
  * */
+
 ip_mat * ip_mat_sub(ip_mat * a, ip_mat * b){
 	ip_mat* out = NULL;
 	if (a != NULL && b != NULL)
@@ -451,7 +459,7 @@ ip_mat * ip_mat_sub(ip_mat * a, ip_mat * b){
 	}
 	else
 	{
-		perror("ERROR: pointer to ip_mat is NULL in ip_mat_sub!!!\n");
+		fprintf(stderr, "ERROR: pointer to ip_mat is NULL in ip_mat_sub!!!\n");
 		exit(1);
 	}
 
@@ -460,6 +468,7 @@ ip_mat * ip_mat_sub(ip_mat * a, ip_mat * b){
 
 /* Moltiplica un ip_mat per uno scalare c. Si moltiplica c per tutti gli elementi di "a"
  * e si salva il risultato in un nuovo tensore in output. */
+
 ip_mat * ip_mat_mul_scalar(ip_mat *a, float c){
 	ip_mat* tmp = NULL;
 	unsigned int i = 0, j = 0, z = 0;
@@ -479,13 +488,14 @@ ip_mat * ip_mat_mul_scalar(ip_mat *a, float c){
 	}
 	else
 	{
-		perror("ERROR: pointer to ip_mat is NULL in ip_mat_mul_scalar!!!\n");
+		fprintf(stderr, "ERROR: pointer to ip_mat is NULL in ip_mat_mul_scalar!!!\n");
 		exit(1);
 	}
 	return tmp;
 }
 
 /* Aggiunge ad un ip_mat uno scalare c e lo restituisce in un nuovo tensore in output. */
+
 ip_mat *  ip_mat_add_scalar(ip_mat *a, float c){
 	ip_mat* tmp = NULL;
 	unsigned int i = 0, j = 0, z = 0;
@@ -506,13 +516,14 @@ ip_mat *  ip_mat_add_scalar(ip_mat *a, float c){
 	}
 	else
 	{
-		perror("ERROR: pointer to ip_mat is NULL in ip_mat_add_scalar!!!\n");
+		fprintf(stderr, "ERROR: pointer to ip_mat is NULL in ip_mat_add_scalar!!!\n");
 		exit(1);
 	}
 	return tmp;
 }
 
 /* Calcola la media di due ip_mat a e b e la restituisce in output.*/
+
 ip_mat * ip_mat_mean(ip_mat * a, ip_mat * b){
 	ip_mat* out = NULL;
 	unsigned int i = 0, j = 0, z = 0;
@@ -530,7 +541,7 @@ ip_mat * ip_mat_mean(ip_mat * a, ip_mat * b){
 	}
 	else
 	{
-		perror("ERROR: pointer to ip_mat is NULL in ip_mat_mean!!!\n");
+		fprintf(stderr, "ERROR: pointer to ip_mat is NULL in ip_mat_mean!!!\n");
 		exit(1);
 	}
 
@@ -543,6 +554,7 @@ ip_mat * ip_mat_mean(ip_mat * a, ip_mat * b){
  * e creando una nuova immagine avente per valore di un pixel su ogni canale la media appena calcolata.
  * Avremo quindi che tutti i canali saranno uguali.
  * */
+
 ip_mat * ip_mat_to_gray_scale(ip_mat * in){
 
 	ip_mat* out = NULL;
@@ -550,7 +562,7 @@ ip_mat * ip_mat_to_gray_scale(ip_mat * in){
 	float somma, media;
 
     if (in == NULL) {
-        perror("ERROR: pointer to ip_mat is NULL in ip_mat_to_gray_scale");
+        fprintf(stderr, "ERROR: pointer to ip_mat is NULL in ip_mat_to_gray_scale");
         exit(1);
     }
 
@@ -577,23 +589,24 @@ ip_mat * ip_mat_to_gray_scale(ip_mat * in){
  *
  * Le variabili "a" e "b" devono avere le stesse dimensioni
  */
+
 ip_mat * ip_mat_blend(ip_mat * a, ip_mat * b, float alpha){
 	ip_mat* out = NULL;
 	unsigned int i, j, z;
 
     if (a == NULL || b == NULL) {
-        perror("ERROR: pointer to ip_mat is NULL in ip_mat_blend");
+        fprintf(stderr, "ERROR: pointer to ip_mat is NULL in ip_mat_blend");
         exit(1);
     }
 
     if (alpha < 0) {
-        perror("ERROR: invalid value for alpha in ip_mat_blend");
+        fprintf(stderr, "ERROR: invalid value for alpha in ip_mat_blend");
         exit(1);
     }
 
     if(a->h != b->h || a->w != b->w || a->k != b->k)
     {
-        perror("ERROR: size mismatch in ip_mat_blend");
+        fprintf(stderr, "ERROR: size mismatch in ip_mat_blend");
         exit(1);
     }
 
@@ -610,13 +623,14 @@ ip_mat * ip_mat_blend(ip_mat * a, ip_mat * b, float alpha){
 
 /* Operazione di brightening: aumenta la luminosità dell'immagine
  * aggiunge ad ogni pixel un certo valore*/
+
 ip_mat * ip_mat_brighten(ip_mat * in, float bright)
 {
 	ip_mat* out = NULL;
 	unsigned int i, j, z;
 
     if (in == NULL) {
-        perror("ERROR: pointer to ip_mat is NULL in ip_mat_brighten");
+        fprintf(stderr, "ERROR: pointer to ip_mat is NULL in ip_mat_brighten");
         exit(1);
     }
 
@@ -636,12 +650,13 @@ ip_mat * ip_mat_brighten(ip_mat * in, float bright)
  * per mezzo della variabile amount.
  * out = a + gauss_noise*amount
  * */
+
 ip_mat * ip_mat_corrupt(ip_mat * a, float amount){
 	ip_mat* out = NULL;
 	unsigned int i, j, z;
 
     if (a == NULL) {
-        perror("ERROR: pointer to ip_mat is NULL in ip_mat_corrupt");
+        fprintf(stderr, "ERROR: pointer to ip_mat is NULL in ip_mat_corrupt");
         exit(1);
     }
 
@@ -666,12 +681,13 @@ ip_mat * ip_mat_corrupt(ip_mat * a, float amount){
  * con valori nulli sui bordi corrispondenti al padding e l'immagine "a" riportata
  * nel centro
  * */
+
 ip_mat * ip_mat_padding(ip_mat * a, unsigned int pad_h, unsigned int pad_w){
 	ip_mat* out = NULL;
 	unsigned int i, j, z;
 
 	if(a == NULL) {
-		perror("ERROR: pointer to ip_mat is NULL in ip_mat_padding\n");
+		fprintf(stderr, "ERROR: pointer to ip_mat is NULL in ip_mat_padding\n");
 		exit(1);
 	}
 
@@ -692,12 +708,12 @@ ip_mat * ip_mat_padding(ip_mat * a, unsigned int pad_h, unsigned int pad_w){
 ip_mat * ip_mat_convolve(ip_mat * a, ip_mat * f) {
 
     if (a == NULL) {
-        perror("ERROR: pointer to ip_mat is NULL in ip_mat_convolve");
+        fprintf(stderr, "ERROR: pointer to ip_mat is NULL in ip_mat_convolve");
         exit(1);
     }
 
     if (f == NULL) {
-        perror("ERROR: pointer to ip_mat filter is NULL in ip_mat_convolve");
+        fprintf(stderr, "ERROR: pointer to ip_mat filter is NULL in ip_mat_convolve");
         exit(1);
     }
 
@@ -813,7 +829,7 @@ void clamp(ip_mat * t, float low, float high){
     unsigned int x, y, z;
 
 	if(t == NULL) {
-		perror("ERROR: pointer to ip_mat is NULL in clamp\n");
+		fprintf(stderr, "ERROR: pointer to ip_mat is NULL in clamp\n");
 		exit(1);
 	}
 
@@ -847,7 +863,7 @@ void rescale(ip_mat * t, float new_max){
     unsigned int x, y, z;
 
 	if(t == NULL) {
-		perror("ERROR: pointer to ip_mat is NULL in rescale\n");
+		fprintf(stderr, "ERROR: pointer to ip_mat is NULL in rescale\n");
 		exit(1);
 	}
 
@@ -870,7 +886,7 @@ ip_mat * ip_mat_resize(ip_mat* a, unsigned int new_height, unsigned int new_widt
     unsigned int i, j, z;
 
     if(a == NULL) {
-        perror("ERROR: pointer to ip_mat is NULL in ip_mat_resize\n");
+        fprintf(stderr, "ERROR: pointer to ip_mat is NULL in ip_mat_resize\n");
         exit(1);
     }
 
@@ -901,12 +917,17 @@ ip_mat * background_chroma_key(ip_mat* a, ip_mat* bg, float* color, float* preci
     unsigned int i, j, z, n;
 
     if(a == NULL || bg == NULL) {
-        perror("ERROR: pointer to ip_mat is NULL in background_chroma_key\n");
+        fprintf(stderr, "ERROR: pointer to ip_mat is NULL in background_chroma_key\n");
         exit(1);
     }
-
-    if(color == NULL || precision == NULL) {
-        perror("ERROR: pointer is NULL in background_chroma_key\n");
+	
+	if(a->w < bg->w || a->h < bg->h || a->k < bg->k){
+		fprintf(stderr, "ERROR: pointer to ip_mat b is smaller than a in background_chroma_key\n");
+        exit(1);
+	}
+    
+	if(color == NULL || precision == NULL) {
+        fprintf(stderr, "ERROR: pointer is NULL in background_chroma_key\n");
         exit(1);
     }
 
@@ -938,12 +959,12 @@ ip_mat * grey_scale_chroma_key(ip_mat* in, float* color, float* precision) {
     unsigned int i, j, z, n=0;
 
     if(in == NULL) {
-        perror("ERROR: pointer to ip_mat is NULL in grey_scale_chroma_key\n");
+        fprintf(stderr, "ERROR: pointer to ip_mat is NULL in grey_scale_chroma_key\n");
         exit(1);
     }
 
     if(color == NULL || precision == NULL) {
-        perror("ERROR: pointer is NULL in grey_scale_chroma_key\n");
+        fprintf(stderr, "ERROR: pointer is NULL in grey_scale_chroma_key\n");
         exit(1);
     }
 
@@ -982,12 +1003,12 @@ ip_mat * ip_mat_contrast(ip_mat* in, float contrast)
     unsigned int i, j, z;
 
     if(in == NULL) {
-        perror("ERROR: pointer to ip_mat is NULL in ip_mat_contrast\n");
+        fprintf(stderr, "ERROR: pointer to ip_mat is NULL in ip_mat_contrast\n");
         exit(1);
     }
 
     if(contrast < 0) {
-        perror("ERROR: invalid value for contrast in ip_mat_contrast\n");
+        fprintf(stderr, "ERROR: invalid value for contrast in ip_mat_contrast\n");
         exit(1);
     }
 

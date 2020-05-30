@@ -917,12 +917,17 @@ ip_mat * background_chroma_key(ip_mat* a, ip_mat* bg, float* color, float* preci
     unsigned int i, j, z, n;
 
     if(a == NULL || bg == NULL) {
-        fprintf(stderr, "ERROR: pointer to ip_mat is NULL in ip_mat_resize\n");
+        fprintf(stderr, "ERROR: pointer to ip_mat is NULL in background_chroma_key\n");
         exit(1);
     }
-
-    if(color == NULL || precision == NULL) {
-        fprintf(stderr, "ERROR: pointer is NULL in ip_mat_resize\n");
+	
+	if(a->w < bg->w || a->h < bg->h || a->k < bg->k){
+		fprintf(stderr, "ERROR: pointer to ip_mat b is smaller than a in background_chroma_key\n");
+        exit(1);
+	}
+    
+	if(color == NULL || precision == NULL) {
+        fprintf(stderr, "ERROR: pointer is NULL in background_chroma_key\n");
         exit(1);
     }
 
@@ -954,12 +959,12 @@ ip_mat * grey_scale_chroma_key(ip_mat* in, float* color, float* precision) {
     unsigned int i, j, z, n=0;
 
     if(in == NULL) {
-        fprintf(stderr, "ERROR: pointer to ip_mat is NULL in ip_mat_resize\n");
+        fprintf(stderr, "ERROR: pointer to ip_mat is NULL in grey_scale_chroma_key\n");
         exit(1);
     }
 
     if(color == NULL || precision == NULL) {
-        fprintf(stderr, "ERROR: pointer is NULL in ip_mat_resize\n");
+        fprintf(stderr, "ERROR: pointer is NULL in grey_scale_chroma_key\n");
         exit(1);
     }
 
@@ -998,12 +1003,12 @@ ip_mat * ip_mat_contrast(ip_mat* in, float contrast)
     unsigned int i, j, z;
 
     if(in == NULL) {
-        fprintf(stderr, "ERROR: pointer to ip_mat is NULL in ip_mat_resize\n");
+        fprintf(stderr, "ERROR: pointer to ip_mat is NULL in ip_mat_contrast\n");
         exit(1);
     }
 
     if(contrast < 0) {
-        fprintf(stderr, "ERROR: invalid value for contrast in ip_mat_resize\n");
+        fprintf(stderr, "ERROR: invalid value for contrast in ip_mat_contrast\n");
         exit(1);
     }
 
