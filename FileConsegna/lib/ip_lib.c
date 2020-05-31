@@ -1,5 +1,11 @@
 /*
- Created by Sebastiano Vascon on 23/03/20.
+ * Id gruppo: 43
+ * 
+ * Componenti:
+ *  Elia Bertapelle, 881359
+ *  Alessandro Dussin, 881424
+ *  Tomas Fornasa, 880034
+ *  Leonardo Piccolo, 882351
 */
 
 #include <stdio.h>
