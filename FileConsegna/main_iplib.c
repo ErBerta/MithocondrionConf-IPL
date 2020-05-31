@@ -1,3 +1,13 @@
+/*
+ * Id gruppo: 43
+ * 
+ * Componenti:
+ *  Elia Bertapelle, 881359
+ *  Alessandro Dussin, 881424
+ *  Tomas Fornasa, 880034
+ *  Leonardo Piccolo, 882351
+*/
+
 #include <stdio.h>
 #include <string.h>
 #include "ip_lib.h"
@@ -7,17 +17,18 @@ void show_help(){
     printf("*** Image Processing Toolbox ***\n");
     printf("\targ 1: input file name (img1) \n");
     printf("\targ 2: input file name (img2) \n");
-    printf("\targ 3: operazione da effettuare (corrupt, gray, brighten, blend, sharp, edge, emboss, avg, gauss) \n");
+    printf("\targ 3: operazione da effettuare (corrupt, gray, brighten, blend, sharp, edge, emboss, avg, gauss, resize, bchroma, gchroma, contrast) \n");
     printf("\targ 4: output file name\n");
     printf("\targ 5: Se 1 concatena la/le immagini di input con quella di output\n");
     printf("\targ 6: Diversi significati in funzione dell'operazione (default 3):\n"
            "\t\t- [avg, gauss]: kernel size \n"
            "\t\t- [corrupt]: massimo livello di noise se si vuole corrompere l'immagine\n"
-           "\t\t- [brighten]: valore bright per aumentare la luminosità \n"
+           "\t\t- [brighten]: valore bright per aumentare/ridurre la luminosità \n"
            "\t\t\n");
     printf("\targ 7: Diversi significati in funzione dell'operazione (default 1.0):\n"
            "\t\t- [gauss] parametro sigma del kernel Gaussiano\n"
-           "\t\t- [blend] parametro alpha per il blending di due immagini");
+           "\t\t- [blend] parametro alpha per il blending di due immagini\n"
+           "\t\t- [contrast]: valore contrast per modificare il contrasto  \n");
     printf("\n");
 }
 
@@ -112,6 +123,57 @@ int main (int argc, char * argv[]) {
         filter = create_gaussian_filter(k_size, k_size, 3, sigma);
         img = ip_mat_convolve(input_img, filter);
         clamp(img,0,255);
+    } else if (strcmp(operation, "resize") == 0) {
+       unsigned int w,h;
+       printf("Inserisci l'altezza della nuova immagine\n");
+       scanf("%u", &h);
+       printf("Inserisci la larghezza della nuova immagine\n");
+       scanf("%u", &w);
+       img = ip_mat_resize(input_img, h, w);
+    } else if (strcmp(operation, "bchroma") == 0) {
+        float *color = (float*)calloc(input_img->k, sizeof(float));
+        float *precision= (float*)calloc(input_img->k, sizeof(float));
+        unsigned int i;
+
+        Bitmap * c = bm_load(fn_in_2);
+        ip_mat * input_img2 = bitmap_to_ip_mat(c);
+
+        printf("Inserisci il colore da modificare\n");
+        for(i=0; i<input_img->k;i++)
+        {
+            printf("Componente %d: ", (i+1));
+            scanf("%f", &color[i]);
+
+            printf("Precisione %d: ", (i+1));
+            scanf("%f", &precision[i]);
+        }
+        img = background_chroma_key(input_img, input_img2, color, precision);
+        
+        free(color);
+        free(precision);
+        ip_mat_free(input_img2);
+        bm_free(c);
+    } else if (strcmp(operation, "gchroma") == 0) {
+        float *color = (float*)calloc(input_img->k, sizeof(float));
+        float *precision = (float*)calloc(input_img->k, sizeof(float));
+        unsigned int i;
+
+        printf("Inserisci il colore da modificare\n");
+        for(i=0; i<input_img->k;i++)
+        {
+            printf("Componente %d: ", (i+1));
+            scanf("%f", &color[i]);
+
+            printf("Precisione %d: ", (i+1));
+            scanf("%f", &precision[i]);
+        }
+        img = grey_scale_chroma_key(input_img, color, precision);
+        
+        free(color);
+        free(precision);
+    } else if (strcmp(operation, "contrast") == 0) {
+        img = ip_mat_contrast(input_img, sigma); /*modifica il contrasto dell'immagine*/
+        clamp(img,0,255); /* effettua il clamping dei valori in 0-255 */
     } else {
         printf("The required operation doesn't exists\n");
         exit(1);

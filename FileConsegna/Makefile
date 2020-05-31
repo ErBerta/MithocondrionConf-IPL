@@ -4,7 +4,7 @@ CFLAGS= -Ilib -Wall -g --ansi --pedantic -g3 -O3 -fsanitize=address -fsanitize=u
 LD_FLAGS=-lm -lz
 
 MAIN_EXEC=main_iplib.c
-OUT=main
+OUT=main_iplib
 TESTER_EXEC=main_tester.sh
 IMG_DIR=images/
 #%.o: %.c $(DEPS)
